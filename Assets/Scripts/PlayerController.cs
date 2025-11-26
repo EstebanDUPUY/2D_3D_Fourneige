@@ -1,21 +1,32 @@
 using Mono.Cecil;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
     // region for declared variables, where every repetitively used variable is declared
     #region DECLARED VARIABLES
 
+    [Header("References")]
+    public Rigidbody rb;
+    public SpriteRenderer spriteRenderer;
+    public bool isFacingRight = true;
+
     [Header("Basic Motions")] // header that designates the basic motions section (like left and right movement)
+    public float horizontalMovement;
     public float moveSpeed;
     public float aceleration;
     public float startingSpeedBoost;
     public float deceleration;
 
     [Header("Basic Character Settings")] // header that designates the basic character settings (like gravity, friction and weight)
-    public float blabla;
+    public float gravity;
+    public float weight;
+    public float groundFriction;
+    public float wallFriction;
 
 
 
@@ -28,7 +39,8 @@ public class PlayerController : MonoBehaviour
     #region START, UPDATE, ETC...
     private void Awake()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -38,16 +50,38 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
+    
     }
-
     
     private void FixedUpdate() // function for physics maths
     {
-        
+        VelocityMaths();
     }
     #endregion
 
+    // region for sprite rotation
+    #region ROTATE SPRITE
+
+    
+
+    #endregion 
+
+    // region for ZQSD movements
+    #region BASIC MOTIONS
+
+    public void MoveInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+            horizontalMovement = ctx.ReadValue<Vector2>().x;
+        if (ctx.canceled)
+            horizontalMovement = 0f;
+    }
+    
+    public void VelocityMaths() // private function to do the maths for velocity
+    {
+        rb.linearVelocity = new Vector3(horizontalMovement * moveSpeed, rb.linearVelocity.y);
+    }
+    #endregion
 
     // region where state switching is handled
     #region STATE SWITCHING
