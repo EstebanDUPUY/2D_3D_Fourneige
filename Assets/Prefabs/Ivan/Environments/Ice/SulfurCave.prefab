@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 2864356094334339939}
   - component: {fileID: 4143655061135499763}
   - component: {fileID: 5816590379697109574}
+  - component: {fileID: 339807888505167301}
   - component: {fileID: 5313982053575039736}
-  - component: {fileID: -3457822127713479993}
+  - component: {fileID: 6083372270338892038}
   m_Layer: 0
-  m_Name: IceSurface
+  m_Name: SulfurCave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -88,14 +89,14 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5313982053575039736
+--- !u!65 &339807888505167301
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9051012073289300858}
-  m_Material: {fileID: 13400000, guid: 14c51b8b18f8cb04f95249c2a8d50872, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -109,7 +110,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-3457822127713479993
+--- !u!65 &5313982053575039736
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9051012073289300858}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &6083372270338892038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,10 +140,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9051012073289300858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2755b8df79e7f1b4892dfaf5a0dae7b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 72e51a18a3e55994baef53be5554e454, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iceSurfaceData: {fileID: 11400000, guid: 1058bb1602daea14cb915ef97f8339d4, type: 2}
-  dragOnIce: 0.2
-  speedMultiplier: 2
-  killFireForm: 1
+  sulfurCaveData: {fileID: 0}
