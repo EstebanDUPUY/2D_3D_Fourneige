@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController_Trash : MonoBehaviour
 {
     // region for declared variables, where every repetitively used variable is declared
     #region DECLARED VARIABLES
