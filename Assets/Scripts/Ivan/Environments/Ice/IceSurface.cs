@@ -4,16 +4,16 @@ public class IceSurface : MonoBehaviour
 {
     public IceSurfaceData iceSurfaceData; // Le ScriptableObject qui définit la glace
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        PlayerTest player = other.GetComponent<PlayerTest>();
+        PlayerTest player = other.gameObject.GetComponent<PlayerTest>();
         if (player != null)
             iceSurfaceData.TriggerEnter(this); // Déclenche l'événement pour ce player
     }
 
-    void OnTriggerExit(Collider other)
+    void OnCollisionExit(Collision other)
     {
-        PlayerTest player = other.GetComponent<PlayerTest>();
+        PlayerTest player = other.gameObject.GetComponent<PlayerTest>();
         if (player != null)
             iceSurfaceData.TriggerExit(this); // Déclenche l'événement pour ce player
     }

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerIceSystem : MonoBehaviour
@@ -7,27 +8,35 @@ public class PlayerIceSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        iceSurfaceData.OnPlayerEnter += HandlePlayerOnIce;
-        iceSurfaceData.OnPlayerExit += HandlePlayerOutOfIce;
+        iceSurfaceData.OnPlayerEnter += PlayerOnIceSurface;
+        iceSurfaceData.OnPlayerExit += PlayerLeaveIceSurface;
     }
 
     private void OnDisable()
     {
-        iceSurfaceData.OnPlayerEnter -= HandlePlayerOnIce;
-        iceSurfaceData.OnPlayerEnter -= HandlePlayerOutOfIce;
+        iceSurfaceData.OnPlayerEnter -= PlayerOnIceSurface;
+        iceSurfaceData.OnPlayerEnter -= PlayerLeaveIceSurface;
     }
 
-    private void HandlePlayerOutOfIce(IceSurface iceSurface)
+    private void PlayerOnIceSurface(IceSurface iceSurface)
+    {
+        if (player.GetPlayerMode() == PlayerTest.PlayerMode.Ice)
+        {
+            Debug.Log("Player glisse sur la glace !");
+            // Si il faut ici mettre application sur rigidbody player pour mouvement.
+            // comme lineardamping
+        }
+        else
+        {
+            player.Die();
+
+            // TO DO
+            // Level Manager Call CheckPoint
+        }
+    }
+
+    private void PlayerLeaveIceSurface(IceSurface iceSurface)
     {
         Debug.Log("Player ne glisse plus sur la glace !");
-    }
-
-    private void HandlePlayerOnIce(IceSurface iceSurface)
-    {
-        // TO DO : Appliquer la glisse, modifier Rigidbody etc.
-        // player.rb.drag = iceSurfaceData.dragOnIce;
-        // player.moveSpeed *= iceSurfaceData.speedMultiplier;
-
-        Debug.Log("Player glisse sur la glace !");
     }
 }
