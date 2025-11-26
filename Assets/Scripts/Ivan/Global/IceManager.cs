@@ -3,13 +3,17 @@ using UnityEngine;
 public class IceManager : MonoBehaviour
 {
     public IceSurfaceData iceSurfaceData;
+    public SulfurCaveData sulfurCaveData;
     public PlayerTest player;
+
+    EnvironmentGame environmentGame;
 
     // Manage Event
 
     private void OnEnable()
     {
         iceSurfaceData.OnPlayerEnter += PlayerOnIceSurface;
+        sulfurCaveData.OnPlayerEnter += PlayerOnSulfurCave;
 
         player.PlayerModeChange += PlayerModeCompareToEnvironment;
     }
@@ -34,34 +38,36 @@ public class IceManager : MonoBehaviour
                 // case PlayerTest.PlayerOnEnvironment.IceBridge:
                 //     Debug.Log("Die -> Fire on Ice Bridge");
                 //     break;
-                // case PlayerTest.PlayerOnEnvironment.SulfurCave:
-                //     Debug.Log("Die -> Fire on Sulfer Cave");
-                //     break;
+                case PlayerTest.PlayerOnEnvironment.SulfurCave:
+                    Debug.Log("Die -> Fire on Sulfer Cave");
+                    break;
             }
         }
     }
 
-    private void PlayerOnIceSurface()
+    private void PlayerOnIceSurface(IceSurface iceSurface)
     {
         player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceSurface);
+        environmentGame = iceSurface;
         PlayerModeCompareToEnvironment(player);
     }
 
-    private void PlayerOnIceBridge()
-    {
-        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceBridge);
-        PlayerModeCompareToEnvironment(player);
-    }
+    // private void PlayerOnIceBridge()
+    // {
+    //     player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceBridge);
+    //     PlayerModeCompareToEnvironment(player);
+    // }
 
-    private void PlayerOnIceMovingWall()
-    {
-        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceMovingWall);
-        PlayerModeCompareToEnvironment(player);
-    }
+    // private void PlayerOnIceMovingWall()
+    // {
+    //     player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceMovingWall);
+    //     PlayerModeCompareToEnvironment(player);
+    // }
 
-    private void PlayerOnSulfurCave()
+    private void PlayerOnSulfurCave(SulfurCave sulfurCave)
     {
         player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.SulfurCave);
+        environmentGame = sulfurCave;
         PlayerModeCompareToEnvironment(player);
     }
 

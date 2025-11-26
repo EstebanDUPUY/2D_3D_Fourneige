@@ -1,19 +1,13 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Events/Environment/IceSurfaceData")]
+[CreateAssetMenu(menuName = "Events/Ice/IceSurfaceData")]
 public class IceSurfaceData : ScriptableObject
 {
-    public float dragOnIce = 0.2f;
-    public float speedMultiplier = 2f;
-    public bool killFireForm = true;
+    public Action<IceSurface> OnPlayerEnter;
 
-    // L'event qui sera déclenché quand le joueur entre
-    public Action OnPlayerEnter;
-
-    // Appel de l'event
-    public void PlayerEnter()
+    public void PlayerEnter(IceSurface iceSurface)
     {
-        OnPlayerEnter?.Invoke();
+        OnPlayerEnter?.Invoke(iceSurface);
     }
 }

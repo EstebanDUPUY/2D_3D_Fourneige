@@ -3313,6 +3313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iceSurfaceData: {fileID: 11400000, guid: 1058bb1602daea14cb915ef97f8339d4, type: 2}
+  sulfurCaveData: {fileID: 0}
   player: {fileID: 618851995}
 --- !u!1 &1120236683
 GameObject:
@@ -5931,6 +5932,10 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7859124552869023711, guid: 3bb4505b1d167af408a77a142d128637, type: 3}
+      propertyPath: sulfurCaveData
+      value: 
+      objectReference: {fileID: 11400000, guid: 739a871a238ee224396e0fbabddc00b0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
