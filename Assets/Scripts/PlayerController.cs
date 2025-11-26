@@ -7,8 +7,21 @@ public class PlayerController : MonoBehaviour
 {
     // region for declared variables, where every repetitively used variable is declared
     #region DECLARED VARIABLES
+
+    [Header("Basic Motions")] // header that designates the basic motions section (like left and right movement)
+    public float moveSpeed;
+    public float aceleration;
+    public float startingSpeedBoost;
+    public float deceleration;
+
+    [Header("Basic Character Settings")] // header that designates the basic character settings (like gravity, friction and weight)
+    public float blabla;
+
+
+
     public enum States { fire, ice}; // enum that declares both states: fire and ice
     public States currentState; // State that declares the current state of the player
+
     #endregion
 
     // region for unity methods like Start and Update
