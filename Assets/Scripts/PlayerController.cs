@@ -1,9 +1,5 @@
-using Mono.Cecil;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -30,7 +26,7 @@ public class PlayerController : MonoBehaviour
     public float wallFriction;
 
 
-
+    // No headers since we can't put one before enums...
     public enum States { fire, ice}; // enum that declares both states: fire and ice
     public States currentState; // State that declares the current state of the player
 
