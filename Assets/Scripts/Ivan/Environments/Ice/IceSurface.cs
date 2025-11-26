@@ -8,13 +8,6 @@ public class IceSurface : MonoBehaviour
     {
         PlayerTest player = other.gameObject.GetComponent<PlayerTest>();
         if (player != null)
-            iceSurfaceData.TriggerEnter(this); // Déclenche l'événement pour ce player
-    }
-
-    void OnCollisionExit(Collision other)
-    {
-        PlayerTest player = other.gameObject.GetComponent<PlayerTest>();
-        if (player != null)
-            iceSurfaceData.TriggerExit(this); // Déclenche l'événement pour ce player
+            iceSurfaceData.PlayerEnter();
     }
 }

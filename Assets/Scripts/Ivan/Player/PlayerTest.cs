@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class PlayerTest : MonoBehaviour
 {
-    Action PlayerModeChange;
-    PlayerIceSystem playerIceSystem;
+    public Action<PlayerTest> PlayerModeChange;
     Rigidbody rb;
 
     public enum PlayerMode
@@ -13,12 +12,22 @@ public class PlayerTest : MonoBehaviour
         Ice,
     }
 
+    public enum PlayerOnEnvironment
+    {
+        IceSurface,
+        IceBridge,
+        IceMovingWall,
+        SulfurCave,
+    }
+
     PlayerMode playerMode;
+    PlayerOnEnvironment playerOnEnvironment;
 
     void Awake()
     {
-        playerMode = PlayerMode.Ice;
-        playerIceSystem = GetComponent<PlayerIceSystem>();
+        playerMode = PlayerMode.Fire;
+        playerOnEnvironment = PlayerOnEnvironment.IceSurface;
+
         rb = GetComponent<Rigidbody>();
     }
 
@@ -27,12 +36,23 @@ public class PlayerTest : MonoBehaviour
         Debug.Log("** PLAYER TEST -> Die()");
     }
 
-    // GETTER
-
-    public PlayerIceSystem GetIceSystem()
+    void SwitchMode()
     {
-        return playerIceSystem;
+        // Gestion Input Esteban
+
+        if (playerMode == PlayerMode.Fire)
+        {
+            playerMode = PlayerMode.Ice;
+        }
+        else
+        {
+            playerMode = PlayerMode.Fire;
+        }
+
+        PlayerModeChange?.Invoke(this);
     }
+
+    // GETTER
 
     public Rigidbody GetRigidbody()
     {
@@ -42,5 +62,22 @@ public class PlayerTest : MonoBehaviour
     public PlayerMode GetPlayerMode()
     {
         return playerMode;
+    }
+
+    public PlayerOnEnvironment GetPlayerOnEnvironment()
+    {
+        return playerOnEnvironment;
+    }
+
+    // SETTER
+
+    public void SetPlayerMode(PlayerMode playerMode)
+    {
+        this.playerMode = playerMode;
+    }
+
+    public void SetPlayerOnEvironment(PlayerOnEnvironment playerOnEnvironment)
+    {
+        this.playerOnEnvironment = playerOnEnvironment;
     }
 }

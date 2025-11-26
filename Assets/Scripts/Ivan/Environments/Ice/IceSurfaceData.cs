@@ -9,17 +9,11 @@ public class IceSurfaceData : ScriptableObject
     public bool killFireForm = true;
 
     // L'event qui sera déclenché quand le joueur entre
-    public Action<IceSurface> OnPlayerEnter;
-    public Action<IceSurface> OnPlayerExit;
+    public Action OnPlayerEnter;
 
     // Appel de l'event
-    public void TriggerEnter(IceSurface iceSurface)
+    public void PlayerEnter()
     {
-        OnPlayerEnter?.Invoke(iceSurface);
-    }
-
-    public void TriggerExit(IceSurface iceSurface)
-    {
-        OnPlayerExit?.Invoke(iceSurface);
+        OnPlayerEnter?.Invoke();
     }
 }
