@@ -16,11 +16,12 @@ public class PlayerController : MonoBehaviour
     public bool isFacingRight = true;
 
     [Header("Basic Motions")] // header that designates the basic motions section (like left and right movement)
-    public float horizontalMovement;
     public float moveSpeed;
     public float aceleration;
     public float startingSpeedBoost;
     public float deceleration;
+
+    private float horizontalMovement;
 
     [Header("Basic Character Settings")] // header that designates the basic character settings (like gravity, friction and weight)
     public float gravity;
