@@ -22,6 +22,7 @@ public class PlayerTest : MonoBehaviour
         IceBridge,
         IceWall,
         SulfurCave,
+        None,
     }
 
     PlayerMode playerMode;
@@ -80,7 +81,7 @@ public class PlayerTest : MonoBehaviour
         this.playerMode = playerMode;
     }
 
-    public void SetPlayerOnEvironment(PlayerOnEnvironment playerOnEnvironment)
+    public void SetPlayerOnEnvironment(PlayerOnEnvironment playerOnEnvironment)
     {
         this.playerOnEnvironment = playerOnEnvironment;
     }

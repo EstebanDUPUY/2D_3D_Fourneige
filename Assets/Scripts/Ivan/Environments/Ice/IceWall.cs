@@ -14,4 +14,11 @@ public class IceWall : EnvironmentGame
         if (player != null)
             iceWallData.PlayerEnter(this);
     }
+
+    void OnCollisionExit(Collision other)
+    {
+        PlayerTest player = other.gameObject.GetComponent<PlayerTest>();
+        if (player != null)
+            iceWallData.PlayerExit();
+    }
 }

@@ -25,6 +25,11 @@ public class IceManager : MonoBehaviour
         iceBridgeData.OnPlayerEnter += PlayerOnIceBridge;
         iceWallData.OnPlayerEnter += PlayerOnIceWall;
 
+        iceWallData.OnPlayerExit += PlayerOutEnvironment;
+        iceBridgeData.OnPlayerExit += PlayerOutEnvironment;
+        sulfurCaveData.OnPlayerExit += PlayerOutEnvironment;
+        iceSurfaceData.OnPlayerExit += PlayerOutEnvironment;
+
         player.PlayerModeChange += PlayerModeCompareToEnvironment;
     }
 
@@ -34,6 +39,13 @@ public class IceManager : MonoBehaviour
         sulfurCaveData.OnPlayerEnter -= PlayerOnSulfurCave;
         iceBridgeData.OnPlayerEnter -= PlayerOnIceBridge;
         iceWallData.OnPlayerEnter -= PlayerOnIceWall;
+
+        iceWallData.OnPlayerExit -= PlayerOutEnvironment;
+        iceBridgeData.OnPlayerExit -= PlayerOutEnvironment;
+        sulfurCaveData.OnPlayerExit -= PlayerOutEnvironment;
+        iceSurfaceData.OnPlayerExit -= PlayerOutEnvironment;
+
+        player.PlayerModeChange -= PlayerModeCompareToEnvironment;
     }
 
     void PlayerModeCompareToEnvironment(PlayerTest player)
@@ -59,54 +71,68 @@ public class IceManager : MonoBehaviour
         }
         else
         {
-            switch (player.GetPlayerOnEnvironment())
+            if (null == environmentGame)
             {
-                case PlayerTest.PlayerOnEnvironment.IceSurface:
-                    Debug.Log("Ice on Ice Surface");
-                    rb.linearDamping = player.linearDampingNormal;
-                    break;
-                case PlayerTest.PlayerOnEnvironment.IceWall:
-                    IceWall iceWall = environmentGame.GetComponent<IceWall>();
-                    rb.linearDamping = iceWall.dragOnIce;
-                    Debug.Log("Ice on Ice Moving Wall");
-                    break;
-                case PlayerTest.PlayerOnEnvironment.IceBridge:
-                    rb.linearDamping = player.linearDampingNormal;
-                    Debug.Log("Ice Fire on Ice Bridge");
-                    break;
-                case PlayerTest.PlayerOnEnvironment.SulfurCave:
-                    rb.linearDamping = player.linearDampingNormal;
-                    Debug.Log("Ice Fire on Sulfer Cave");
-                    break;
+                rb.linearDamping = player.linearDampingNormal;
+            }
+            else
+            {
+                switch (player.GetPlayerOnEnvironment())
+                {
+                    case PlayerTest.PlayerOnEnvironment.IceSurface:
+                        Debug.Log("Ice on Ice Surface");
+                        rb.linearDamping = player.linearDampingNormal;
+                        break;
+                    case PlayerTest.PlayerOnEnvironment.IceWall:
+                        IceWall iceWall = environmentGame.GetComponent<IceWall>();
+                        rb.linearDamping = iceWall.dragOnIce;
+                        Debug.Log("Ice on Ice Moving Wall");
+                        break;
+                    case PlayerTest.PlayerOnEnvironment.IceBridge:
+                        rb.linearDamping = player.linearDampingNormal;
+                        Debug.Log("Ice Fire on Ice Bridge");
+                        break;
+                    case PlayerTest.PlayerOnEnvironment.SulfurCave:
+                        rb.linearDamping = player.linearDampingNormal;
+                        Debug.Log("Ice Fire on Sulfer Cave");
+                        break;
+                }
             }
         }
     }
 
     private void PlayerOnIceSurface(IceSurface iceSurface)
     {
-        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceSurface);
+        player.SetPlayerOnEnvironment(PlayerTest.PlayerOnEnvironment.IceSurface);
         environmentGame = iceSurface;
         PlayerModeCompareToEnvironment(player);
     }
 
     private void PlayerOnIceBridge(IceBridge iceBridge)
     {
-        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceBridge);
+        player.SetPlayerOnEnvironment(PlayerTest.PlayerOnEnvironment.IceBridge);
         environmentGame = iceBridge;
         PlayerModeCompareToEnvironment(player);
     }
 
     private void PlayerOnIceWall(IceWall iceWall)
     {
-        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceWall);
+        player.SetPlayerOnEnvironment(PlayerTest.PlayerOnEnvironment.IceWall);
         environmentGame = iceWall;
         PlayerModeCompareToEnvironment(player);
     }
 
     private void PlayerOnSulfurCave(SulfurCave sulfurCave)
     {
-        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.SulfurCave);
+        player.SetPlayerOnEnvironment(PlayerTest.PlayerOnEnvironment.SulfurCave);
         environmentGame = sulfurCave;
+        PlayerModeCompareToEnvironment(player);
+    }
+
+    private void PlayerOutEnvironment()
+    {
+        player.SetPlayerOnEnvironment(PlayerTest.PlayerOnEnvironment.None);
+        environmentGame = null;
         PlayerModeCompareToEnvironment(player);
     }
 
