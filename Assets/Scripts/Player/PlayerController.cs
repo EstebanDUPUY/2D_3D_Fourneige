@@ -708,8 +708,8 @@ public class PlayerController : MonoBehaviour
     /// Uses Y-rotation instead of scale to avoid visual artifacts.
     /// 
     /// Rotation values:
-    /// - 0° = Facing right
-    /// - 180° = Facing left
+    /// - 0ï¿½ = Facing right
+    /// - 180ï¿½ = Facing left
     /// 
     /// Duration: 0.15 seconds (quick and snappy for fast gameplay)
     /// </summary>
