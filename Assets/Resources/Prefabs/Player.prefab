@@ -331,7 +331,7 @@ MonoBehaviour:
   dashHasInvincibility: 0
   dashInvincibilityDuration: 0.3
   dashIsFixedDistance: 0
-  dashDistance: 5
-  dashDuration: 0.25
+  dashDistance: 3
+  dashDuration: 0.3
   dashSpeed: 50
-  wallStickRequiresInput: 1
+  wallStickRequiresInput: 0

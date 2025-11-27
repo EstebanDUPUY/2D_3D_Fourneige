@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: IceState
   m_EditorClassIdentifier: 
   stateName: Ice
-  moveSpeed: 12
-  acceleration: 8
-  startingSpeedBoost: 2.5
-  deceleration: 3
-  gravity: 40
-  weight: 3
-  groundFriction: 2
-  wallFriction: 2
-  wallSlideFriction: 4
-  jumpForce: 15
+  moveSpeed: 25
+  acceleration: 10
+  startingSpeedBoost: 5
+  deceleration: 6
+  gravity: 50
+  weight: 1
+  groundFriction: 4
+  wallFriction: 16
+  wallSlideFriction: 24
+  jumpForce: 22
   jumpHoldGravityMultiplier: 0.4
   jumpReleaseGravityMultiplier: 2
   maxJumpHoldTime: 0.4

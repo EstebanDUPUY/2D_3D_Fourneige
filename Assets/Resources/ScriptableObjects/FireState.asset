@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: FireState
   m_EditorClassIdentifier: 
   stateName: Fire
-  moveSpeed: 25
+  moveSpeed: 50
   acceleration: 15
   startingSpeedBoost: 9
-  deceleration: 8
+  deceleration: 0.3
   gravity: 30
   weight: 1
   groundFriction: 0.3
@@ -26,7 +26,7 @@ MonoBehaviour:
   jumpHoldGravityMultiplier: 1
   jumpReleaseGravityMultiplier: 1
   maxJumpHoldTime: 0.15
-  coyoteTimeDuration: 0.1
+  coyoteTimeDuration: 0.005
   jumpBufferTime: 1
   hasBufferedJump: 0
   hasDash: 0
