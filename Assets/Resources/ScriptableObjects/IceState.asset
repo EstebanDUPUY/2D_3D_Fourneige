@@ -20,8 +20,8 @@ MonoBehaviour:
   gravity: 50
   weight: 1
   groundFriction: 4
-  wallFriction: 16
-  wallSlideFriction: 24
+  wallFriction: 1
+  wallSlideFriction: 1
   jumpForce: 22
   jumpHoldGravityMultiplier: 0.4
   jumpReleaseGravityMultiplier: 2
