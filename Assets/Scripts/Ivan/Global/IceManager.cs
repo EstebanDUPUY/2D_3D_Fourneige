@@ -67,8 +67,8 @@ public class IceManager : MonoBehaviour
                     Debug.Log("Die -> Fire on Ice Surface");
                     break;
                 case PlayerIceSystem.PlayerOnEnvironment.IceWall:
-                    IceWall iceWall = environmentGame.GetComponent<IceWall>();
-                    Debug.Log("Die -> Fire on Ice Moving Wall");
+                    rb.linearDamping = playerIceSystem.linearDampingNormal;
+                    Debug.Log("Linear Damping Normal -> Fire on Ice Moving Wall");
                     break;
                 case PlayerIceSystem.PlayerOnEnvironment.IceBridge:
                     Debug.Log("Die -> Fire on Ice Bridge");

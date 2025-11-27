@@ -22,7 +22,7 @@ public class IceWall : EnvironmentGame
         if (player != null)
         {
             iceWallData.PlayerEnter(this);
-            StartCoroutine(MoveWall());
+            // StartCoroutine(MoveWall());
         }
     }
 
