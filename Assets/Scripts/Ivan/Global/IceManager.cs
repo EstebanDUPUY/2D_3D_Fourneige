@@ -1,5 +1,5 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
 public class IceManager : MonoBehaviour
 {
@@ -37,7 +37,9 @@ public class IceManager : MonoBehaviour
         sulfurCaveData.OnPlayerExit += PlayerOutEnvironment;
         iceSurfaceData.OnPlayerExit += PlayerOutEnvironment;
 
-        playerIceSystem.PlayerModeChange += PlayerModeCompareToEnvironment;
+        // playerIceSystem.PlayerModeChange += PlayerModeCompareToEnvironment;
+
+        player.SwitchMode += PlayerModeCompareToEnvironment;
     }
 
     private void OnDisable()
@@ -52,12 +54,12 @@ public class IceManager : MonoBehaviour
         sulfurCaveData.OnPlayerExit -= PlayerOutEnvironment;
         iceSurfaceData.OnPlayerExit -= PlayerOutEnvironment;
 
-        playerIceSystem.PlayerModeChange -= PlayerModeCompareToEnvironment;
+        // playerIceSystem.PlayerModeChange -= PlayerModeCompareToEnvironment;
     }
 
-    void PlayerModeCompareToEnvironment(PlayerIceSystem playerIceSystem)
+    void PlayerModeCompareToEnvironment()
     {
-        if (playerIceSystem.GetPlayerMode() == PlayerIceSystem.PlayerMode.Fire)
+        if (player.currentState == PlayerController.States.Fire)
         {
             switch (playerIceSystem.GetPlayerOnEnvironment())
             {
@@ -114,35 +116,35 @@ public class IceManager : MonoBehaviour
     {
         playerIceSystem.SetPlayerOnEnvironment(PlayerIceSystem.PlayerOnEnvironment.IceSurface);
         environmentGame = iceSurface;
-        PlayerModeCompareToEnvironment(playerIceSystem);
+        PlayerModeCompareToEnvironment();
     }
 
     private void PlayerOnIceBridge(IceBridge iceBridge)
     {
         playerIceSystem.SetPlayerOnEnvironment(PlayerIceSystem.PlayerOnEnvironment.IceBridge);
         environmentGame = iceBridge;
-        PlayerModeCompareToEnvironment(playerIceSystem);
+        PlayerModeCompareToEnvironment();
     }
 
     private void PlayerOnIceWall(IceWall iceWall)
     {
         playerIceSystem.SetPlayerOnEnvironment(PlayerIceSystem.PlayerOnEnvironment.IceWall);
         environmentGame = iceWall;
-        PlayerModeCompareToEnvironment(playerIceSystem);
+        PlayerModeCompareToEnvironment();
     }
 
     private void PlayerOnSulfurCave(SulfurCave sulfurCave)
     {
         playerIceSystem.SetPlayerOnEnvironment(PlayerIceSystem.PlayerOnEnvironment.SulfurCave);
         environmentGame = sulfurCave;
-        PlayerModeCompareToEnvironment(playerIceSystem);
+        PlayerModeCompareToEnvironment();
     }
 
     private void PlayerOutEnvironment()
     {
         playerIceSystem.SetPlayerOnEnvironment(PlayerIceSystem.PlayerOnEnvironment.None);
         environmentGame = null;
-        PlayerModeCompareToEnvironment(playerIceSystem);
+        PlayerModeCompareToEnvironment();
     }
 
     // Other Functions

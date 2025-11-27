@@ -1,11 +1,12 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 /// <summary>
 /// Main controller for the player character in a 2.5D platformer.
 /// Handles movement, jumping, wall mechanics, dashing, and state switching (Fire/Ice).
-/// 
+///
 /// Core Systems:
 /// - Dual-state system using ScriptableObjects for data-driven design
 /// - Hybrid ground detection (Raycast + OverlapBox) for reliability
@@ -34,8 +35,15 @@ public class PlayerController : MonoBehaviour
     /// Enum defining the two available player states.
     /// Each state has drastically different physics and abilities.
     /// </summary>
-    public enum States { Fire, Ice }
+    public enum States
+    {
+        Fire,
+        Ice,
+    }
+
     public States currentState; // Current active state
+
+    public Action SwitchMode;
 
     #endregion
 
@@ -46,7 +54,6 @@ public class PlayerController : MonoBehaviour
     private float currentSpeed; // Current movement speed (not actively used but kept for future features)
     private bool isFacingRight = true; // Tracks which direction the sprite is facing
     private bool isFlipping = false; // Prevents multiple flip coroutines from running simultaneously
-
     #endregion
 
     // ==================== GROUND & WALL DETECTION ====================
@@ -56,7 +63,7 @@ public class PlayerController : MonoBehaviour
     /// Detection uses a hybrid approach:
     /// 1. OverlapBox: Confirms solid contact (reliable, no false negatives)
     /// 2. Raycast: Predicts upcoming contact (enables coyote time and buffering)
-    /// 
+    ///
     /// This combination provides both reliability and predictive capabilities.
     /// </summary>
     [Header("Detection Settings")]
@@ -77,7 +84,6 @@ public class PlayerController : MonoBehaviour
     private bool isTouchingWall; // TRUE when either side detects a wall
     private bool isWallAhead; // TRUE when Raycast detects wall in facing direction
     private int wallDirection; // -1 = wall on left, 1 = wall on right, 0 = no wall
-
     #endregion
 
     // ==================== JUMP VARIABLES ====================
@@ -95,7 +101,6 @@ public class PlayerController : MonoBehaviour
     private float coyoteTimeTimer; // Countdown timer for coyote time window
     private float jumpHoldTimer; // Tracks how long jump button has been held
     private bool isHoldingJump; // TRUE while jump button is held during ascent
-
     #endregion
 
     // ==================== DASH VARIABLES ====================
@@ -120,7 +125,6 @@ public class PlayerController : MonoBehaviour
     private bool isInvincible; // TRUE during invincibility frames
     private bool canDash = true; // FALSE after dash until landing (prevents air spam)
     private Vector3 dashDirection; // Normalized direction vector for current dash
-
     #endregion
 
     // ==================== WALL MECHANICS ====================
@@ -137,7 +141,6 @@ public class PlayerController : MonoBehaviour
 
     private bool isWallSliding; // TRUE when sliding down a wall
     private bool canWallJump; // TRUE when wall jump is available
-
     #endregion
 
     #endregion
@@ -211,7 +214,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Updates all timing systems for jump mechanics.
     /// Called every frame in Update().
-    /// 
+    ///
     /// IMPROVED: Coyote time only resets on solid ground contact, not prediction
     /// </summary>
     private void UpdateTimers()
@@ -255,7 +258,7 @@ public class PlayerController : MonoBehaviour
     /// Evaluates conditions for both ground jump and wall jump.
     /// Ground jump uses coyote time for forgiveness.
     /// Wall jump has separate availability tracking.
-    /// 
+    ///
     /// IMPROVED: Better priority handling and state checking
     /// </summary>
     private void TryJump()
@@ -281,7 +284,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Executes a standard ground jump.
     /// Resets vertical velocity to ensure consistent jump height.
-    /// 
+    ///
     /// IMPROVED: Guarantees minimum upward velocity for consistent jumps
     /// </summary>
     private void Jump()
@@ -385,9 +388,10 @@ public class PlayerController : MonoBehaviour
         float speedDifference = targetSpeed - rb.linearVelocity.x;
 
         // Choose between acceleration (moving) or deceleration (stopping)
-        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f)
-            ? currentStateData.acceleration
-            : currentStateData.deceleration;
+        float accelRate =
+            (Mathf.Abs(targetSpeed) > 0.01f)
+                ? currentStateData.acceleration
+                : currentStateData.deceleration;
 
         // Apply starting boost when beginning movement from standstill
         // Creates a more responsive "pop" feel
@@ -423,7 +427,7 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>
     /// Applies custom gravity with multipliers for variable jump height (Celeste-style).
-    /// 
+    ///
     /// Three gravity states:
     /// 1. Holding jump + ascending: Reduced gravity (floaty, allows holding for height)
     /// 2. Falling OR released jump: Increased gravity (snappy, responsive)
@@ -447,7 +451,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // Apply gravity force with multiplier
-        rb.AddForce(Vector3.down * currentStateData.gravity * gravityMultiplier * rb.mass, ForceMode.Force);
+        rb.AddForce(
+            Vector3.down * currentStateData.gravity * gravityMultiplier * rb.mass,
+            ForceMode.Force
+        );
 
         // Reset jumping flag when grounded
         if (isGrounded)
@@ -458,13 +465,13 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>
     /// Applies wall slide mechanics when conditions are met.
-    /// 
+    ///
     /// Wall slide activates when:
     /// - Touching a wall
     /// - Not grounded
     /// - Falling (negative Y velocity)
     /// - (Optional) Pushing toward the wall with input
-    /// 
+    ///
     /// While sliding, vertical velocity is capped to create controlled descent.
     /// </summary>
     private void ApplyWallSlide()
@@ -475,8 +482,8 @@ public class PlayerController : MonoBehaviour
         // Optional: Require player to hold toward wall to stick
         if (wallStickRequiresInput)
         {
-            bool pushingTowardWall = (wallDirection > 0 && moveInput.x > 0)
-                                  || (wallDirection < 0 && moveInput.x < 0);
+            bool pushingTowardWall =
+                (wallDirection > 0 && moveInput.x > 0) || (wallDirection < 0 && moveInput.x < 0);
             shouldWallSlide = shouldWallSlide && pushingTowardWall;
         }
 
@@ -537,15 +544,16 @@ public class PlayerController : MonoBehaviour
                 currentState = States.Fire;
                 ApplyStateData(fireStateData);
             }
+            SwitchMode?.Invoke();
         }
     }
 
     /// <summary>
     /// Called by Unity's Input System for jump input.
-    /// 
+    ///
     /// On press (performed): Buffer the jump input ONLY if grounded/about to land
     /// On release (canceled): Stop variable height control
-    /// 
+    ///
     /// FIX: Prevents buffering jump while already airborne (no unintended double jump)
     /// </summary>
     public void OnJump(InputAction.CallbackContext ctx)
@@ -607,11 +615,11 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>
     /// Executes the dash movement in the specified direction.
-    /// 
+    ///
     /// Two modes:
     /// 1. Fixed Distance: Lerp from start to target position
     /// 2. Fixed Duration: Apply constant velocity for duration
-    /// 
+    ///
     /// Dash locks out normal movement and can trigger invincibility.
     /// </summary>
     private IEnumerator PerformDash(Vector3 direction)
@@ -706,11 +714,11 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Smoothly rotates the sprite on Y-axis to create a flip effect.
     /// Uses Y-rotation instead of scale to avoid visual artifacts.
-    /// 
+    ///
     /// Rotation values:
     /// - 0� = Facing right
     /// - 180� = Facing left
-    /// 
+    ///
     /// Duration: 0.15 seconds (quick and snappy for fast gameplay)
     /// </summary>
     private IEnumerator FlipSprite(bool flipToRight)
@@ -744,29 +752,41 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>
     /// Hybrid ground detection system combining OverlapBox and Raycast.
-    /// 
+    ///
     /// OverlapBox: Checks for immediate contact (isGrounded)
     /// - Reliable, no false negatives
     /// - Positioned at bottom of character collider
-    /// 
+    ///
     /// Raycast: Predicts upcoming contact (isAboutToLand)
     /// - Enables coyote time and jump buffering
     /// - Slightly elevated start position to avoid starting inside ground
-    /// 
+    ///
     /// This combination provides both current state and predictive capabilities.
     /// </summary>
     private void CheckGroundStatus()
     {
         // Calculate check position at bottom of collider
-        Vector3 boxCenter = transform.position - new Vector3(0, GetComponent<Collider>().bounds.extents.y, 0);
+        Vector3 boxCenter =
+            transform.position - new Vector3(0, GetComponent<Collider>().bounds.extents.y, 0);
 
         // OverlapBox: Check for solid ground contact
-        isGrounded = Physics.CheckBox(boxCenter, groundCheckSize / 2, Quaternion.identity, groundLayer);
+        isGrounded = Physics.CheckBox(
+            boxCenter,
+            groundCheckSize / 2,
+            Quaternion.identity,
+            groundLayer
+        );
 
         // Raycast: Predict ground within distance
         RaycastHit hit;
         Vector3 rayStart = boxCenter + Vector3.up * 0.1f; // Slightly elevated to avoid self-collision
-        isAboutToLand = Physics.Raycast(rayStart, Vector3.down, out hit, groundRaycastDistance, groundLayer);
+        isAboutToLand = Physics.Raycast(
+            rayStart,
+            Vector3.down,
+            out hit,
+            groundRaycastDistance,
+            groundLayer
+        );
     }
 
     #endregion
@@ -777,7 +797,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Detects walls on both sides of the character using OverlapBox.
     /// Also uses Raycast to detect walls ahead in facing direction.
-    /// 
+    ///
     /// Checks both left and right simultaneously to determine:
     /// - isTouchingWall: Is there a wall on either side?
     /// - wallDirection: Which side is the wall on?
@@ -815,25 +835,26 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     // ==================== DEBUG GIZMOS ====================
-    #region GIZMOS 
+    #region GIZMOS
 
     /// <summary>
     /// Draws visual debugging information in the Scene view.
     /// Only visible when the GameObject is selected.
-    /// 
+    ///
     /// Color coding:
     /// - Green/Red boxes: Ground detection (green = grounded)
     /// - Yellow/Gray line down: Ground prediction (yellow = about to land)
     /// - Blue boxes: Wall detection zones
     /// - Cyan/Gray line forward: Wall ahead prediction (cyan = wall ahead)
-    /// 
+    ///
     /// Use these visualizations to tune detection sizes and distances.
     /// </summary>
     private void OnDrawGizmosSelected()
     {
         // Get collider reference
         Collider col = GetComponent<Collider>();
-        if (col == null) return;
+        if (col == null)
+            return;
 
         // Calculate ground check position at bottom of collider
         Vector3 groundCheckCenter = transform.position - new Vector3(0, col.bounds.extents.y, 0);
@@ -859,7 +880,10 @@ public class PlayerController : MonoBehaviour
         // Wall ahead raycast
         Gizmos.color = isWallAhead ? Color.cyan : Color.gray;
         Vector3 wallRayDirection = isFacingRight ? Vector3.right : Vector3.left;
-        Gizmos.DrawLine(transform.position, transform.position + wallRayDirection * wallRaycastDistance);
+        Gizmos.DrawLine(
+            transform.position,
+            transform.position + wallRayDirection * wallRaycastDistance
+        );
     }
 
     #endregion
