@@ -15,13 +15,13 @@ MonoBehaviour:
   stateName: Ice
   moveSpeed: 12
   acceleration: 8
-  startingSpeedBoost: 1.5
+  startingSpeedBoost: 2.5
   deceleration: 3
   gravity: 40
   weight: 3
   groundFriction: 2
   wallFriction: 2
-  wallSlideFriction: -2
+  wallSlideFriction: 4
   jumpForce: 15
   jumpHoldGravityMultiplier: 0.4
   jumpReleaseGravityMultiplier: 2
