@@ -6,7 +6,7 @@ public class SulfurCave : EnvironmentGame
 
     void OnTriggerEnter(Collider other)
     {
-        PlayerTest player = other.GetComponent<PlayerTest>();
+        PlayerIceSystem player = other.GetComponent<PlayerIceSystem>();
         if (player != null)
             sulfurCaveData.PlayerEnter(this);
     }

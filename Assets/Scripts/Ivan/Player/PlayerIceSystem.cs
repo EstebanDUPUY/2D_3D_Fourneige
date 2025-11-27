@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-public class PlayerTest : MonoBehaviour
+public class PlayerIceSystem : MonoBehaviour
 {
-    public Action<PlayerTest> PlayerModeChange;
-    Rigidbody rb;
+    public Action<PlayerIceSystem> PlayerModeChange;
+    public Rigidbody rb;
 
     public float linearDampingNormal = 0f;
     public float speedMultiplierInit = 1f;
@@ -30,10 +30,11 @@ public class PlayerTest : MonoBehaviour
 
     void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         playerMode = PlayerMode.Ice;
         playerOnEnvironment = PlayerOnEnvironment.IceSurface;
 
-        rb = GetComponent<Rigidbody>();
+        // rb = GetComponent<Rigidbody>();
     }
 
     public void Die()

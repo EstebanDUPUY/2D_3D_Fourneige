@@ -10,7 +10,7 @@ public class IceBridge : EnvironmentGame
 
     void OnCollisionEnter(Collision other)
     {
-        PlayerTest player = other.gameObject.GetComponent<PlayerTest>();
+        PlayerIceSystem player = other.gameObject.GetComponent<PlayerIceSystem>();
         if (player != null)
             iceBridgeData.PlayerEnter(this);
     }
