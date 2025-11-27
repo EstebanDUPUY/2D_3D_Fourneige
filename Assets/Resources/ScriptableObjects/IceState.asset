@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateName: Ice
   moveSpeed: 25
-  acceleration: 10
+  acceleration: 25
   startingSpeedBoost: 5
   deceleration: 6
   gravity: 50
