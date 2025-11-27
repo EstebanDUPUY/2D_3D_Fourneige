@@ -6,6 +6,10 @@ public class PlayerTest : MonoBehaviour
     public Action<PlayerTest> PlayerModeChange;
     Rigidbody rb;
 
+    public float linearDampingNormal = 0f;
+    public float speedMultiplierInit = 1f;
+    public float speedMultiplier = 1f;
+
     public enum PlayerMode
     {
         Fire,
@@ -16,7 +20,7 @@ public class PlayerTest : MonoBehaviour
     {
         IceSurface,
         IceBridge,
-        IceMovingWall,
+        IceWall,
         SulfurCave,
     }
 
@@ -25,7 +29,7 @@ public class PlayerTest : MonoBehaviour
 
     void Awake()
     {
-        playerMode = PlayerMode.Fire;
+        playerMode = PlayerMode.Ice;
         playerOnEnvironment = PlayerOnEnvironment.IceSurface;
 
         rb = GetComponent<Rigidbody>();

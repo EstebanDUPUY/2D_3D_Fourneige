@@ -5763,13 +5763,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8000558775199975559, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
+      propertyPath: dragOnIce
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.463
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.081
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5777,7 +5781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.92387956
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalRotation.x
@@ -5789,7 +5793,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.38268343
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5801,7 +5805,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 9051012073289300858, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_Name

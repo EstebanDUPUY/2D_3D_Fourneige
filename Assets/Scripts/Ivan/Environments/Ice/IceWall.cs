@@ -4,7 +4,7 @@ public class IceWall : EnvironmentGame
 {
     public IceWallData iceWallData;
 
-    public float dragOnIce = 0.2f;
+    public float dragOnIce = 45f;
     public float speedMultiplier = 2f;
     public bool killFireForm = true;
 

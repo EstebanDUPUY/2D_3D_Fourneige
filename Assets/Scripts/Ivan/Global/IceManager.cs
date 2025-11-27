@@ -7,8 +7,14 @@ public class IceManager : MonoBehaviour
     public IceBridgeData iceBridgeData;
     public IceWallData iceWallData;
     public PlayerTest player;
+    public Rigidbody rb;
 
     EnvironmentGame environmentGame;
+
+    void Awake()
+    {
+        rb = player.GetComponent<Rigidbody>();
+    }
 
     // Manage Event
 
@@ -26,6 +32,8 @@ public class IceManager : MonoBehaviour
     {
         iceSurfaceData.OnPlayerEnter -= PlayerOnIceSurface;
         sulfurCaveData.OnPlayerEnter -= PlayerOnSulfurCave;
+        iceBridgeData.OnPlayerEnter -= PlayerOnIceBridge;
+        iceWallData.OnPlayerEnter -= PlayerOnIceWall;
     }
 
     void PlayerModeCompareToEnvironment(PlayerTest player)
@@ -37,7 +45,8 @@ public class IceManager : MonoBehaviour
                 case PlayerTest.PlayerOnEnvironment.IceSurface:
                     Debug.Log("Die -> Fire on Ice Surface");
                     break;
-                case PlayerTest.PlayerOnEnvironment.IceMovingWall:
+                case PlayerTest.PlayerOnEnvironment.IceWall:
+                    IceWall iceWall = environmentGame.GetComponent<IceWall>();
                     Debug.Log("Die -> Fire on Ice Moving Wall");
                     break;
                 case PlayerTest.PlayerOnEnvironment.IceBridge:
@@ -45,6 +54,29 @@ public class IceManager : MonoBehaviour
                     break;
                 case PlayerTest.PlayerOnEnvironment.SulfurCave:
                     Debug.Log("Die -> Fire on Sulfer Cave");
+                    break;
+            }
+        }
+        else
+        {
+            switch (player.GetPlayerOnEnvironment())
+            {
+                case PlayerTest.PlayerOnEnvironment.IceSurface:
+                    Debug.Log("Ice on Ice Surface");
+                    rb.linearDamping = player.linearDampingNormal;
+                    break;
+                case PlayerTest.PlayerOnEnvironment.IceWall:
+                    IceWall iceWall = environmentGame.GetComponent<IceWall>();
+                    rb.linearDamping = iceWall.dragOnIce;
+                    Debug.Log("Ice on Ice Moving Wall");
+                    break;
+                case PlayerTest.PlayerOnEnvironment.IceBridge:
+                    rb.linearDamping = player.linearDampingNormal;
+                    Debug.Log("Ice Fire on Ice Bridge");
+                    break;
+                case PlayerTest.PlayerOnEnvironment.SulfurCave:
+                    rb.linearDamping = player.linearDampingNormal;
+                    Debug.Log("Ice Fire on Sulfer Cave");
                     break;
             }
         }
@@ -66,7 +98,7 @@ public class IceManager : MonoBehaviour
 
     private void PlayerOnIceWall(IceWall iceWall)
     {
-        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceMovingWall);
+        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceWall);
         environmentGame = iceWall;
         PlayerModeCompareToEnvironment(player);
     }
