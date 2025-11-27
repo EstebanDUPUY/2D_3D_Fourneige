@@ -211,11 +211,15 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Updates all timing systems for jump mechanics.
     /// Called every frame in Update().
+    /// 
+    /// IMPROVED: Coyote time only resets on solid ground contact, not prediction
     /// </summary>
     private void UpdateTimers()
     {
         // Coyote Time: Grace period after leaving ground
-        if (isGrounded || isAboutToLand)
+        // FIXED: Only reset on actual ground contact, not prediction
+        // This prevents coyote time from staying active too long
+        if (isGrounded)
         {
             coyoteTimeTimer = currentStateData.coyoteTimeDuration; // Reset timer while grounded
         }
@@ -251,33 +255,47 @@ public class PlayerController : MonoBehaviour
     /// Evaluates conditions for both ground jump and wall jump.
     /// Ground jump uses coyote time for forgiveness.
     /// Wall jump has separate availability tracking.
+    /// 
+    /// IMPROVED: Better priority handling and state checking
     /// </summary>
     private void TryJump()
     {
-        // Can ground jump if: within coyote time AND not already jumping
-        bool canGroundJump = coyoteTimeTimer > 0 && !isJumping;
+        // Can ground jump if: within coyote time AND not already jumping AND not dashing
+        bool canGroundJump = coyoteTimeTimer > 0 && !isJumping && !isDashing;
 
-        if (jumpBuffered && canGroundJump)
+        if (jumpBuffered)
         {
-            Jump(); // Execute ground jump
-        }
-        else if (jumpBuffered && canWallJump)
-        {
-            WallJump(); // Execute wall jump
+            // Priority 1: Wall jump (if available)
+            if (canWallJump && !isGrounded)
+            {
+                WallJump();
+            }
+            // Priority 2: Ground jump
+            else if (canGroundJump)
+            {
+                Jump();
+            }
         }
     }
 
     /// <summary>
     /// Executes a standard ground jump.
     /// Resets vertical velocity to ensure consistent jump height.
+    /// 
+    /// IMPROVED: Guarantees minimum upward velocity for consistent jumps
     /// </summary>
     private void Jump()
     {
-        // Reset vertical velocity to prevent velocity stacking
+        // FIXED: Reset vertical velocity completely for consistent jumps
+        // Prevents velocity stacking from slopes or previous forces
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
         // Apply upward impulse force
         rb.AddForce(Vector3.up * currentStateData.jumpForce, ForceMode.Impulse);
+
+        // ADDED: Guarantee minimum upward velocity
+        // Ensures jump always reaches intended height even on slopes/moving platforms
+        StartCoroutine(GuaranteeJumpVelocity());
 
         // Reset jump-related states
         isJumping = true;
@@ -285,6 +303,27 @@ public class PlayerController : MonoBehaviour
         jumpHoldTimer = 0f;
         jumpBuffered = false; // Consume the buffered input
         coyoteTimeTimer = 0f; // Consume coyote time
+    }
+
+    /// <summary>
+    /// Ensures jump maintains minimum velocity for one frame.
+    /// Prevents external forces (slopes, moving platforms) from reducing jump height.
+    /// </summary>
+    private IEnumerator GuaranteeJumpVelocity()
+    {
+        // Wait for physics to apply forces
+        yield return new WaitForFixedUpdate();
+
+        // If upward velocity is less than expected, boost it
+        float expectedMinVelocity = currentStateData.jumpForce * 0.9f; // 90% of jump force
+        if (rb.linearVelocity.y < expectedMinVelocity)
+        {
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                expectedMinVelocity,
+                rb.linearVelocity.z
+            );
+        }
     }
 
     /// <summary>
@@ -504,15 +543,24 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Called by Unity's Input System for jump input.
     /// 
-    /// On press (performed): Buffer the jump input
+    /// On press (performed): Buffer the jump input ONLY if grounded/about to land
     /// On release (canceled): Stop variable height control
+    /// 
+    /// FIX: Prevents buffering jump while already airborne (no unintended double jump)
     /// </summary>
     public void OnJump(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
         {
-            jumpBuffered = true;
-            jumpBufferTimer = currentStateData.jumpBufferTime;
+            // FIXED: Only buffer jump if we're grounded, about to land, or on a wall
+            // This prevents the air double-jump bug
+            bool canBufferJump = isGrounded || isAboutToLand || canWallJump;
+
+            if (canBufferJump)
+            {
+                jumpBuffered = true;
+                jumpBufferTimer = currentStateData.jumpBufferTime;
+            }
         }
 
         if (ctx.canceled)

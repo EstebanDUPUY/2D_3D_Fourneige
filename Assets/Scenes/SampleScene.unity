@@ -846,7 +846,7 @@ MonoBehaviour:
   wallCheckSize: {x: 0.25, y: 1.5, z: 0}
   groundRaycastDistance: 0.25
   wallRaycastDistance: 0.25
-  dashHasInvincibility: 1
+  dashHasInvincibility: 0
   dashInvincibilityDuration: 0.3
   dashIsFixedDistance: 0
   dashDistance: 5
