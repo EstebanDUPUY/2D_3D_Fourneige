@@ -16,47 +16,47 @@ MonoBehaviour:
   stateColor: {r: 0, g: 0, b: 1, a: 1}
   canMove: 1
   canSwitchFromThisState: 1
-  stateSwitchCooldown: 0
+  stateSwitchCooldown: 0.001
   canMoveOnGround: 1
-  moveSpeed: 15
-  acceleration: 1
-  startingSpeedBoost: 1
-  deceleration: 1
+  moveSpeed: 40
+  acceleration: 11
+  startingSpeedBoost: 2.6
+  deceleration: 2.5
   hasAirControl: 1
-  airControlMultiplier: 0.8
-  gravity: 30
-  weight: 1
-  groundFriction: 0.5
+  airControlMultiplier: 0.6
+  gravity: 7.5
+  weight: 2.5
+  groundFriction: 0.15
   canJump: 1
   jumpForce: 15
   hasVariableJump: 1
-  jumpHoldGravityMultiplier: 0.5
-  jumpReleaseGravityMultiplier: 2
-  maxJumpHoldTime: 0.3
+  jumpHoldGravityMultiplier: 0.2
+  jumpReleaseGravityMultiplier: 4
+  maxJumpHoldTime: 0.5
   hasCoyoteTime: 1
-  coyoteTimeDuration: 0.15
+  coyoteTimeDuration: 0.3
   hasJumpBuffer: 1
-  jumpBufferTime: 0.2
+  jumpBufferTime: 0.3
   hasDoubleJump: 0
   maxAirJumps: 1
-  airJumpForceMultiplier: 0.9
+  airJumpForceMultiplier: 1.5
   hasWallSlide: 1
-  wallSlideRequiresInput: 0
-  wallSlideFriction: -3
+  wallSlideRequiresInput: 1
+  wallSlideFriction: -0.65
   hasWallJump: 1
-  wallJumpForce: 0
-  wallJumpHorizontalMultiplier: 0.7
-  hasDash: 0
-  hasAirDash: 0
-  dashCooldown: 0
+  wallJumpForce: 25
+  wallJumpHorizontalMultiplier: 1.5
+  hasDash: 1
+  hasAirDash: 1
+  dashCooldown: 0.15
   dashIsFixedDistance: 0
   dashDistance: 5
-  dashDuration: 0.3
-  dashSpeed: 20
+  dashDuration: 0.45
+  dashSpeed: 29
   dashHasInvincibility: 0
   dashInvincibilityDuration: 0.3
   hasBunnyHop: 0
-  bunnyHopSpeedBonus: 0.15
+  bunnyHopSpeedBonus: 0.5
   bunnyHopDecayRate: 1
-  bunnyHopMaxSpeed: 1.5
+  bunnyHopMaxSpeed: 3
   bunnyHopTimingWindow: 0.1

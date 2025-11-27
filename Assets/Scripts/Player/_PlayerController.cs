@@ -29,6 +29,11 @@ public class _PlayerController : MonoBehaviour
     private Rigidbody rb; // Physics body for movement and forces
     private SpriteRenderer spriteRenderer; // For visual feedback and sprite flipping effects
 
+    // Visual Transform - the child GameObject that rotates for sprite flipping
+    [Header("Visual References")]
+    [Tooltip("Drag the 'Visual' child GameObject here")]
+    public Transform visualTransform;
+
     // State Data - ScriptableObjects containing all parameters for each state
     public _PlayerStateData fireStateData; // First state option
     public _PlayerStateData iceStateData; // Second state option
@@ -187,11 +192,26 @@ public class _PlayerController : MonoBehaviour
 
     /// <summary>
     /// Awake is called before Start. Used for getting component references.
+    /// IMPORTANT: SpriteRenderer must be on a child GameObject (Visual/Sprite).
     /// </summary>
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Get SpriteRenderer from child (it's no longer on this GameObject)
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        // Validate that visualTransform is assigned
+        if (visualTransform == null)
+        {
+            Debug.LogError("Visual Transform is not assigned! Please drag the 'Visual' child GameObject to the PlayerController's visualTransform field in the Inspector.");
+        }
+
+        // Ensure visual starts at correct rotation
+        if (visualTransform != null)
+        {
+            visualTransform.rotation = Quaternion.Euler(0, 0, 0); // Start facing right
+        }
     }
 
     /// <summary>
@@ -844,9 +864,14 @@ public class _PlayerController : MonoBehaviour
 
     /// <summary>
     /// Called by Unity's Input System for jump input.
-    /// Respects canJump toggle and hasJumpBuffer toggle.
-    /// Prevents buffering jump while already airborne (unless double jump available).
+    /// 
+    /// On press (performed): Buffer the jump input if jump buffering is enabled
+    /// On release (canceled): Stop variable height control
+    /// 
+    /// FIXED: Jump buffer now activates ANYTIME, not just when close to ground.
+    /// The buffer timer and TryJump() handle whether the jump can execute.
     /// </summary>
+    /// <param name="ctx">Input context from Unity Input System</param>
     public void OnJump(InputAction.CallbackContext ctx)
     {
         // Early exit if jumping disabled
@@ -855,34 +880,32 @@ public class _PlayerController : MonoBehaviour
             return;
         }
 
+        // JUMP PRESSED
         if (ctx.performed)
         {
-            // Determine if we can buffer this jump
-            bool canBufferJump = false;
-
+            // If jump buffering is ENABLED, always buffer the input
             if (currentStateData.hasJumpBuffer)
-            {
-                // Can buffer if grounded, about to land, on wall, or have air jumps
-                canBufferJump = isGrounded
-                             || isAboutToLand
-                             || (currentStateData.hasWallJump && canWallJump)
-                             || (currentStateData.hasDoubleJump && airJumpsRemaining > 0);
-            }
-            else
-            {
-                // Without jump buffer, can only jump if conditions met immediately
-                canBufferJump = isGrounded
-                             || (currentStateData.hasWallJump && canWallJump)
-                             || (currentStateData.hasDoubleJump && airJumpsRemaining > 0);
-            }
-
-            if (canBufferJump)
             {
                 jumpBuffered = true;
                 jumpBufferTimer = currentStateData.jumpBufferTime;
             }
+            // If jump buffering is DISABLED, only allow immediate execution
+            else
+            {
+                // Check if we can jump RIGHT NOW (no buffering)
+                bool canJumpImmediately = isGrounded
+                                       || (currentStateData.hasWallJump && canWallJump)
+                                       || (currentStateData.hasDoubleJump && airJumpsRemaining > 0);
+
+                if (canJumpImmediately)
+                {
+                    jumpBuffered = true;
+                    jumpBufferTimer = 0.01f; // Tiny buffer for TryJump to catch it
+                }
+            }
         }
 
+        // JUMP RELEASED
         if (ctx.canceled)
         {
             // Only stop holding if variable jump is enabled
@@ -1047,29 +1070,69 @@ public class _PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Smoothly rotates the sprite on Y-axis to create a flip effect.
-    /// Uses Y-rotation instead of scale to avoid visual artifacts.
-    /// Duration: 0.15 seconds (quick and snappy for fast gameplay).
+    /// Smoothly rotates the VISUAL CHILD on Y-axis to create a flip effect.
+    /// Uses a separate Transform so the main player GameObject stays axis-aligned.
+    /// 
+    /// How it works:
+    /// - Only rotates visualTransform (the Visual child GameObject)
+    /// - Player GameObject and all physics components remain unrotated
+    /// - Camera (if child of Player) is NOT affected
+    /// - Colliders and detection boxes remain axis-aligned
+    /// 
+    /// Rotation values:
+    /// - 0° = Facing right (default Unity forward)
+    /// - 180° = Facing left (rotated around Y-axis)
+    /// 
+    /// Duration: 0.15 seconds (quick and snappy for fast gameplay)
     /// </summary>
+    /// <param name="flipToRight">True = face right (0°), False = face left (180°)</param>
     private IEnumerator FlipSprite(bool flipToRight)
     {
         isFlipping = true;
 
-        float startRotation = transform.eulerAngles.y;
-        float targetRotation = flipToRight ? 0f : 180f;
-        float elapsed = 0f;
-        float flipDuration = 0.15f;
-
-        while (elapsed < flipDuration)
+        // Safety check: ensure visualTransform is assigned
+        if (visualTransform == null)
         {
-            elapsed += Time.deltaTime;
-            float yRotation = Mathf.Lerp(startRotation, targetRotation, elapsed / flipDuration);
-            transform.rotation = Quaternion.Euler(0, yRotation, 0);
-            yield return null;
+            Debug.LogError("Cannot flip sprite: visualTransform is null!");
+            isFlipping = false;
+            yield break; // Exit coroutine early
         }
 
-        transform.rotation = Quaternion.Euler(0, targetRotation, 0);
+        // Get current rotation (Y-axis only, we ignore X and Z)
+        float startRotation = visualTransform.eulerAngles.y;
+
+        // Determine target rotation
+        // Right = 0 degrees, Left = 180 degrees
+        float targetRotation = flipToRight ? 0f : 180f;
+
+        // Animation timing
+        float elapsed = 0f;
+        float flipDuration = 0.15f; // 150 milliseconds - fast but visible
+
+        // Smoothly interpolate rotation over duration
+        while (elapsed < flipDuration)
+        {
+            elapsed += Time.deltaTime; // Increment by frame time
+
+            // Calculate interpolation progress (0 to 1)
+            float t = elapsed / flipDuration;
+
+            // Lerp between start and target rotation
+            float yRotation = Mathf.Lerp(startRotation, targetRotation, t);
+
+            // Apply rotation ONLY to visual transform (not player root)
+            visualTransform.rotation = Quaternion.Euler(0, yRotation, 0);
+
+            yield return null; // Wait one frame
+        }
+
+        // Snap to exact final rotation (prevent floating point drift)
+        visualTransform.rotation = Quaternion.Euler(0, targetRotation, 0);
+
+        // Update facing direction tracker
         isFacingRight = flipToRight;
+
+        // Allow new flips
         isFlipping = false;
     }
 
