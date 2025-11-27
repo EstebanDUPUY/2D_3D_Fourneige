@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c15cebccab40048b14814cfb083c97, type: 3}
+  m_Name: IceState
+  m_EditorClassIdentifier: 
+  stateName: Ice
+  moveSpeed: 15
+  acceleration: 5
+  startingSpeedBoost: 5
+  deceleration: 5
+  gravity: 3
+  weight: 3
+  groundFriction: 1
+  wallFriction: 2
+  wallSlideFriction: 3
+  jumpForce: 15
+  jumpHoldGravityMultiplier: 3
+  jumpReleaseGravityMultiplier: 2
+  maxJumpHoldTime: 10
+  coyoteTimeDuration: 0.6
+  jumpBufferTime: 2
+  hasBufferedJump: 1
+  hasDash: 1
+  hasAirDash: 1

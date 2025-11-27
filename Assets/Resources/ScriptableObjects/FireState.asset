@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c15cebccab40048b14814cfb083c97, type: 3}
+  m_Name: FireState
+  m_EditorClassIdentifier: 
+  stateName: Fire
+  moveSpeed: 25
+  acceleration: 5
+  startingSpeedBoost: 15
+  deceleration: 1
+  gravity: 1
+  weight: 1
+  groundFriction: 0.5
+  wallFriction: 1
+  wallSlideFriction: 1.5
+  jumpForce: 20
+  jumpHoldGravityMultiplier: 0
+  jumpReleaseGravityMultiplier: 0
+  maxJumpHoldTime: 5
+  coyoteTimeDuration: 0.2
+  jumpBufferTime: 1
+  hasBufferedJump: 0
+  hasDash: 0
+  hasAirDash: 0
