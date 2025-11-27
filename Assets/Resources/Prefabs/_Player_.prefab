@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 537143512607401498}
   - component: {fileID: 3690522389583083509}
   - component: {fileID: 5143532671044710198}
-  - component: {fileID: 9076587341155373644}
+  - component: {fileID: 4617142848686457867}
   m_Layer: 3
-  m_Name: _Player
+  m_Name: _Player_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9076587341155373644}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _PlayerController, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
     m_ActionName: 'Player/Crouch[/DualSenseGamepadHID/buttonEast,/Keyboard/c]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9076587341155373644}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _PlayerController, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
     m_ActionName: 'Player/Sprint[/Keyboard/leftShift,/DualSenseGamepadHID/leftStickPress]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9076587341155373644}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _PlayerController, Assembly-CSharp
         m_MethodName: OnSwitchState
         m_Mode: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
     m_ActionName: 'Player/SwitchState[/Keyboard/q,/DualSenseGamepadHID/leftShoulder]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9076587341155373644}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _PlayerController, Assembly-CSharp
         m_MethodName: OnDash
         m_Mode: 0
@@ -193,6 +193,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 204ee91e-e7ad-49f2-82c8-0fa5a07c2845
+    m_ActionName: 'Player/FezLeft[/Keyboard/w,/DualSenseGamepadHID/leftTrigger]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cfb39e4b-d22d-4012-b755-7ce1628fd19a
+    m_ActionName: 'Player/FezRight[/Keyboard/x,/DualSenseGamepadHID/rightTrigger]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -248,7 +256,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &9076587341155373644
+--- !u!114 &4617142848686457867
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,7 +265,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5593439629627990384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 925d9e9199cbfd94091705fd4863444f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f2db0a46aa420a4aa75ada9052a8056, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   visualTransform: {fileID: 4390338307456602908}
@@ -283,6 +291,11 @@ MonoBehaviour:
   dashSpeed: 20
   overrideWallStickRequiresInput: 0
   wallStickRequiresInput: 0
+  useWorldRotation: 1
+  worldRotationController: {fileID: 0}
+  freezeDuringRotation: 1
+  useRotationRelativeMovement: 1
+  snapAfterRotation: 1
 --- !u!1 &7602086003527541098
 GameObject:
   m_ObjectHideFlags: 0
