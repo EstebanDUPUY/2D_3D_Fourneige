@@ -2445,6 +2445,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceBridge
       objectReference: {fileID: 0}
+    - target: {fileID: 9051012073289300858, guid: 6efd8200158c1e04abafaa833895a4b4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6753,6 +6757,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8000558775199975559, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
+      propertyPath: speed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8000558775199975559, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: dragOnIce
       value: 30
       objectReference: {fileID: 0}
@@ -6762,11 +6770,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.29
+      value: 35.45
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.03
+      value: 4.23
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7166,6 +7174,10 @@ PrefabInstance:
     - target: {fileID: 9051012073289300858, guid: f81a6aef2a83c104ea907ef5e7a4b5df, type: 3}
       propertyPath: m_Name
       value: IceSurface
+      objectReference: {fileID: 0}
+    - target: {fileID: 9051012073289300858, guid: f81a6aef2a83c104ea907ef5e7a4b5df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
