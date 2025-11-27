@@ -253,8 +253,9 @@ public class _PlayerController : MonoBehaviour
         // Evaluate if jump should execute
         TryJump();
 
-        // Reset dash when landing (if no cooldown system)
-        if (isGrounded && !canDash && currentStateData.dashCooldown <= 0)
+        // Reset dash when landing (if no cooldown system AND dash was actually used)
+        // FIXED: Only reset if dash was used, not if cooldown is active
+        if (isGrounded && !canDash && currentStateData.dashCooldown <= 0 && dashCooldownTimer <= 0)
         {
             canDash = true;
         }
@@ -446,14 +447,21 @@ public class _PlayerController : MonoBehaviour
 
         // Reset jump-related states
         isJumping = true;
-        isHoldingJump = currentStateData.hasVariableJump; // Only enable hold if variable jump active
+        isHoldingJump = currentStateData.hasVariableJump;
         jumpHoldTimer = 0f;
         jumpBuffered = false;
         coyoteTimeTimer = 0f;
         canBunnyHop = false;
 
-        // Reset air jumps
-        airJumpsRemaining = currentStateData.maxAirJumps;
+        // Reset air jumps (only if state allows double jump)
+        if (currentStateData.hasDoubleJump)
+        {
+            airJumpsRemaining = currentStateData.maxAirJumps;
+        }
+        else
+        {
+            airJumpsRemaining = 0; // No air jumps if double jump disabled
+        }
     }
 
     /// <summary>
@@ -595,6 +603,9 @@ public class _PlayerController : MonoBehaviour
     /// <summary>
     /// Switches to a new state by loading its ScriptableObject data.
     /// Updates Rigidbody mass and provides visual feedback via sprite color.
+    /// 
+    /// FIXED: Only resets air jumps when grounded to prevent infinite flight exploit.
+    /// FIXED: Preserves dash cooldown across state switches.
     /// </summary>
     private void ApplyStateData(_PlayerStateData data)
     {
@@ -604,12 +615,25 @@ public class _PlayerController : MonoBehaviour
         // Visual feedback using state color
         spriteRenderer.color = data.stateColor;
 
-        // Reset air jumps when switching states
-        airJumpsRemaining = data.maxAirJumps;
+        // FIXED: Only reset air jumps when grounded
+        // This prevents exploit: jump -> switch state -> get new air jumps -> fly infinitely
+        if (isGrounded)
+        {
+            airJumpsRemaining = data.maxAirJumps;
+        }
+        else
+        {
+            // When switching states mid-air, recalculate remaining jumps
+            // Use the LOWER value between current remaining and new state's max
+            airJumpsRemaining = Mathf.Min(airJumpsRemaining, data.maxAirJumps);
+        }
 
         // Start state switch cooldown
         stateSwitchCooldownTimer = data.stateSwitchCooldown;
         canSwitchState = false;
+
+        // FIXED: Preserve dash availability across state switches
+        // Don't reset canDash here - let cooldown system handle it
     }
 
     /// <summary>
@@ -829,6 +853,10 @@ public class _PlayerController : MonoBehaviour
     /// Called when state switch input is pressed.
     /// Toggles between Fire and Ice states.
     /// Respects canSwitchFromThisState toggle and cooldown system.
+    /// 
+    /// FIXED: Prevents state switching abuse for infinite flight.
+    /// Option 1: Block switching while airborne (strict)
+    /// Option 2: Allow switching but with proper restrictions (current)
     /// </summary>
     public void OnSwitchState(InputAction.CallbackContext ctx)
     {
@@ -846,6 +874,23 @@ public class _PlayerController : MonoBehaviour
         // Check cooldown
         if (!canSwitchState)
         {
+            return;
+        }
+
+        // OPTIONAL: Uncomment to prevent state switching while airborne (anti-exploit)
+        // This is the STRICTEST fix - completely prevents air switching
+        /*
+        if (!isGrounded)
+        {
+            Debug.Log("Cannot switch states while airborne!");
+            return;
+        }
+        */
+
+        // FIXED: Track if we're mid-dash to prevent dash spam via state switch
+        if (isDashing)
+        {
+            Debug.Log("Cannot switch states while dashing!");
             return;
         }
 
@@ -936,6 +981,13 @@ public class _PlayerController : MonoBehaviour
 
         // Check air dash permission
         if (!isGrounded && !currentStateData.hasAirDash)
+        {
+            return;
+        }
+
+        // FIXED: Prevent dash spam via rapid state switching
+        // If dash cooldown is active, don't allow dash even after state switch
+        if (dashCooldownTimer > 0)
         {
             return;
         }

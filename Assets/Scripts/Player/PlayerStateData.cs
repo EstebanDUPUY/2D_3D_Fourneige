@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 
 /// <summary>
@@ -9,7 +10,7 @@ using UnityEngine;
 /// Then assign to PlayerController's fireStateData/iceStateData fields.
 /// </summary>
 [CreateAssetMenu(fileName = "New State Data", menuName = "Player/State Data")]
-public class PlayerStateData : ScriptableObject
+public class _PlayerStateData : ScriptableObject
 {
     #region VARIABLES
 
@@ -167,3 +168,4 @@ public class PlayerStateData : ScriptableObject
 
     #endregion
 }
+*/
