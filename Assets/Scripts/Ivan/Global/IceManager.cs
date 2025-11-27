@@ -4,6 +4,7 @@ public class IceManager : MonoBehaviour
 {
     public IceSurfaceData iceSurfaceData;
     public SulfurCaveData sulfurCaveData;
+    public IceBridgeData iceBridgeData;
     public PlayerTest player;
 
     EnvironmentGame environmentGame;
@@ -14,6 +15,7 @@ public class IceManager : MonoBehaviour
     {
         iceSurfaceData.OnPlayerEnter += PlayerOnIceSurface;
         sulfurCaveData.OnPlayerEnter += PlayerOnSulfurCave;
+        iceBridgeData.OnPlayerEnter += PlayerOnIceBridge;
 
         player.PlayerModeChange += PlayerModeCompareToEnvironment;
     }
@@ -21,6 +23,7 @@ public class IceManager : MonoBehaviour
     private void OnDisable()
     {
         iceSurfaceData.OnPlayerEnter -= PlayerOnIceSurface;
+        sulfurCaveData.OnPlayerEnter -= PlayerOnSulfurCave;
     }
 
     void PlayerModeCompareToEnvironment(PlayerTest player)
@@ -35,9 +38,9 @@ public class IceManager : MonoBehaviour
                 // case PlayerTest.PlayerOnEnvironment.IceMovingWall:
                 //     Debug.Log("Die -> Fire on Ice Moving Wall");
                 //     break;
-                // case PlayerTest.PlayerOnEnvironment.IceBridge:
-                //     Debug.Log("Die -> Fire on Ice Bridge");
-                //     break;
+                case PlayerTest.PlayerOnEnvironment.IceBridge:
+                    Debug.Log("Die -> Fire on Ice Bridge");
+                    break;
                 case PlayerTest.PlayerOnEnvironment.SulfurCave:
                     Debug.Log("Die -> Fire on Sulfer Cave");
                     break;
@@ -52,11 +55,12 @@ public class IceManager : MonoBehaviour
         PlayerModeCompareToEnvironment(player);
     }
 
-    // private void PlayerOnIceBridge()
-    // {
-    //     player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceBridge);
-    //     PlayerModeCompareToEnvironment(player);
-    // }
+    private void PlayerOnIceBridge(IceBridge iceBridge)
+    {
+        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceBridge);
+        environmentGame = iceBridge;
+        PlayerModeCompareToEnvironment(player);
+    }
 
     // private void PlayerOnIceMovingWall()
     // {
