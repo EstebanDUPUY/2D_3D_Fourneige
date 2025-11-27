@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e392b20d322c27a4389e1306ebc692f9, type: 3}
+  m_Name: _IceState
+  m_EditorClassIdentifier: 
+  stateName: _Ice
+  stateColor: {r: 0, g: 0, b: 1, a: 1}
+  canMove: 1
+  canSwitchFromThisState: 1
+  stateSwitchCooldown: 0
+  canMoveOnGround: 1
+  moveSpeed: 15
+  acceleration: 1
+  startingSpeedBoost: 1
+  deceleration: 1
+  hasAirControl: 1
+  airControlMultiplier: 0.8
+  gravity: 30
+  weight: 1
+  groundFriction: 0.5
+  canJump: 1
+  jumpForce: 15
+  hasVariableJump: 1
+  jumpHoldGravityMultiplier: 0.5
+  jumpReleaseGravityMultiplier: 2
+  maxJumpHoldTime: 0.3
+  hasCoyoteTime: 1
+  coyoteTimeDuration: 0.15
+  hasJumpBuffer: 1
+  jumpBufferTime: 0.2
+  hasDoubleJump: 0
+  maxAirJumps: 1
+  airJumpForceMultiplier: 0.9
+  hasWallSlide: 1
+  wallSlideRequiresInput: 0
+  wallSlideFriction: -3
+  hasWallJump: 1
+  wallJumpForce: 0
+  wallJumpHorizontalMultiplier: 0.7
+  hasDash: 0
+  hasAirDash: 0
+  dashCooldown: 0
+  dashIsFixedDistance: 0
+  dashDistance: 5
+  dashDuration: 0.3
+  dashSpeed: 20
+  dashHasInvincibility: 0
+  dashInvincibilityDuration: 0.3
+  hasBunnyHop: 0
+  bunnyHopSpeedBonus: 0.15
+  bunnyHopDecayRate: 1
+  bunnyHopMaxSpeed: 1.5
+  bunnyHopTimingWindow: 0.1
