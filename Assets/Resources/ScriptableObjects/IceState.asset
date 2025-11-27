@@ -29,5 +29,5 @@ MonoBehaviour:
   coyoteTimeDuration: 0.3
   jumpBufferTime: 0.3
   hasBufferedJump: 1
-  hasDash: 0
-  hasAirDash: 0
+  hasDash: 1
+  hasAirDash: 1

@@ -28,6 +28,6 @@ MonoBehaviour:
   maxJumpHoldTime: 0.15
   coyoteTimeDuration: 0.1
   jumpBufferTime: 1
-  hasBufferedJump: 0
-  hasDash: 0
-  hasAirDash: 0
+  hasBufferedJump: 1
+  hasDash: 1
+  hasAirDash: 1
