@@ -26,9 +26,9 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer; // For visual feedback and sprite flipping effects
 
     // State Data - ScriptableObjects containing all parameters for each state
-    public PlayerStateData fireStateData; // Fast, light, low friction state
-    public PlayerStateData iceStateData; // Slow, heavy, high friction state with dash
-    private PlayerStateData currentStateData; // Currently active state data
+    public _PlayerStateData fireStateData; // Fast, light, low friction state
+    public _PlayerStateData iceStateData; // Slow, heavy, high friction state with dash
+    private _PlayerStateData currentStateData; // Currently active state data
 
     /// <summary>
     /// Enum defining the two available player states.
@@ -361,7 +361,7 @@ public class PlayerController : MonoBehaviour
     /// Switches to a new state by loading its ScriptableObject data.
     /// Updates Rigidbody mass and provides visual feedback via sprite color.
     /// </summary>
-    private void ApplyStateData(PlayerStateData data)
+    private void ApplyStateData(_PlayerStateData data)
     {
         currentStateData = data; // Set active data reference
         rb.mass = data.weight; // Update physics mass
