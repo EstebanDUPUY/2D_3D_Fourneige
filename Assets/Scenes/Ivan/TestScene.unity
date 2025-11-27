@@ -3435,6 +3435,7 @@ MonoBehaviour:
   iceBridgeData: {fileID: 11400000, guid: 02293a7f2a3d9ad4b854705ed7daf7a3, type: 2}
   iceWallData: {fileID: 11400000, guid: 58e94a953104681448dc34b734f5e2cc, type: 2}
   player: {fileID: 618851995}
+  rb: {fileID: 0}
 --- !u!1 &1120236683
 GameObject:
   m_ObjectHideFlags: 0
