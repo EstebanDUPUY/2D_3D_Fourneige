@@ -21,7 +21,7 @@ public class FireObstacleController : MonoBehaviour
     public void GeyserAction(float force, bool isInGeyser, bool isInBody)
     {
         if (inBodyGeyser != isInBody && inGeyser) return;
-        
+
         forceGeyser = force;
         inGeyser = isInGeyser;
         inBodyGeyser = isInBody;
