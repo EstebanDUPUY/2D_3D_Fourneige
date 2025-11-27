@@ -5,6 +5,7 @@ public class IceManager : MonoBehaviour
     public IceSurfaceData iceSurfaceData;
     public SulfurCaveData sulfurCaveData;
     public IceBridgeData iceBridgeData;
+    public IceWallData iceWallData;
     public PlayerTest player;
 
     EnvironmentGame environmentGame;
@@ -16,6 +17,7 @@ public class IceManager : MonoBehaviour
         iceSurfaceData.OnPlayerEnter += PlayerOnIceSurface;
         sulfurCaveData.OnPlayerEnter += PlayerOnSulfurCave;
         iceBridgeData.OnPlayerEnter += PlayerOnIceBridge;
+        iceWallData.OnPlayerEnter += PlayerOnIceWall;
 
         player.PlayerModeChange += PlayerModeCompareToEnvironment;
     }
@@ -35,9 +37,9 @@ public class IceManager : MonoBehaviour
                 case PlayerTest.PlayerOnEnvironment.IceSurface:
                     Debug.Log("Die -> Fire on Ice Surface");
                     break;
-                // case PlayerTest.PlayerOnEnvironment.IceMovingWall:
-                //     Debug.Log("Die -> Fire on Ice Moving Wall");
-                //     break;
+                case PlayerTest.PlayerOnEnvironment.IceMovingWall:
+                    Debug.Log("Die -> Fire on Ice Moving Wall");
+                    break;
                 case PlayerTest.PlayerOnEnvironment.IceBridge:
                     Debug.Log("Die -> Fire on Ice Bridge");
                     break;
@@ -62,11 +64,12 @@ public class IceManager : MonoBehaviour
         PlayerModeCompareToEnvironment(player);
     }
 
-    // private void PlayerOnIceMovingWall()
-    // {
-    //     player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceMovingWall);
-    //     PlayerModeCompareToEnvironment(player);
-    // }
+    private void PlayerOnIceWall(IceWall iceWall)
+    {
+        player.SetPlayerOnEvironment(PlayerTest.PlayerOnEnvironment.IceMovingWall);
+        environmentGame = iceWall;
+        PlayerModeCompareToEnvironment(player);
+    }
 
     private void PlayerOnSulfurCave(SulfurCave sulfurCave)
     {
