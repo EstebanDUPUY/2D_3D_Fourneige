@@ -8,6 +8,8 @@ public class LevelManager : MonoBehaviour
 
     InputAction togglePlayAction;
 
+    public IceManager iceManager;
+
     // Action
     public static Action<bool> OnPlayPauseTime;
 
@@ -22,11 +24,13 @@ public class LevelManager : MonoBehaviour
     void OnEnable()
     {
         togglePlayAction.performed += OnTogglePlay;
+        iceManager.PlayerDie += GameOver;
     }
 
     void OnDisable()
     {
         togglePlayAction.performed -= OnTogglePlay;
+        iceManager.PlayerDie -= GameOver;
     }
 
     // Actions
@@ -35,6 +39,12 @@ public class LevelManager : MonoBehaviour
     {
         if (!context.performed)
             return;
+        PlayPauseTime();
+    }
+
+    public void GameOver()
+    {
+        // TO DO :  do a true GameOver
         PlayPauseTime();
     }
 

@@ -31,15 +31,10 @@ public class PlayerIceSystem : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerMode = PlayerMode.Ice;
+        playerMode = PlayerMode.Fire;
         playerOnEnvironment = PlayerOnEnvironment.IceSurface;
 
         // rb = GetComponent<Rigidbody>();
-    }
-
-    public void Die()
-    {
-        Debug.Log("** PLAYER TEST -> Die()");
     }
 
     void SwitchMode()

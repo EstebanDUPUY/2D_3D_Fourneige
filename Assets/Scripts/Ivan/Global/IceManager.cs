@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class IceManager : MonoBehaviour
 {
@@ -9,9 +10,12 @@ public class IceManager : MonoBehaviour
 
     public PlayerController player;
     PlayerIceSystem playerIceSystem;
+
     Rigidbody rb;
 
     EnvironmentGame environmentGame;
+
+    public Action PlayerDie;
 
     void Awake()
     {
@@ -68,6 +72,8 @@ public class IceManager : MonoBehaviour
                     Debug.Log("Die -> Fire on Ice Bridge");
                     break;
                 case PlayerIceSystem.PlayerOnEnvironment.SulfurCave:
+                    Debug.Log("THE CALL");
+                    PlayerDie?.Invoke();
                     Debug.Log("Die -> Fire on Sulfer Cave");
                     break;
             }
