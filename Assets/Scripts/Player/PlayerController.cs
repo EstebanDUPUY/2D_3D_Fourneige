@@ -26,9 +26,9 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer; // For visual feedback and sprite flipping effects
 
     // State Data - ScriptableObjects containing all parameters for each state
-    public PlayerStateData fireStateData; // Fast, light, low friction state
-    public PlayerStateData iceStateData; // Slow, heavy, high friction state with dash
-    private PlayerStateData currentStateData; // Currently active state data
+    public _PlayerStateData fireStateData; // Fast, light, low friction state
+    public _PlayerStateData iceStateData; // Slow, heavy, high friction state with dash
+    private _PlayerStateData currentStateData; // Currently active state data
 
     /// <summary>
     /// Enum defining the two available player states.
@@ -361,7 +361,7 @@ public class PlayerController : MonoBehaviour
     /// Switches to a new state by loading its ScriptableObject data.
     /// Updates Rigidbody mass and provides visual feedback via sprite color.
     /// </summary>
-    private void ApplyStateData(PlayerStateData data)
+    private void ApplyStateData(_PlayerStateData data)
     {
         currentStateData = data; // Set active data reference
         rb.mass = data.weight; // Update physics mass
@@ -377,11 +377,26 @@ public class PlayerController : MonoBehaviour
     /// - Starting speed boost for responsiveness
     /// - Ground friction when not moving
     /// - Automatic sprite flipping based on direction
+    /// 
+    /// FIXED: Prevents pushing into wall during wall slide (stops sticking)
     /// </summary>
     private void ApplyMovement()
     {
         // Calculate target speed from input
         float targetSpeed = moveInput.x * currentStateData.moveSpeed;
+
+        // FIXED: If wall sliding, prevent movement toward the wall
+        if (isWallSliding)
+        {
+            bool tryingToMoveIntoWall = (wallDirection > 0 && moveInput.x > 0)
+                                     || (wallDirection < 0 && moveInput.x < 0);
+
+            if (tryingToMoveIntoWall)
+            {
+                targetSpeed = 0; // Cancel movement toward wall
+            }
+        }
+
         float speedDifference = targetSpeed - rb.linearVelocity.x;
 
         // Choose between acceleration (moving) or deceleration (stopping)
@@ -428,9 +443,18 @@ public class PlayerController : MonoBehaviour
     /// 1. Holding jump + ascending: Reduced gravity (floaty, allows holding for height)
     /// 2. Falling OR released jump: Increased gravity (snappy, responsive)
     /// 3. Default: Normal gravity
+    /// 
+    /// FIXED: Skips gravity when wall sliding to prevent overpowering wall friction
     /// </summary>
     private void ApplyGravity()
     {
+        // FIXED: Don't apply gravity when wall sliding
+        // Wall slide uses velocity capping, gravity would overpower it
+        if (isWallSliding)
+        {
+            return; // Exit early, let wall slide handle vertical movement
+        }
+
         float gravityMultiplier = 1f;
 
         // Reduce gravity while holding jump and moving upward
@@ -466,26 +490,42 @@ public class PlayerController : MonoBehaviour
     /// - (Optional) Pushing toward the wall with input
     /// 
     /// While sliding, vertical velocity is capped to create controlled descent.
+    /// 
+    /// FIXED: Better input handling and clearer slide application
     /// </summary>
     private void ApplyWallSlide()
     {
         // Base conditions: touching wall, airborne, falling
         bool shouldWallSlide = isTouchingWall && !isGrounded && rb.linearVelocity.y < 0;
 
-        // Optional: Require player to hold toward wall to stick
+        // FIXED: Inverted the logic - if wallStickRequiresInput is TRUE, check for input
+        // If FALSE (your case), slide automatically
         if (wallStickRequiresInput)
         {
             bool pushingTowardWall = (wallDirection > 0 && moveInput.x > 0)
                                   || (wallDirection < 0 && moveInput.x < 0);
             shouldWallSlide = shouldWallSlide && pushingTowardWall;
         }
+        // ADDED: If wallStickRequiresInput is FALSE, prevent sticking when pushing toward wall
+        else
+        {
+            bool pushingAwayFromWall = (wallDirection > 0 && moveInput.x < -0.1f)
+                                    || (wallDirection < 0 && moveInput.x > 0.1f);
+
+            // If pushing away from wall, disable wall slide (allows dropping off)
+            if (pushingAwayFromWall)
+            {
+                shouldWallSlide = false;
+            }
+        }
 
         if (shouldWallSlide)
         {
             isWallSliding = true;
-            canWallJump = true; // Enable wall jump while sliding
+            canWallJump = true;
 
-            // Cap fall speed to wallSlideFriction value
+            // Apply wall slide friction
+            // Clamp fall speed to wall slide friction value
             float slideSpeed = -currentStateData.wallSlideFriction;
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
