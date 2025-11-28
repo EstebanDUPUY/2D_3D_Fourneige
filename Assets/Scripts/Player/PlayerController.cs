@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     public bool isDamaged;
     public bool isAttachedToWallIce;
 
+    public Vector3 environmentVelocity;
+
     // ==================== REFERENCES ====================
     #region REFERENCES
 
@@ -171,6 +173,11 @@ public class PlayerController : MonoBehaviour
     //     PlayerDamageSystem.Die -= () => isDamaged = true;
     //     LevelManager.OnLevelReset -= () => isDamaged = false;
     // }
+
+    void ApplyEnvironmentMoveToPlayer()
+    {
+        rb.transform.Translate(environmentVelocity);
+    }
 
     /// <summary>
     /// Initialize the player state and apply starting configuration.

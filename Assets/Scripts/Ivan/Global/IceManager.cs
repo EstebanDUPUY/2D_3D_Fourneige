@@ -163,6 +163,7 @@ public class IceManager : MonoBehaviour
         player.isAttachedToWallIce = false;
     }
 
+
     // Other Functions
 
     // void HandleDie()

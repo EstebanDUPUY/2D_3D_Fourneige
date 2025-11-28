@@ -6,14 +6,18 @@ public class IceWall : EnvironmentGame
     public IceWallData iceWallData;
 
     public float dragOnIce = 45f;
-    public float speed = 4f;
-    public float range = 10f;
+    private float speed = 2f;
+    public float range = 5f;
 
-    float startX;
+    public Vector3 velocity;
+
+    float startY;
+
+    Rigidbody rbPlayer;
 
     void Awake()
     {
-        startX = transform.position.x;
+        startY = transform.position.y;
     }
 
     void OnCollisionEnter(Collision other)
@@ -21,6 +25,7 @@ public class IceWall : EnvironmentGame
         PlayerIceSystem player = other.gameObject.GetComponent<PlayerIceSystem>();
         if (player != null)
         {
+            rbPlayer = player.rb;
             iceWallData.PlayerEnter(this);
             // StartCoroutine(MoveWall());
         }
@@ -35,18 +40,22 @@ public class IceWall : EnvironmentGame
 
     IEnumerator MoveWall()
     {
-        float targetX = startX + range;
+        float targetY = startY + range;
 
-        while (transform.position.x < targetX)
+        while (transform.position.y < targetY)
         {
-            transform.Translate(Vector3.right * speed * Time.deltaTime);
+            velocity = Vector3.up * speed * Time.deltaTime;
+            transform.Translate(velocity);
+            // rbPlayer.transform.Translate(velocity);
 
             yield return null; // attendre la prochaine frame
         }
 
-        while (transform.position.x > startX)
+        while (transform.position.y > startY)
         {
-            transform.Translate(-Vector3.right * speed * Time.deltaTime);
+            velocity = -Vector3.up * speed * Time.deltaTime;
+            transform.Translate(velocity);
+            // rbPlayer.transform.Translate(velocity);
             yield return null;
         }
     }
