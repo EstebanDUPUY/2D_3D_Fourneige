@@ -10,11 +10,11 @@ public class PlayerIceSystem : MonoBehaviour
     public float speedMultiplierInit = 1f;
     public float speedMultiplier = 1f;
 
-    public enum PlayerMode
-    {
-        Fire,
-        Ice,
-    }
+    // public enum PlayerMode
+    // {
+    //     Fire,
+    //     Ice,
+    // }
 
     public enum PlayerOnEnvironment
     {
@@ -25,33 +25,33 @@ public class PlayerIceSystem : MonoBehaviour
         None,
     }
 
-    PlayerMode playerMode;
+    // PlayerMode playerMode;
     PlayerOnEnvironment playerOnEnvironment;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerMode = PlayerMode.Fire;
-        playerOnEnvironment = PlayerOnEnvironment.IceSurface;
+        // playerMode = PlayerMode.Fire;
+        playerOnEnvironment = PlayerOnEnvironment.None;
 
         // rb = GetComponent<Rigidbody>();
     }
 
-    void SwitchMode()
-    {
-        // Gestion Input Esteban
+    // void SwitchMode()
+    // {
+    //     // Gestion Input Esteban
 
-        if (playerMode == PlayerMode.Fire)
-        {
-            playerMode = PlayerMode.Ice;
-        }
-        else
-        {
-            playerMode = PlayerMode.Fire;
-        }
+    //     if (playerMode == PlayerMode.Fire)
+    //     {
+    //         playerMode = PlayerMode.Ice;
+    //     }
+    //     else
+    //     {
+    //         playerMode = PlayerMode.Fire;
+    //     }
 
-        PlayerModeChange?.Invoke(this);
-    }
+    //     PlayerModeChange?.Invoke(this);
+    // }
 
     // GETTER
 
@@ -60,10 +60,10 @@ public class PlayerIceSystem : MonoBehaviour
         return rb;
     }
 
-    public PlayerMode GetPlayerMode()
-    {
-        return playerMode;
-    }
+    // public PlayerMode GetPlayerMode()
+    // {
+    //     return playerMode;
+    // }
 
     public PlayerOnEnvironment GetPlayerOnEnvironment()
     {
@@ -72,10 +72,10 @@ public class PlayerIceSystem : MonoBehaviour
 
     // SETTER
 
-    public void SetPlayerMode(PlayerMode playerMode)
-    {
-        this.playerMode = playerMode;
-    }
+    // public void SetPlayerMode(PlayerMode playerMode)
+    // {
+    //     this.playerMode = playerMode;
+    // }
 
     public void SetPlayerOnEnvironment(PlayerOnEnvironment playerOnEnvironment)
     {

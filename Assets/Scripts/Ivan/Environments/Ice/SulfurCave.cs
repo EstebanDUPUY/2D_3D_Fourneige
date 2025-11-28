@@ -10,4 +10,16 @@ public class SulfurCave : EnvironmentGame
         if (player != null)
             sulfurCaveData.PlayerEnter(this);
     }
+
+    void OnTriggerExit(Collider other)
+    {
+        PlayerIceSystem player = other.GetComponent<PlayerIceSystem>();
+        if (player != null)
+            sulfurCaveData.PlayerExit();
+    }
+
+    public void Explode()
+    {
+        
+    }
 }

@@ -55,6 +55,7 @@ public class IceManager : MonoBehaviour
         iceSurfaceData.OnPlayerExit -= PlayerOutEnvironment;
 
         // playerIceSystem.PlayerModeChange -= PlayerModeCompareToEnvironment;
+        player.SwitchMode -= PlayerModeCompareToEnvironment;
     }
 
     void PlayerModeCompareToEnvironment()
@@ -63,16 +64,16 @@ public class IceManager : MonoBehaviour
         {
             switch (playerIceSystem.GetPlayerOnEnvironment())
             {
-                case PlayerIceSystem.PlayerOnEnvironment.IceSurface:
-                    Debug.Log("Die -> Fire on Ice Surface");
-                    break;
+                // case PlayerIceSystem.PlayerOnEnvironment.IceSurface:
+                //     Debug.Log("Die -> Fire on Ice Surface");
+                //     break;
                 case PlayerIceSystem.PlayerOnEnvironment.IceWall:
                     rb.linearDamping = playerIceSystem.linearDampingNormal;
                     Debug.Log("Linear Damping Normal -> Fire on Ice Moving Wall");
                     break;
-                case PlayerIceSystem.PlayerOnEnvironment.IceBridge:
-                    Debug.Log("Die -> Fire on Ice Bridge");
-                    break;
+                // case PlayerIceSystem.PlayerOnEnvironment.IceBridge:
+                //     Debug.Log("Die -> Fire on Ice Bridge");
+                //     break;
                 case PlayerIceSystem.PlayerOnEnvironment.SulfurCave:
                     Debug.Log("THE CALL");
                     PlayerDie?.Invoke();
