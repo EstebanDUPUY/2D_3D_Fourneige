@@ -18,7 +18,7 @@ MonoBehaviour:
   canSwitchFromThisState: 1
   stateSwitchCooldown: 0.001
   canMoveOnGround: 1
-  moveSpeed: 40
+  moveSpeed: 30
   acceleration: 11
   startingSpeedBoost: 2.6
   deceleration: 2.5

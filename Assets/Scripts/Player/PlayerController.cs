@@ -1,3 +1,5 @@
+/*
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour
     public float wallRaycastDistance = 0.2f; // How far ahead to check for walls
 
     // Detection states
-    private bool isGrounded; // TRUE when OverlapBox detects ground contact
+    public bool isGrounded; // TRUE when OverlapBox detects ground contact
     private bool isAboutToLand; // TRUE when Raycast predicts ground within distance
     private bool isTouchingWall; // TRUE when either side detects a wall
     private bool isWallAhead; // TRUE when Raycast detects wall in facing direction
@@ -904,3 +906,5 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 }
+
+*/
