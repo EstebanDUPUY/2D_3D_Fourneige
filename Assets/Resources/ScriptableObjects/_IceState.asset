@@ -41,7 +41,7 @@ MonoBehaviour:
   maxAirJumps: 1
   airJumpForceMultiplier: 1.5
   hasWallSlide: 1
-  wallSlideRequiresInput: 1
+  wallSlideRequiresInput: 0
   wallSlideFriction: -0.65
   hasWallJump: 1
   wallJumpForce: 25
