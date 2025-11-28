@@ -19,12 +19,14 @@ public class PlayerController : MonoBehaviour
 {
     #region Variables
 
+    bool isDamaged;
+
     // ==================== REFERENCES ====================
     #region REFERENCES
 
     // Core Components
     private Rigidbody rb; // Physics body for movement and forces
-    private SpriteRenderer spriteRenderer; // For visual feedback and sprite flipping effects
+    private SpriteRenderer spriteRenderer; // For visual feedback and sfixedprite flipping effects
 
     // State Data - ScriptableObjects containing all parameters for each state
     public PlayerStateData fireStateData; // Fast, light, low friction state
@@ -157,6 +159,18 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    void OnEnable()
+    {
+        PlayerDamageSystem.Die += () => isDamaged = true;
+        LevelManager.OnLevelReset += () => isDamaged = false;
+    }
+
+    void OnDisable()
+    {
+        PlayerDamageSystem.Die -= () => isDamaged = true;
+        LevelManager.OnLevelReset -= () => isDamaged = false;
+    }
+
     /// <summary>
     /// Initialize the player state and apply starting configuration.
     /// </summary>
@@ -198,7 +212,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if (!isDashing)
+        if (!isDashing && !isDamaged)
         {
             ApplyMovement(); // Horizontal movement with acceleration
             ApplyWallSlide(); // Wall slide friction

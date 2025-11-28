@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,11 +13,15 @@ public class LevelManager : MonoBehaviour
 
     // Action
     public static Action<bool> OnPlayPauseTime;
+    public static Action OnLevelReset;
+
+    public static LevelManager Instance;
 
     bool onPause;
 
     void Awake()
     {
+        Instance = this;
         playerInput = GetComponent<PlayerInput>();
         togglePlayAction = playerInput.actions["TogglePlay"];
     }
@@ -24,13 +29,13 @@ public class LevelManager : MonoBehaviour
     void OnEnable()
     {
         togglePlayAction.performed += OnTogglePlay;
-        iceManager.PlayerDie += GameOver;
+        PlayerDamageSystem.Die += GameOver;
     }
 
     void OnDisable()
     {
         togglePlayAction.performed -= OnTogglePlay;
-        iceManager.PlayerDie -= GameOver;
+        PlayerDamageSystem.Die -= GameOver;
     }
 
     // Actions
@@ -42,10 +47,15 @@ public class LevelManager : MonoBehaviour
         PlayPauseTime();
     }
 
-    public void GameOver()
+    public static void GameOver()
     {
-        // TO DO :  do a true GameOver
-        PlayPauseTime();
+        Instance.StartCoroutine(Instance.GameOverRoutine());
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        yield return new WaitForSeconds(2f);
+        OnLevelReset?.Invoke();
     }
 
     public void PlayPauseTime()
