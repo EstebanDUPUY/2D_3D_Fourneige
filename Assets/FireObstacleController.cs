@@ -1,5 +1,8 @@
+using System;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class FireObstacleController : MonoBehaviour
 {
@@ -8,22 +11,25 @@ public class FireObstacleController : MonoBehaviour
     private bool inGeyser;
     private bool inBodyGeyser;
 
+    private _FezPlayerController state;
+
+    [SerializeField] public VolumeProfile profil;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        state = GetComponent<_FezPlayerController>();
     }
 
-    void Update()
+  
+    public void OnChangeLight()
     {
-        if (inGeyser)
-            rb.AddForce(0, forceGeyser, 0, ForceMode.Impulse);
-    }
-    public void GeyserAction(float force, bool isInGeyser, bool isInBody)
-    {
-        if (inBodyGeyser != isInBody && inGeyser) return;
-
-        forceGeyser = force;
-        inGeyser = isInGeyser;
-        inBodyGeyser = isInBody;
+        if (profil.TryGet<Vignette>(out Vignette vignette))
+        {
+            if (state.currentState == _FezPlayerController.States.Fire)
+                vignette.intensity.value = 0.2f;
+            else
+                vignette.intensity.value = 1f;
+        }
     }
 }

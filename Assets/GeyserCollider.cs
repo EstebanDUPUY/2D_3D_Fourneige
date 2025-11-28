@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class GeyserCollider : MonoBehaviour
 {
@@ -29,4 +29,4 @@ public class GeyserCollider : MonoBehaviour
         if (!controller)
             controller = other.GetComponent<FireObstacleController>();
     }
-}
+}*/
