@@ -1016,30 +1016,6 @@ public class _FezPlayerController : MonoBehaviour
             );
         }
 
-        if (!isGrounded && isTouchingWall && !isWallSliding)
-        {
-            bool pushingIntoWall = (wallDirection > 0 && moveInput.x > 0)
-                                || (wallDirection < 0 && moveInput.x < 0);
-
-            if (pushingIntoWall)
-            {
-                // Zero out horizontal velocity component toward the wall
-                Vector3 getMovementRight = GetMovementRight();
-                float horizontalSpeed = Vector3.Dot(rb.linearVelocity, movementRight);
-
-                // If moving toward wall, cancel that velocity
-                if ((wallDirection > 0 && horizontalSpeed > 0) ||
-                    (wallDirection < 0 && horizontalSpeed < 0))
-                {
-                    rb.linearVelocity = new Vector3(
-                        0, // Cancel X velocity into wall
-                        rb.linearVelocity.y,
-                        rb.linearVelocity.z
-                    );
-                }
-            }
-        }
-
         // Handle sprite flipping based on movement direction
         if (moveInput.x > 0 && !isFacingRight)
         {
@@ -1156,23 +1132,6 @@ public class _FezPlayerController : MonoBehaviour
                 canWallJump = false;
             }
         }
-        /*
-        // Anti-stick: Cancel velocity into wall when touching but not sliding
-        if (isTouchingWall && !isGrounded && !isWallSliding)
-        {
-            bool pushingIntoWall = (wallDirection > 0 && moveInput.x > 0)
-                                || (wallDirection < 0 && moveInput.x < 0);
-
-            if (pushingIntoWall)
-            {
-                rb.linearVelocity = new Vector3(
-                    0,
-                    rb.linearVelocity.y,
-                    rb.linearVelocity.z
-                );
-            }
-        }
-        */
     }
 
     #endregion
@@ -1602,9 +1561,9 @@ public class _FezPlayerController : MonoBehaviour
 
             // Snap to nearest axis to be safe (1,0,0) or (0,0,1)
             if (Mathf.Abs(worldRight.z) > Mathf.Abs(worldRight.x))
-                checkDirection = new Vector3(0, 0, Mathf.Sign(worldRight.z));
+                checkDirection = new Vector3(0, 0, 1);
             else
-                checkDirection = new Vector3(Mathf.Sign(worldRight.x), 0, 0);
+                checkDirection = Vector3.right;
         }
 
         // 2. Check Right Side (Relative to Camera)
