@@ -1,5 +1,3 @@
-/*
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
@@ -19,8 +17,9 @@ using System.Collections;
 /// - Air control (optional per state)
 /// - State switching with cooldown
 /// - Master movement lock
+/// - Fez-style world rotation integration (optional)
 /// </summary>
-public class _PlayerController : MonoBehaviour
+public class _FezPlayerController : MonoBehaviour
 {
     #region Variables
 
@@ -53,6 +52,7 @@ public class _PlayerController : MonoBehaviour
     // ==================== MOVEMENT VARIABLES ====================
     #region MOVEMENT VARIABLES
 
+    private float facingAngle = 0f; // Tracks local facing (0=Right, 180=Left)
     private Vector2 moveInput; // Raw input from keyboard/controller (-1 to 1 on X axis)
     private float currentSpeed; // Current movement speed (not actively used but kept for future features)
     private bool isFacingRight = true; // Tracks which direction the sprite is facing
@@ -187,6 +187,42 @@ public class _PlayerController : MonoBehaviour
 
     #endregion
 
+    // ==================== WORLD ROTATION (FEZ-STYLE) ====================
+    #region WORLD ROTATION VARIABLES
+
+    /// <summary>
+    /// Fez-style world rotation integration.
+    /// Features:
+    /// - Freeze player during rotation (optional)
+    /// - Adapt movement to current camera view (optional)
+    /// - Snap to 2D plane after rotation (optional)
+    /// 
+    /// Requires _WorldRotationController in scene.
+    /// </summary>
+    [Header("World Rotation Settings")]
+
+    [Tooltip("Enable Fez-style world rotation integration")]
+    public bool useWorldRotation = false;
+
+    [Tooltip("Reference to the world rotation controller. Auto-finds if null")]
+    public _WorldRotationController worldRotationController;
+
+    [Tooltip("Freeze player during world rotation (like Fez)")]
+    public bool freezeDuringRotation = true;
+
+    [Tooltip("Adapt movement direction to current camera view")]
+    public bool useRotationRelativeMovement = true;
+
+    [Tooltip("Snap to 2D plane after rotation completes")]
+    public bool snapAfterRotation = true;
+
+    // Private rotation state
+    private bool isFrozenForRotation = false; // TRUE during world rotation freeze
+    private Vector3 frozenPosition; // Position when frozen
+    private Vector3 velocityBeforeFreeze; // Velocity to restore after unfreeze
+
+    #endregion
+
     #endregion
 
     // ==================== UNITY LIFECYCLE METHODS ====================
@@ -223,6 +259,20 @@ public class _PlayerController : MonoBehaviour
     {
         currentState = States.Fire; // Always start in Fire state
         ApplyStateData(fireStateData); // Load Fire state parameters
+
+        facingAngle = isFacingRight ? 0f : 180f;
+        // Initialize world rotation if enabled
+        InitializeWorldRotation();
+
+        if (worldRotationController != null)
+        {
+            UpdatePhysicsConstraints(worldRotationController.GetCurrentFaceIndex());
+        }
+        else
+        {
+            // Default to Standard 2D (Lock Z) if no rotation system found
+            UpdatePhysicsConstraints(0);
+        }
     }
 
     /// <summary>
@@ -235,6 +285,12 @@ public class _PlayerController : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        // Early exit if frozen for world rotation
+        if (isFrozenForRotation)
+        {
+            return;
+        }
+
         // Early exit if movement is completely disabled
         if (!currentStateData.canMove)
         {
@@ -269,6 +325,14 @@ public class _PlayerController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        // Handle frozen state for world rotation
+        if (isFrozenForRotation)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.position = frozenPosition;
+            return;
+        }
+
         // Early exit if movement is completely disabled
         if (!currentStateData.canMove)
         {
@@ -284,6 +348,238 @@ public class _PlayerController : MonoBehaviour
 
         // Decay bunny hop bonus over time
         DecayBunnyHopBonus();
+    }
+
+    private void LateUpdate()
+    {
+        if (visualTransform == null) return;
+
+        // 1. Get the current Camera Y Rotation
+        float cameraAngle = 0f;
+        if (worldRotationController != null && worldRotationController.cameraTransform != null)
+        {
+            cameraAngle = worldRotationController.cameraTransform.eulerAngles.y;
+        }
+        else if (Camera.main != null)
+        {
+            cameraAngle = Camera.main.transform.eulerAngles.y;
+        }
+
+        // 2. Apply Rotation: Camera Angle + Your Facing Angle
+        // This effectively "parents" the sprite rotation to the camera view
+        visualTransform.rotation = Quaternion.Euler(0, cameraAngle + facingAngle, 0);
+    }
+
+    #endregion
+
+    // ==================== WORLD ROTATION INTEGRATION ====================
+    #region WORLD ROTATION
+
+    /// <summary>
+    /// Initializes world rotation integration if enabled.
+    /// Subscribes to rotation events from _WorldRotationController.
+    /// </summary>
+    private void InitializeWorldRotation()
+    {
+        if (!useWorldRotation)
+        {
+            return;
+        }
+
+        // Find controller if not assigned
+        if (worldRotationController == null)
+        {
+            worldRotationController = _WorldRotationController.Instance;
+        }
+
+        if (worldRotationController == null)
+        {
+            Debug.LogWarning("[_PlayerController] World rotation enabled but no _WorldRotationController found in scene!");
+            useWorldRotation = false;
+            return;
+        }
+
+        // Subscribe to rotation events
+        worldRotationController.OnRotationStarted += OnWorldRotationStarted;
+        worldRotationController.OnRotationCompleted += OnWorldRotationCompleted;
+    }
+
+    /// <summary>
+    /// Unsubscribes from rotation events on disable.
+    /// </summary>
+    private void OnDisable()
+    {
+        if (worldRotationController != null)
+        {
+            worldRotationController.OnRotationStarted -= OnWorldRotationStarted;
+            worldRotationController.OnRotationCompleted -= OnWorldRotationCompleted;
+        }
+    }
+
+    /// <summary>
+    /// Called when world rotation begins.
+    /// Freezes player if freezeDuringRotation is enabled.
+    /// </summary>
+    private void OnWorldRotationStarted(int newFaceIndex)
+    {
+        if (!useWorldRotation || !freezeDuringRotation)
+        {
+            return;
+        }
+
+        FreezeForRotation();
+    }
+
+    /// <summary>
+    /// Called when world rotation completes.
+    /// Unfreezes player and optionally snaps to 2D plane.
+    /// </summary>
+    private void OnWorldRotationCompleted(int faceIndex)
+    {
+        if (!useWorldRotation)
+        {
+            return;
+        }
+
+        if (freezeDuringRotation)
+        {
+            UnfreezeFromRotation();
+        }
+
+        if (snapAfterRotation)
+        {
+            SnapToCurrentPlane();
+        }
+
+        UpdatePhysicsConstraints(faceIndex);
+    }
+
+    /// <summary>
+    /// Freezes player in place during world rotation.
+    /// Stores current position and velocity for later restoration.
+    /// </summary>
+    private void FreezeForRotation()
+    {
+        isFrozenForRotation = true;
+        frozenPosition = transform.position;
+        velocityBeforeFreeze = rb.linearVelocity;
+        rb.isKinematic = true;
+    }
+
+    /// <summary>
+    /// Unfreezes player after world rotation.
+    /// Restores velocity in the new camera-relative direction.
+    /// </summary>
+    private void UnfreezeFromRotation()
+    {
+        rb.isKinematic = false;
+        isFrozenForRotation = false;
+
+        // Restore velocity adapted to new direction
+        if (useRotationRelativeMovement && worldRotationController != null)
+        {
+            // Calculate horizontal speed from old velocity
+            float horizontalSpeed = new Vector2(velocityBeforeFreeze.x, velocityBeforeFreeze.z).magnitude;
+
+            // Get new right direction
+            Vector3 newRight = worldRotationController.GetCurrentRight();
+
+            // Maintain direction (left/right) of movement
+            float direction = Mathf.Sign(Vector3.Dot(velocityBeforeFreeze.normalized, newRight));
+            if (Mathf.Abs(direction) < 0.1f) direction = 1f;
+
+            rb.linearVelocity = new Vector3(
+                newRight.x * horizontalSpeed * direction,
+                velocityBeforeFreeze.y,
+                newRight.z * horizontalSpeed * direction
+            );
+        }
+        else
+        {
+            rb.linearVelocity = velocityBeforeFreeze;
+        }
+    }
+
+    /// <summary>
+    /// Snaps player to the 2D plane based on current camera view.
+    /// Called after rotation completes to prevent depth-related issues.
+    /// </summary>
+    private void SnapToCurrentPlane()
+    {
+        if (worldRotationController == null)
+        {
+            return;
+        }
+
+        // Get current face for determining snap behavior
+        int faceIndex = worldRotationController.GetCurrentFaceIndex();
+
+        // In a full implementation, you would raycast to find valid platforms
+        // For now, this is a placeholder for the depth snapper system
+        // The _FezDepthSnapper component handles more complex snapping logic
+    }
+
+    /// <summary>
+    /// Gets the movement direction based on world rotation state.
+    /// Returns world right if rotation disabled, or camera-relative right if enabled.
+    /// </summary>
+    private Vector3 GetMovementRight()
+    {
+        if (useWorldRotation && useRotationRelativeMovement && worldRotationController != null)
+        {
+            return worldRotationController.GetCurrentRight();
+        }
+
+        return Vector3.right;
+    }
+
+    /// <summary>
+    /// Returns TRUE if world is currently rotating.
+    /// Used to prevent actions during rotation.
+    /// </summary>
+    public bool IsWorldRotating()
+    {
+        if (!useWorldRotation || worldRotationController == null)
+        {
+            return false;
+        }
+
+        return worldRotationController.IsRotating();
+    }
+
+    /// <summary>
+    /// Returns TRUE if player is frozen for world rotation.
+    /// </summary>
+    public bool IsFrozenForRotation()
+    {
+        return isFrozenForRotation;
+    }
+
+    /// <summary>
+    /// Dynamically locks the physics axis perpendicular to the camera.
+    /// This ensures true 2D movement on the current plane.
+    /// </summary>
+    private void UpdatePhysicsConstraints(int faceIndex)
+    {
+        if (rb == null) return;
+
+        // Standard constraints: Always freeze rotation X and Z (so player doesn't tip over)
+        RigidbodyConstraints constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        // Even Faces (0: North, 2: South) = View is along Z-axis.
+        // We move on X, so we must FREEZE Z (Depth).
+        if (faceIndex % 2 == 0)
+        {
+            constraints |= RigidbodyConstraints.FreezePositionZ;
+        }
+        // Odd Faces (1: East, 3: West) = View is along X-axis.
+        // We move on Z, so we must FREEZE X (Depth).
+        else
+        {
+            constraints |= RigidbodyConstraints.FreezePositionX;
+        }
+
+        rb.constraints = constraints;
     }
 
     #endregion
@@ -648,6 +944,7 @@ public class _PlayerController : MonoBehaviour
     /// - Ground friction when not moving
     /// - Prevents pushing into wall during wall slide
     /// - Automatic sprite flipping
+    /// - Optional rotation-relative movement for Fez-style gameplay
     /// </summary>
     private void ApplyMovement()
     {
@@ -658,19 +955,22 @@ public class _PlayerController : MonoBehaviour
             return;
         }
 
-        // Calculate target speed from input
-        float targetSpeed = moveInput.x * currentStateData.moveSpeed;
+        // Get movement direction (world or camera-relative)
+        Vector3 movementRight = GetMovementRight();
+
+        // Calculate target velocity from input
+        Vector3 targetVelocity = movementRight * moveInput.x * currentStateData.moveSpeed;
 
         // Apply bunny hop bonus if active
         if (currentStateData.hasBunnyHop && bunnyHopBonus > 0)
         {
-            targetSpeed *= (1f + bunnyHopBonus);
+            targetVelocity *= (1f + bunnyHopBonus);
         }
 
         // Apply air control multiplier if in air
         if (!isGrounded && currentStateData.hasAirControl)
         {
-            targetSpeed *= currentStateData.airControlMultiplier;
+            targetVelocity *= currentStateData.airControlMultiplier;
         }
 
         // If wall sliding, prevent movement toward the wall
@@ -681,26 +981,30 @@ public class _PlayerController : MonoBehaviour
 
             if (tryingToMoveIntoWall)
             {
-                targetSpeed = 0;
+                targetVelocity = Vector3.zero;
             }
         }
 
-        float speedDifference = targetSpeed - rb.linearVelocity.x;
+        // Calculate current horizontal velocity
+        Vector3 currentHorizontalVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        Vector3 targetHorizontalVel = new Vector3(targetVelocity.x, 0, targetVelocity.z);
+
+        Vector3 velocityDifference = targetHorizontalVel - currentHorizontalVel;
 
         // Choose between acceleration (moving) or deceleration (stopping)
-        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f)
+        float accelRate = (targetHorizontalVel.magnitude > 0.01f)
             ? currentStateData.acceleration
             : currentStateData.deceleration;
 
         // Apply starting boost when beginning movement from standstill (ground only)
-        if (isGrounded && Mathf.Abs(rb.linearVelocity.x) < 0.01f && Mathf.Abs(targetSpeed) > 0.01f)
+        if (isGrounded && currentHorizontalVel.magnitude < 0.01f && targetHorizontalVel.magnitude > 0.01f)
         {
-            speedDifference *= currentStateData.startingSpeedBoost;
+            velocityDifference *= currentStateData.startingSpeedBoost;
         }
 
-        // Calculate force to apply
-        float movement = speedDifference * accelRate;
-        rb.AddForce(Vector3.right * movement, ForceMode.Force);
+        // Calculate and apply force
+        Vector3 movement = velocityDifference * accelRate;
+        rb.AddForce(movement, ForceMode.Force);
 
         // Apply ground friction when grounded and not inputting movement
         if (isGrounded && Mathf.Abs(moveInput.x) < 0.01f)
@@ -708,7 +1012,7 @@ public class _PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x * (1 - currentStateData.groundFriction * Time.fixedDeltaTime),
                 rb.linearVelocity.y,
-                rb.linearVelocity.z
+                rb.linearVelocity.z * (1 - currentStateData.groundFriction * Time.fixedDeltaTime)
             );
         }
 
@@ -838,10 +1142,17 @@ public class _PlayerController : MonoBehaviour
     /// <summary>
     /// Called by Unity's Input System when movement input changes.
     /// Receives Vector2 from keyboard/controller.
-    /// Respects canMove master toggle.
+    /// Respects canMove master toggle and world rotation freeze.
     /// </summary>
     public void OnMove(InputAction.CallbackContext ctx)
     {
+        // Block input during rotation freeze
+        if (isFrozenForRotation)
+        {
+            moveInput = Vector2.zero;
+            return;
+        }
+
         if (!currentStateData.canMove)
         {
             moveInput = Vector2.zero;
@@ -857,12 +1168,17 @@ public class _PlayerController : MonoBehaviour
     /// Respects canSwitchFromThisState toggle and cooldown system.
     /// 
     /// FIXED: Prevents state switching abuse for infinite flight.
-    /// Option 1: Block switching while airborne (strict)
-    /// Option 2: Allow switching but with proper restrictions (current)
+    /// FIXED: Blocks state switching during world rotation.
     /// </summary>
     public void OnSwitchState(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed)
+        {
+            return;
+        }
+
+        // Block during world rotation
+        if (isFrozenForRotation || IsWorldRotating())
         {
             return;
         }
@@ -878,15 +1194,6 @@ public class _PlayerController : MonoBehaviour
         {
             return;
         }
-
-        // OPTIONAL: Uncomment to prevent state switching while airborne (anti-exploit)
-        // This is the STRICTEST fix - completely prevents air switching
-        //if (!isGrounded)
-        //{
-        //    Debug.Log("Cannot switch states while airborne!");
-        //    return;
-        //}
-      
 
         // FIXED: Track if we're mid-dash to prevent dash spam via state switch
         if (isDashing)
@@ -915,11 +1222,15 @@ public class _PlayerController : MonoBehaviour
     /// On release (canceled): Stop variable height control
     /// 
     /// FIXED: Jump buffer now activates ANYTIME, not just when close to ground.
-    /// The buffer timer and TryJump() handle whether the jump can execute.
     /// </summary>
-    /// <param name="ctx">Input context from Unity Input System</param>
     public void OnJump(InputAction.CallbackContext ctx)
     {
+        // Block during rotation freeze
+        if (isFrozenForRotation)
+        {
+            return;
+        }
+
         // Early exit if jumping disabled
         if (!currentStateData.canJump)
         {
@@ -974,6 +1285,12 @@ public class _PlayerController : MonoBehaviour
             return;
         }
 
+        // Block during rotation freeze
+        if (isFrozenForRotation)
+        {
+            return;
+        }
+
         // Check if dash is enabled for this state
         if (!currentStateData.hasDash)
         {
@@ -987,7 +1304,6 @@ public class _PlayerController : MonoBehaviour
         }
 
         // FIXED: Prevent dash spam via rapid state switching
-        // If dash cooldown is active, don't allow dash even after state switch
         if (dashCooldownTimer > 0)
         {
             return;
@@ -1004,11 +1320,29 @@ public class _PlayerController : MonoBehaviour
 
         if (moveInput.magnitude > 0.1f)
         {
-            dashDir = new Vector3(moveInput.x, moveInput.y, 0).normalized;
+            // Use rotation-relative direction if enabled
+            if (useWorldRotation && useRotationRelativeMovement && worldRotationController != null)
+            {
+                Vector3 right = worldRotationController.GetCurrentRight();
+                dashDir = (right * moveInput.x + Vector3.up * moveInput.y).normalized;
+            }
+            else
+            {
+                dashDir = new Vector3(moveInput.x, moveInput.y, 0).normalized;
+            }
         }
         else
         {
-            dashDir = isFacingRight ? Vector3.right : Vector3.left;
+            // Use rotation-relative facing direction if enabled
+            if (useWorldRotation && useRotationRelativeMovement && worldRotationController != null)
+            {
+                Vector3 right = worldRotationController.GetCurrentRight();
+                dashDir = isFacingRight ? right : -right;
+            }
+            else
+            {
+                dashDir = isFacingRight ? Vector3.right : Vector3.left;
+            }
         }
 
         StartCoroutine(PerformDash(dashDir));
@@ -1143,49 +1477,34 @@ public class _PlayerController : MonoBehaviour
     {
         isFlipping = true;
 
-        // Safety check: ensure visualTransform is assigned
         if (visualTransform == null)
         {
-            Debug.LogError("Cannot flip sprite: visualTransform is null!");
             isFlipping = false;
-            yield break; // Exit coroutine early
+            yield break;
         }
 
-        // Get current rotation (Y-axis only, we ignore X and Z)
-        float startRotation = visualTransform.eulerAngles.y;
+        // We animate the variable 'facingAngle' instead of the Transform directly
+        float startAngle = facingAngle;
+        float targetAngle = flipToRight ? 0f : 180f;
 
-        // Determine target rotation
-        // Right = 0 degrees, Left = 180 degrees
-        float targetRotation = flipToRight ? 0f : 180f;
-
-        // Animation timing
         float elapsed = 0f;
-        float flipDuration = 0.15f; // 150 milliseconds - fast but visible
+        float flipDuration = 0.15f;
 
-        // Smoothly interpolate rotation over duration
         while (elapsed < flipDuration)
         {
-            elapsed += Time.deltaTime; // Increment by frame time
-
-            // Calculate interpolation progress (0 to 1)
+            elapsed += Time.deltaTime;
             float t = elapsed / flipDuration;
 
-            // Lerp between start and target rotation
-            float yRotation = Mathf.Lerp(startRotation, targetRotation, t);
+            // Lerp the angle value
+            // LateUpdate will automatically apply (CameraAngle + facingAngle) this frame
+            facingAngle = Mathf.Lerp(startAngle, targetAngle, t);
 
-            // Apply rotation ONLY to visual transform (not player root)
-            visualTransform.rotation = Quaternion.Euler(0, yRotation, 0);
-
-            yield return null; // Wait one frame
+            yield return null;
         }
 
-        // Snap to exact final rotation (prevent floating point drift)
-        visualTransform.rotation = Quaternion.Euler(0, targetRotation, 0);
-
-        // Update facing direction tracker
+        // Ensure we land exactly on the target
+        facingAngle = targetAngle;
         isFacingRight = flipToRight;
-
-        // Allow new flips
         isFlipping = false;
     }
 
@@ -1232,28 +1551,91 @@ public class _PlayerController : MonoBehaviour
     {
         Vector3 boxCenter = transform.position;
 
-        // Check right side
+        // 1. Get the correct "Right" direction based on Camera Rotation
+        Vector3 checkDirection = Vector3.right; // Default
+        if (useWorldRotation && worldRotationController != null)
+        {
+            // Use the ABSOLUTE value to just get the axis (X or Z)
+            // We handle Left/Right checking manually below
+            Vector3 worldRight = worldRotationController.GetCurrentRight();
+
+            // Snap to nearest axis to be safe (1,0,0) or (0,0,1)
+            if (Mathf.Abs(worldRight.z) > Mathf.Abs(worldRight.x))
+                checkDirection = new Vector3(0, 0, 1);
+            else
+                checkDirection = Vector3.right;
+        }
+
+        // 2. Check Right Side (Relative to Camera)
         bool rightWall = Physics.CheckBox(
-            boxCenter + Vector3.right * 0.5f,
+            boxCenter + checkDirection * 0.5f,
             wallCheckSize / 2,
             Quaternion.identity,
             wallLayer
         );
 
-        // Check left side
+        // 3. Check Left Side (Relative to Camera)
         bool leftWall = Physics.CheckBox(
-            boxCenter + Vector3.left * 0.5f,
+            boxCenter - checkDirection * 0.5f,
             wallCheckSize / 2,
             Quaternion.identity,
             wallLayer
         );
 
         isTouchingWall = rightWall || leftWall;
+
+        // 4. Determine Wall Direction (1 = Right, -1 = Left relative to Camera)
         wallDirection = rightWall ? 1 : (leftWall ? -1 : 0);
 
-        // Raycast for wall ahead
-        Vector3 rayDirection = isFacingRight ? Vector3.right : Vector3.left;
-        isWallAhead = Physics.Raycast(boxCenter, rayDirection, wallRaycastDistance, wallLayer);
+        // 5. Raycast for "Wall Ahead"
+        // We calculate this based on where the player is actually facing visually
+        Vector3 facingDir = isFacingRight ? checkDirection : -checkDirection;
+        isWallAhead = Physics.Raycast(boxCenter, facingDir, wallRaycastDistance, wallLayer);
+    }
+
+    #endregion
+
+    // ==================== PUBLIC GETTERS ====================
+    #region PUBLIC GETTERS
+
+    /// <summary>
+    /// Returns TRUE if player is currently grounded.
+    /// </summary>
+    public bool IsGrounded()
+    {
+        return isGrounded;
+    }
+
+    /// <summary>
+    /// Returns TRUE if player is currently dashing.
+    /// </summary>
+    public bool IsDashing()
+    {
+        return isDashing;
+    }
+
+    /// <summary>
+    /// Returns TRUE if player is currently invincible.
+    /// </summary>
+    public bool IsInvincible()
+    {
+        return isInvincible;
+    }
+
+    /// <summary>
+    /// Returns TRUE if player is wall sliding.
+    /// </summary>
+    public bool IsWallSliding()
+    {
+        return isWallSliding;
+    }
+
+    /// <summary>
+    /// Returns the current state data.
+    /// </summary>
+    public _PlayerStateData GetCurrentStateData()
+    {
+        return currentStateData;
     }
 
     #endregion
@@ -1290,9 +1672,16 @@ public class _PlayerController : MonoBehaviour
         Gizmos.color = isWallAhead ? Color.cyan : Color.gray;
         Vector3 wallRayDirection = isFacingRight ? Vector3.right : Vector3.left;
         Gizmos.DrawLine(transform.position, transform.position + wallRayDirection * wallRaycastDistance);
+
+        // World rotation direction indicators
+        if (useWorldRotation && worldRotationController != null)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentRight() * 2f);
+            Gizmos.color = new Color(1f, 0.5f, 0f); // Orange
+            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentForward() * 2f);
+        }
     }
 
     #endregion
 }
-
-*/
