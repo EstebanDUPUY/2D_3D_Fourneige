@@ -16,6 +16,6 @@ public class PlayerDamageSystem : MonoBehaviour
     public void Explode()
     {
         Debug.Log("PlayerDamageSystem Explode Call");
-        rb.AddForce(Vector3.right * speedExplode, ForceMode.Force);
+        // rb.AddForce(Vector3.right * speedExplode, ForceMode.Force);
     }
 }
