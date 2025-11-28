@@ -310,9 +310,65 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4111531794878899725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: showDebugLogs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5593439629627990384, guid: 177680a1fa706ac469b76914524c83db, type: 3}
       propertyPath: m_Name
       value: '_Player_ '
+      objectReference: {fileID: 0}
+    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.5881896
+      objectReference: {fileID: 0}
+    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.659259
+      objectReference: {fileID: 0}
+    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9914449
+      objectReference: {fileID: 0}
+    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.13052616
+      objectReference: {fileID: 0}
+    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.5881896
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.659259
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9914449
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.13052616
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7908830213155072861, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: showDebugLogs
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7908830213155072861, guid: 177680a1fa706ac469b76914524c83db, type: 3}
+      propertyPath: inputModeEnabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8945429667551413984, guid: 177680a1fa706ac469b76914524c83db, type: 3}
       propertyPath: far clip plane
