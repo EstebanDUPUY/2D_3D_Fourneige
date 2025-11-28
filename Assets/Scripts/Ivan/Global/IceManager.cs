@@ -10,6 +10,7 @@ public class IceManager : MonoBehaviour
 
     public PlayerController player;
     PlayerIceSystem playerIceSystem;
+    PlayerDamageSystem playerDamageSystem;
 
     Rigidbody rb;
 
@@ -21,6 +22,7 @@ public class IceManager : MonoBehaviour
     {
         rb = player.GetComponent<Rigidbody>();
         playerIceSystem = player.GetComponent<PlayerIceSystem>();
+        playerDamageSystem = player.GetComponent<PlayerDamageSystem>();
     }
 
     // Manage Event
@@ -75,8 +77,9 @@ public class IceManager : MonoBehaviour
                 //     Debug.Log("Die -> Fire on Ice Bridge");
                 //     break;
                 case PlayerIceSystem.PlayerOnEnvironment.SulfurCave:
+                    playerDamageSystem.Explode();
                     Debug.Log("THE CALL");
-                    PlayerDie?.Invoke();
+                    // PlayerDie?.Invoke();
                     Debug.Log("Die -> Fire on Sulfer Cave");
                     break;
             }

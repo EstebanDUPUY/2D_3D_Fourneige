@@ -17,9 +17,4 @@ public class SulfurCave : EnvironmentGame
         if (player != null)
             sulfurCaveData.PlayerExit();
     }
-
-    public void Explode()
-    {
-        
-    }
 }
