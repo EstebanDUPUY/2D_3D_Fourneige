@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
 {
     #region Variables
 
-    bool isDamaged;
+    public bool isDamaged;
+    public bool isAttachedToWallIce;
 
     // ==================== REFERENCES ====================
     #region REFERENCES
@@ -159,17 +160,17 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    void OnEnable()
-    {
-        PlayerDamageSystem.Die += () => isDamaged = true;
-        LevelManager.OnLevelReset += () => isDamaged = false;
-    }
+    // void OnEnable()
+    // {
+    //     PlayerDamageSystem.Die += () => isDamaged = true;
+    //     LevelManager.OnLevelReset += () => isDamaged = false;
+    // }
 
-    void OnDisable()
-    {
-        PlayerDamageSystem.Die -= () => isDamaged = true;
-        LevelManager.OnLevelReset -= () => isDamaged = false;
-    }
+    // void OnDisable()
+    // {
+    //     PlayerDamageSystem.Die -= () => isDamaged = true;
+    //     LevelManager.OnLevelReset -= () => isDamaged = false;
+    // }
 
     /// <summary>
     /// Initialize the player state and apply starting configuration.
@@ -214,7 +215,10 @@ public class PlayerController : MonoBehaviour
     {
         if (!isDashing && !isDamaged)
         {
-            ApplyMovement(); // Horizontal movement with acceleration
+            if (!isAttachedToWallIce)
+            {
+                ApplyMovement(); // Horizontal movement with acceleration
+            }
             ApplyWallSlide(); // Wall slide friction
             ApplyGravity(); // Custom gravity with variable jump multipliers
         }
@@ -538,6 +542,7 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
+        isAttachedToWallIce = false;
     }
 
     /// <summary>

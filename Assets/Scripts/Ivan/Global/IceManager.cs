@@ -42,6 +42,11 @@ public class IceManager : MonoBehaviour
         // playerIceSystem.PlayerModeChange += PlayerModeCompareToEnvironment;
 
         player.SwitchMode += PlayerModeCompareToEnvironment;
+
+        // PLAYER
+
+        PlayerDamageSystem.Die += () => player.isDamaged = true;
+        LevelManager.OnLevelReset += () => player.isDamaged = false;
     }
 
     private void OnDisable()
@@ -58,6 +63,11 @@ public class IceManager : MonoBehaviour
 
         // playerIceSystem.PlayerModeChange -= PlayerModeCompareToEnvironment;
         player.SwitchMode -= PlayerModeCompareToEnvironment;
+
+        // PLAYER
+
+        PlayerDamageSystem.Die -= () => player.isDamaged = true;
+        LevelManager.OnLevelReset -= () => player.isDamaged = false;
     }
 
     void PlayerModeCompareToEnvironment()
@@ -135,6 +145,7 @@ public class IceManager : MonoBehaviour
         playerIceSystem.SetPlayerOnEnvironment(PlayerIceSystem.PlayerOnEnvironment.IceWall);
         environmentGame = iceWall;
         PlayerModeCompareToEnvironment();
+        player.isAttachedToWallIce = true;
     }
 
     private void PlayerOnSulfurCave(SulfurCave sulfurCave)
@@ -149,6 +160,7 @@ public class IceManager : MonoBehaviour
         playerIceSystem.SetPlayerOnEnvironment(PlayerIceSystem.PlayerOnEnvironment.None);
         environmentGame = null;
         PlayerModeCompareToEnvironment();
+        player.isAttachedToWallIce = false;
     }
 
     // Other Functions
