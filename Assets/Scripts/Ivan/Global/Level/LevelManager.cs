@@ -49,13 +49,15 @@ public class LevelManager : MonoBehaviour
 
     public static void GameOver()
     {
+        Debug.Log("LevelManager -> GameOver() call");
         Instance.StartCoroutine(Instance.GameOverRoutine());
     }
 
     private IEnumerator GameOverRoutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.75f);
         OnLevelReset?.Invoke();
+        Debug.Log("LevelManager -> GameOverRoutine with reset level call");
     }
 
     public void PlayPauseTime()

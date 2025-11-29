@@ -11,8 +11,7 @@ public class ResetPlayer : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         startPos = transform.position;
         startRot = transform.rotation;
-
-        // autres init si besoin
+        rb.linearDamping = 0;
     }
 
     void OnEnable()
@@ -31,7 +30,7 @@ public class ResetPlayer : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        transform.position = startPos;
-        transform.rotation = startRot;
+        rb.transform.position = startPos;
+        rb.transform.rotation = startRot;
     }
 }

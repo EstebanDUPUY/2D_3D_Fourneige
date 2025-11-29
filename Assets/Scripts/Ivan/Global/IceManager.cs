@@ -90,7 +90,7 @@ public class IceManager : MonoBehaviour
                 //     Debug.Log("Die -> Fire on Ice Bridge");
                 //     break;
                 case PlayerIceSystem.PlayerOnEnvironment.SulfurCave:
-                    // playerDamageSystem.Explode();
+                    playerDamageSystem.Explode();
                     iceVFX.PlaySulfurExplosion(player.transform.position);
                     Debug.Log("THE CALL");
                     // PlayerDie?.Invoke();

@@ -19,8 +19,8 @@ public class PlayerDamageSystem : MonoBehaviour
     public void Explode()
     {
         Debug.Log("PlayerDamageSystem Explode Call");
-        rb.linearVelocity = (Vector3.right + Vector3.up * 0.07f).normalized * 62f;
-
+        rb.linearVelocity = (Vector3.right + Vector3.up * 0.6f).normalized * 13f;
+        rb.linearDamping = 1.6f;
         Die?.Invoke();
     }
 }
