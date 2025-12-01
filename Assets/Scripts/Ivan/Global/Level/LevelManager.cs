@@ -55,7 +55,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator GameOverRoutine()
     {
-        yield return new WaitForSeconds(1.75f);
+        yield return new WaitForSeconds(1.25f);
         OnLevelReset?.Invoke();
         Debug.Log("LevelManager -> GameOverRoutine with reset level call");
     }

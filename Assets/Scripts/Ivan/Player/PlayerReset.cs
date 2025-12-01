@@ -26,11 +26,13 @@ public class ResetPlayer : MonoBehaviour
 
     void Reset()
     {
-        Debug.Log("ResetPlayer -> Reset()");
+        Debug.Log("ResetPlayer -> Reset() avant");
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        rb.transform.position = startPos;
-        rb.transform.rotation = startRot;
+        rb.MovePosition(startPos);
+        rb.MoveRotation(startRot);
+
+        Debug.Log("ResetPlayer -> Reset() apres");
     }
 }
