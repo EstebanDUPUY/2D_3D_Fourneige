@@ -668,6 +668,18 @@ PrefabInstance:
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 976598083}
+    - target: {fileID: 4391866384896232907, guid: 9c81dfb0d3b083948943326bd89f10d7, type: 3}
+      propertyPath: Damping.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391866384896232907, guid: 9c81dfb0d3b083948943326bd89f10d7, type: 3}
+      propertyPath: Damping.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391866384896232907, guid: 9c81dfb0d3b083948943326bd89f10d7, type: 3}
+      propertyPath: Damping.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6029404846721828647, guid: 9c81dfb0d3b083948943326bd89f10d7, type: 3}
       propertyPath: playerRigidbody
       value: 

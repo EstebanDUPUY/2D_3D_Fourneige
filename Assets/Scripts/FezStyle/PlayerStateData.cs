@@ -146,7 +146,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Cooldown after switching to this state before switching again.</summary>
     [Tooltip("Cooldown duration after switching to this state")]
-    [Range(0f, 5f)]
     public float stateSwitchCooldown = 0.5f;
 
     // ==================== BASIC MOVEMENT ====================
@@ -158,22 +157,18 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Maximum horizontal movement speed.</summary>
     [Tooltip("Maximum horizontal movement speed")]
-    [Range(1f, 50f)]
     public float moveSpeed = 15f;
 
     /// <summary>How quickly the player accelerates to target speed.</summary>
     [Tooltip("Acceleration rate - higher = snappier")]
-    [Range(10f, 500f)]
     public float acceleration = 100f;
 
     /// <summary>Multiplier applied to first frame of movement for instant responsiveness.</summary>
     [Tooltip("Speed boost on first frame of movement")]
-    [Range(1f, 5f)]
     public float startingSpeedBoost = 2f;
 
     /// <summary>How quickly the player slows down when no input is given.</summary>
     [Tooltip("Deceleration rate - higher = stops faster")]
-    [Range(10f, 500f)]
     public float deceleration = 150f;
 
     // ==================== MOVEMENT FEEL (NEW) ====================
@@ -181,7 +176,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Minimum speed to consider 'moving' (prevents micro-drift).</summary>
     [Tooltip("Minimum speed threshold - prevents micro-drift")]
-    [Range(0f, 1f)]
     public float minimumMoveSpeed = 0.1f;
 
     /// <summary>Apply deceleration when changing direction.</summary>
@@ -190,7 +184,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Turn deceleration multiplier.</summary>
     [Tooltip("Deceleration multiplier when turning")]
-    [Range(1f, 5f)]
     public float turnDecelerationMultiplier = 1.5f;
 
     // ==================== SLOPES (NEW) ====================
@@ -202,7 +195,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Maximum walkable slope angle in degrees.</summary>
     [Tooltip("Maximum angle player can walk on")]
-    [Range(0f, 89f)]
     public float maxSlopeAngle = 45f;
 
     /// <summary>Behavior when on slopes steeper than max.</summary>
@@ -211,12 +203,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Speed when sliding down steep slopes.</summary>
     [Tooltip("Slide speed on steep slopes")]
-    [Range(1f, 50f)]
     public float steepSlopeSlideSpeed = 10f;
 
     /// <summary>Control multiplier when sliding on steep slopes (for SlideReducedControl mode).</summary>
     [Tooltip("Movement control multiplier during steep slope slide")]
-    [Range(0f, 1f)]
     public float steepSlopeControlMultiplier = 0.3f;
 
     /// <summary>Can the player jump while on a steep slope.</summary>
@@ -232,7 +222,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Percentage of ground control available in air.</summary>
     [Tooltip("Air control strength (0 = none, 1 = full)")]
-    [Range(0f, 1f)]
     public float airControlMultiplier = 0.8f;
 
     // ==================== AIR CONTROL TIMING (NEW) ====================
@@ -240,12 +229,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Delay before air control activates after leaving ground.</summary>
     [Tooltip("Delay before air control kicks in")]
-    [Range(0f, 1f)]
     public float airControlDelay = 0f;
 
     /// <summary>Air control ramp-up time (0 = instant full control).</summary>
     [Tooltip("Time to ramp up to full air control")]
-    [Range(0f, 1f)]
     public float airControlRampUpTime = 0f;
 
     /// <summary>Can change direction instantly in air.</summary>
@@ -254,7 +241,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Air deceleration when no input (0 = maintain momentum).</summary>
     [Tooltip("Air deceleration rate when no input")]
-    [Range(0f, 100f)]
     public float airDeceleration = 0f;
 
     // ==================== PHYSICS ====================
@@ -262,17 +248,14 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Additional gravity force applied to the character.</summary>
     [Tooltip("Custom gravity strength")]
-    [Range(0f, 100f)]
     public float gravity = 30f;
 
     /// <summary>Rigidbody mass value.</summary>
     [Tooltip("Character mass (affects physics interactions)")]
-    [Range(0.1f, 10f)]
     public float weight = 1f;
 
     /// <summary>Ground friction when not moving.</summary>
     [Tooltip("Ground friction (0 = ice, 1 = instant stop)")]
-    [Range(0f, 1f)]
     public float groundFriction = 0.5f;
 
     // ==================== FALL SPEED (NEW) ====================
@@ -280,7 +263,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Maximum fall speed (terminal velocity).</summary>
     [Tooltip("Maximum falling speed")]
-    [Range(10f, 100f)]
     public float maxFallSpeed = 50f;
 
     /// <summary>Enable fast fall when holding down.</summary>
@@ -289,7 +271,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Fast fall speed multiplier.</summary>
     [Tooltip("Fast fall gravity multiplier")]
-    [Range(1f, 5f)]
     public float fastFallMultiplier = 1.5f;
 
     /// <summary>Fast fall requires pressing down (vs just holding).</summary>
@@ -305,12 +286,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Fall speed threshold for hard landing.</summary>
     [Tooltip("Fall speed that triggers hard landing")]
-    [Range(5f, 50f)]
     public float hardLandingThreshold = 20f;
 
     /// <summary>Landing lag duration.</summary>
     [Tooltip("Duration of landing lag")]
-    [Range(0f, 1f)]
     public float landingLagDuration = 0.1f;
 
     /// <summary>Reduce landing lag if holding jump (for bunny hop feel).</summary>
@@ -319,12 +298,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Landing lag reduction multiplier when jump is buffered.</summary>
     [Tooltip("Landing lag multiplier when jump buffered")]
-    [Range(0f, 1f)]
     public float landingLagReductionMultiplier = 0.5f;
 
     /// <summary>Movement speed multiplier during landing lag (for ReducedMovement mode).</summary>
     [Tooltip("Movement speed during landing lag")]
-    [Range(0f, 1f)]
     public float landingLagMovementMultiplier = 0.3f;
 
     // ==================== JUMP SYSTEM ====================
@@ -336,7 +313,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Initial upward velocity applied when jumping.</summary>
     [Tooltip("Jump force (impulse)")]
-    [Range(1f, 50f)]
     public float jumpForce = 15f;
 
     // ==================== JUMP FEEL (NEW) ====================
@@ -348,17 +324,14 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Horizontal momentum multiplier on jump.</summary>
     [Tooltip("Horizontal momentum multiplier")]
-    [Range(1f, 2f)]
     public float jumpMomentumMultiplier = 1.1f;
 
     /// <summary>Jump force multiplier when jumping while moving fast.</summary>
     [Tooltip("Extra jump height when moving fast")]
-    [Range(1f, 1.5f)]
     public float movingJumpBonus = 1f;
 
     /// <summary>Speed threshold for moving jump bonus.</summary>
     [Tooltip("Speed required for moving jump bonus")]
-    [Range(0f, 20f)]
     public float movingJumpSpeedThreshold = 10f;
 
     // ==================== VARIABLE JUMP ====================
@@ -370,17 +343,14 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Gravity multiplier while holding jump and ascending.</summary>
     [Tooltip("Gravity while holding jump")]
-    [Range(0.1f, 1f)]
     public float jumpHoldGravityMultiplier = 0.5f;
 
     /// <summary>Gravity multiplier when falling or after releasing jump early.</summary>
     [Tooltip("Gravity when falling or jump released")]
-    [Range(1f, 5f)]
     public float jumpReleaseGravityMultiplier = 2.0f;
 
     /// <summary>Maximum duration the player can hold jump for extra height.</summary>
     [Tooltip("Max hold time for variable jump")]
-    [Range(0.05f, 1f)]
     public float maxJumpHoldTime = 0.3f;
 
     // ==================== APEX HANG (NEW) ====================
@@ -392,17 +362,14 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Velocity threshold to consider 'at apex'.</summary>
     [Tooltip("Velocity threshold for apex detection")]
-    [Range(0.5f, 10f)]
     public float apexVelocityThreshold = 2f;
 
     /// <summary>Gravity multiplier at apex.</summary>
     [Tooltip("Gravity at apex (lower = floatier)")]
-    [Range(0.1f, 1f)]
     public float apexGravityMultiplier = 0.5f;
 
     /// <summary>Air control multiplier at apex.</summary>
     [Tooltip("Extra air control at apex")]
-    [Range(1f, 3f)]
     public float apexAirControlMultiplier = 1.3f;
 
     /// <summary>Should apex air control stack with regular air control.</summary>
@@ -418,7 +385,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Grace period after leaving platform where jump is allowed.</summary>
     [Tooltip("Coyote time duration")]
-    [Range(0.01f, 0.5f)]
     public float coyoteTimeDuration = 0.15f;
 
     // ==================== JUMP BUFFERING ====================
@@ -430,7 +396,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Time window before landing where jump input is remembered.</summary>
     [Tooltip("Jump buffer time window")]
-    [Range(0.01f, 0.5f)]
     public float jumpBufferTime = 0.2f;
 
     // ==================== DOUBLE JUMP ====================
@@ -442,12 +407,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Maximum number of air jumps.</summary>
     [Tooltip("Number of air jumps allowed")]
-    [Range(1, 10)]
     public int maxAirJumps = 1;
 
     /// <summary>Force multiplier for air jumps.</summary>
     [Tooltip("Air jump force multiplier")]
-    [Range(0.3f, 2f)]
     public float airJumpForceMultiplier = 0.9f;
 
     /// <summary>Reset air jumps when wall jumping.</summary>
@@ -466,13 +429,12 @@ public class PlayerStateData : ScriptableObject
     public bool wallSlideRequiresInput = false;
 
     /// <summary>Maximum fall speed when sliding (negative value).</summary>
-    [Tooltip("Wall slide fall speed (negative = slower)")]
-    [Range(-20f, -0.5f)]
+    [Tooltip("Wall slide fall speed (negative = slower). Must be negative!")]
+    [Range(-100f, -0.01f)]
     public float wallSlideFriction = -3f;
 
     /// <summary>Delay before wall slide activates after touching wall.</summary>
     [Tooltip("Delay before wall slide starts")]
-    [Range(0f, 0.5f)]
     public float wallSlideDelay = 0f;
 
     /// <summary>Can slide on walls while moving upward.</summary>
@@ -488,12 +450,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Max duration player can cling before forced slide.</summary>
     [Tooltip("Max cling duration (0 = infinite)")]
-    [Range(0f, 10f)]
     public float maxWallClingDuration = 2f;
 
     /// <summary>Stamina cost per second while clinging (0 = no cost).</summary>
     [Tooltip("Stamina drain while clinging")]
-    [Range(0f, 50f)]
     public float wallClingStaminaCost = 0f;
 
     /// <summary>Can the player jump from wall cling.</summary>
@@ -502,7 +462,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Wall cling gravity (0 = stick perfectly).</summary>
     [Tooltip("Gravity while wall clinging")]
-    [Range(0f, 10f)]
     public float wallClingGravity = 0f;
 
     // ==================== WALL JUMP ====================
@@ -514,12 +473,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Upward force during wall jump (0 = use jumpForce).</summary>
     [Tooltip("Wall jump vertical force (0 = use jump force)")]
-    [Range(0f, 50f)]
     public float wallJumpForce = 0f;
 
     /// <summary>Horizontal push multiplier when wall jumping.</summary>
     [Tooltip("Horizontal push strength")]
-    [Range(0.1f, 2f)]
     public float wallJumpHorizontalMultiplier = 0.7f;
 
     /// <summary>Direction mode for wall jump push.</summary>
@@ -535,12 +492,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Time after wall jump where air control is modified.</summary>
     [Tooltip("Control lock duration")]
-    [Range(0f, 1f)]
     public float wallJumpControlLockDuration = 0.2f;
 
     /// <summary>Air control multiplier during wall jump lock.</summary>
     [Tooltip("Air control during lock (0 = none)")]
-    [Range(0f, 1f)]
     public float wallJumpControlLockMultiplier = 0.3f;
 
     /// <summary>Only apply lock when trying to return to same wall.</summary>
@@ -560,7 +515,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Cooldown after dashing before dashing again.</summary>
     [Tooltip("Dash cooldown time")]
-    [Range(0f, 5f)]
     public float dashCooldown = 0f;
 
     // ==================== DASH DIRECTION (NEW) ====================
@@ -587,22 +541,18 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Distance traveled during dash.</summary>
     [Tooltip("Dash distance (if fixed distance)")]
-    [Range(1f, 20f)]
     public float dashDistance = 5f;
 
     /// <summary>Duration of dash.</summary>
     [Tooltip("Dash duration in seconds")]
-    [Range(0.05f, 1f)]
     public float dashDuration = 0.3f;
 
     /// <summary>Speed during dash.</summary>
     [Tooltip("Dash speed (if fixed duration)")]
-    [Range(5f, 100f)]
     public float dashSpeed = 20f;
 
     /// <summary>Velocity multiplier applied after dash ends.</summary>
     [Tooltip("Velocity kept after dash (0 = stop)")]
-    [Range(0f, 1f)]
     public float dashEndVelocityMultiplier = 0f;
 
     /// <summary>Cancel dash on wall collision.</summary>
@@ -619,7 +569,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Gravity multiplier during dash (if dashHasGravity).</summary>
     [Tooltip("Gravity strength during dash")]
-    [Range(0f, 1f)]
     public float dashGravityMultiplier = 0.5f;
 
     // ==================== DASH INVINCIBILITY ====================
@@ -631,7 +580,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Duration of invincibility during dash.</summary>
     [Tooltip("Invincibility duration")]
-    [Range(0f, 1f)]
     public float dashInvincibilityDuration = 0.3f;
 
     /// <summary>Visual feedback style during invincibility.</summary>
@@ -640,12 +588,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Flicker speed for Flicker visual mode.</summary>
     [Tooltip("Flicker frequency")]
-    [Range(5f, 60f)]
     public float dashFlickerSpeed = 30f;
 
     /// <summary>Alpha value for Transparent visual mode.</summary>
     [Tooltip("Transparency during invincibility")]
-    [Range(0f, 1f)]
     public float dashTransparencyAlpha = 0.5f;
 
     /// <summary>Color for ColorShift visual mode.</summary>
@@ -657,12 +603,10 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Maximum dash charges.</summary>
     [Tooltip("Max number of dash charges")]
-    [Range(1, 10)]
     public int maxDashCharges = 1;
 
     /// <summary>Time to recharge one dash charge.</summary>
     [Tooltip("Recharge time per charge")]
-    [Range(0f, 10f)]
     public float dashRechargeTime = 0f;
 
     /// <summary>Dash recharge mode.</summary>
@@ -675,7 +619,6 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Delay before dash recharge starts.</summary>
     [Tooltip("Delay before recharge begins")]
-    [Range(0f, 5f)]
     public float dashRechargeDelay = 0f;
 
     // ==================== BUNNY HOP ====================
@@ -687,22 +630,18 @@ public class PlayerStateData : ScriptableObject
 
     /// <summary>Speed bonus per successful bunny hop.</summary>
     [Tooltip("Speed bonus per hop")]
-    [Range(0f, 0.5f)]
     public float bunnyHopSpeedBonus = 0.15f;
 
     /// <summary>How quickly bunny hop bonus decays.</summary>
     [Tooltip("Bonus decay rate")]
-    [Range(0.1f, 5f)]
     public float bunnyHopDecayRate = 1f;
 
     /// <summary>Maximum speed from bunny hopping.</summary>
     [Tooltip("Max speed multiplier from bunny hop")]
-    [Range(1f, 3f)]
     public float bunnyHopMaxSpeed = 1.5f;
 
     /// <summary>Time window after landing to chain bunny hop.</summary>
     [Tooltip("Timing window for bunny hop")]
-    [Range(0.01f, 0.5f)]
     public float bunnyHopTimingWindow = 0.1f;
 
     #endregion
