@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9117428698391364448
+--- !u!1 &94106907259241022
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6413513388564247487}
-  - component: {fileID: 1565083371664310300}
-  - component: {fileID: 1854616508459154400}
-  - component: {fileID: 3638798866003298041}
-  - component: {fileID: 7468540270151497121}
-  - component: {fileID: 1136925834445417546}
-  m_Layer: 3
-  m_Name: Player
-  m_TagString: Player
+  - component: {fileID: 6180103584095245302}
+  - component: {fileID: 2742119755464251758}
+  m_Layer: 0
+  m_Name: Visual
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6413513388564247487
+--- !u!4 &6180103584095245302
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117428698391364448}
+  m_GameObject: {fileID: 94106907259241022}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 3953160275233880906}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1565083371664310300
+--- !u!212 &2742119755464251758
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117428698391364448}
+  m_GameObject: {fileID: 94106907259241022}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -91,13 +87,49 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1854616508459154400
+--- !u!1 &9110561492619151986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3953160275233880906}
+  - component: {fileID: 6796938326107716487}
+  - component: {fileID: 178127218146997420}
+  - component: {fileID: 1761079241518343159}
+  - component: {fileID: 1194010735664149338}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3953160275233880906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9110561492619151986}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: -4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6180103584095245302}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6796938326107716487
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117428698391364448}
+  m_GameObject: {fileID: 9110561492619151986}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
@@ -118,8 +150,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1136925834445417546}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1194010735664149338}
+        m_TargetAssemblyTypeName: FezPlayerController, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -150,8 +182,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Crouch[/Keyboard/c]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1136925834445417546}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1194010735664149338}
+        m_TargetAssemblyTypeName: FezPlayerController, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
@@ -178,8 +210,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Sprint[/Keyboard/leftShift]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1136925834445417546}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1194010735664149338}
+        m_TargetAssemblyTypeName: FezPlayerController, Assembly-CSharp
         m_MethodName: OnSwitchState
         m_Mode: 0
         m_Arguments:
@@ -192,6 +224,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8e87d1a2-efda-4c52-bb87-281d4ff7e39e
     m_ActionName: 'Player/SwitchState[/Keyboard/q]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1194010735664149338}
+        m_TargetAssemblyTypeName: FezPlayerController, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6dbd0b58-bc5c-4071-a1f2-2651421deafe
+    m_ActionName: 'Player/Dash[/Keyboard/shift]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: FezWorldRotation, Assembly-CSharp
+        m_MethodName: OnRotateLeft
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 204ee91e-e7ad-49f2-82c8-0fa5a07c2845
+    m_ActionName: 'Player/FezLeft[/Keyboard/w]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: FezWorldRotation, Assembly-CSharp
+        m_MethodName: OnRotateRight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cfb39e4b-d22d-4012-b755-7ce1628fd19a
+    m_ActionName: 'Player/FezRight[/Keyboard/x]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: c95b2375-e6d9-4b88-9c4c-c5e76515df4b
@@ -232,57 +312,18 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1136925834445417546}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnDash
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 6dbd0b58-bc5c-4071-a1f2-2651421deafe
-    m_ActionName: 'Player/Dash[/Keyboard/shift,/DualSenseGamepadHID/rightShoulder]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!136 &3638798866003298041
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117428698391364448}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &7468540270151497121
+--- !u!54 &178127218146997420
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117428698391364448}
+  m_GameObject: {fileID: 9110561492619151986}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -301,22 +342,46 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 120
+  m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &1136925834445417546
+--- !u!136 &1761079241518343159
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9110561492619151986}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1194010735664149338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9117428698391364448}
+  m_GameObject: {fileID: 9110561492619151986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f3cc6cfe02f5b45b1f3785f57b6eee, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f2db0a46aa420a4aa75ada9052a8056, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireStateData: {fileID: 11400000, guid: 6766ceb4390262a45a9b48d7d6716952, type: 2}
-  iceStateData: {fileID: 11400000, guid: 8b622f6c36b5d164884194ed2b4620b1, type: 2}
+  visualTransform: {fileID: 6180103584095245302}
+  fireStateData: {fileID: 11400000, guid: 8ad5a3a5cda3c774bb6d4f4fdfa25431, type: 2}
+  iceStateData: {fileID: 11400000, guid: 1ebe92857a36acc4599c7b829b071b59, type: 2}
   currentState: 0
   groundLayer:
     serializedVersion: 2
@@ -324,14 +389,30 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
-  groundCheckSize: {x: 0.9, y: 0.25, z: 0}
-  wallCheckSize: {x: 0.25, y: 1.5, z: 0}
-  groundRaycastDistance: 0.25
-  wallRaycastDistance: 0.25
-  dashHasInvincibility: 0
+  groundCheckSize: {x: 0.9, y: 0.1, z: 0.9}
+  groundRaycastDistance: 0.2
+  wallCheckSize: {x: 0.1, y: 0.9, z: 0.9}
+  wallRaycastDistance: 0.2
+  overrideDashSettings: 0
+  dashHasInvincibility: 1
   dashInvincibilityDuration: 0.3
   dashIsFixedDistance: 0
   dashDistance: 5
   dashDuration: 0.3
   dashSpeed: 20
+  overrideWallStickRequiresInput: 0
   wallStickRequiresInput: 0
+  useWorldRotation: 1
+  worldRotationController: {fileID: 0}
+  freezeDuringRotation: 1
+  useRotationRelativeMovement: 1
+  snapAfterRotation: 1
+  clearDepthVelocityOnRotation: 1
+  preserveHorizontalMomentum: 1
+  wallCheckDelayAfterRotation: 0.1
+  use4DirectionalWallCheck: 0
+  fullWallCheckInterval: 0.1
+  showWorldSpaceGizmos: 1
+  showCameraRelativeGizmos: 1
+  showDetectionResults: 1
+  showSlopeGizmos: 1
