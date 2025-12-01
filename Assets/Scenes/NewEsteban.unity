@@ -440,6 +440,7 @@ GameObject:
   - component: {fileID: 1458438557}
   - component: {fileID: 1458438556}
   - component: {fileID: 1458438555}
+  - component: {fileID: 1458438558}
   m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
@@ -536,6 +537,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1458438553}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1458438558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458438553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 723be564e3f220443b9bcdb49847d244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragOnIce: 45
+  range: 5
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &2119066176 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6359581717814830041, guid: 9c81dfb0d3b083948943326bd89f10d7, type: 3}

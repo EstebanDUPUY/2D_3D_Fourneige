@@ -1,11 +1,12 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 /// <summary>
 /// Fully modular player controller for 2.5D platformer with Fez-style world rotation.
 /// All features are toggle-based through ScriptableObject states.
-/// 
+///
 /// Core Systems:
 /// - Data-driven state system (no hardcoded state exclusivity)
 /// - Hybrid ground/wall detection with slope support
@@ -45,9 +46,19 @@ public class FezPlayerController : MonoBehaviour
     /// <summary>
     /// Enum defining the available player states.
     /// </summary>
-    public enum States { Fire, Ice }
+    public enum States
+    {
+        Fire,
+        Ice,
+    }
+
     public States currentState;
 
+    public Action SwitchMode;
+
+    [Header("For Moving")]
+    public bool isDamaged;
+    public bool isAttachedToWallIce;
     #endregion
 
     // ==================== MOVEMENT VARIABLES ====================
@@ -216,32 +227,43 @@ public class FezPlayerController : MonoBehaviour
     // the player to the right side of the SCREEN, not world coordinates.
     // -------------------------------------------------------------------------
 
-    [Tooltip("Enable Fez-style world rotation integration. If FALSE, all rotation features are disabled.")]
+    [Tooltip(
+        "Enable Fez-style world rotation integration. If FALSE, all rotation features are disabled."
+    )]
     public bool useWorldRotation = false;
+
     // Master toggle for the entire rotation system.
     // Set to TRUE when using FezWorldRotation in your scene.
     // When FALSE, all rotation-related code is bypassed for performance.
 
-    [Tooltip("Reference to the FezWorldRotation controller. Will auto-find via FezWorldRotation.Instance if left empty.")]
+    [Tooltip(
+        "Reference to the FezWorldRotation controller. Will auto-find via FezWorldRotation.Instance if left empty."
+    )]
     public FezWorldRotation worldRotationController;
+
     // Direct reference to the rotation controller.
     // Can be assigned in Inspector or left null for auto-detection.
     // Auto-detection uses the singleton pattern: FezWorldRotation.Instance
 
     [Tooltip("Freeze player movement and physics during rotation animation.")]
     public bool freezeDuringRotation = true;
+
     // When TRUE: Player stops completely during the 90° rotation animation.
     // When FALSE: Player can continue moving during rotation (can feel chaotic).
     // RECOMMENDED: Keep TRUE for authentic Fez feel.
 
-    [Tooltip("Movement input is relative to current camera view. 'Right' means screen-right, not world +X.")]
+    [Tooltip(
+        "Movement input is relative to current camera view. 'Right' means screen-right, not world +X."
+    )]
     public bool useRotationRelativeMovement = true;
+
     // When TRUE: After rotating, pressing "right" still moves player right on screen.
     // When FALSE: Controls are always world-relative (confusing after rotation).
     // RECOMMENDED: Keep TRUE for intuitive controls.
 
     [Tooltip("Trigger depth snapping after rotation. FezDepthSnapper handles the actual snap.")]
     public bool snapAfterRotation = true;
+
     // When TRUE: Signals that a depth snap should occur after rotation.
     // The FezDepthSnapper component listens for rotation events and handles snapping.
     // When FALSE: Player stays at their current position (may float or clip).
@@ -250,9 +272,9 @@ public class FezPlayerController : MonoBehaviour
     // Rotation Physics - How velocity is handled during/after rotation
     // -------------------------------------------------------------------------
     [Header("Rotation Physics")]
-
     [Tooltip("Zero out velocity in the depth direction (into/out of screen) after rotation.")]
     public bool clearDepthVelocityOnRotation = true;
+
     // The "depth" direction is perpendicular to the screen (forward/backward).
     // After rotation, you typically don't want the player drifting into the screen.
     // When TRUE: Depth velocity is set to 0 after each rotation.
@@ -260,6 +282,7 @@ public class FezPlayerController : MonoBehaviour
 
     [Tooltip("Keep horizontal movement speed through rotation, just redirect it.")]
     public bool preserveHorizontalMomentum = true;
+
     // When TRUE: If player was running right at 5 units/sec, they continue at 5 units/sec
     //            in the new "right" direction after rotation.
     // When FALSE: All velocity is preserved as-is (movement may suddenly be into screen).
@@ -268,6 +291,7 @@ public class FezPlayerController : MonoBehaviour
     [Tooltip("Delay before wall detection resumes after rotation (prevents false positives).")]
     [Range(0f, 0.5f)]
     public float wallCheckDelayAfterRotation = 0.1f;
+
     // After rotation, there's a brief moment where the player hasn't fully settled.
     // Wall detection during this time can give incorrect results.
     // This delay pauses wall checks for the specified duration.
@@ -277,17 +301,20 @@ public class FezPlayerController : MonoBehaviour
     // Wall Detection Mode - For advanced mechanics
     // -------------------------------------------------------------------------
     [Header("Wall Detection Mode")]
-
     [Tooltip("Check walls in all 4 world directions, not just camera-relative left/right.")]
     public bool use4DirectionalWallCheck = false;
+
     // Standard mode: Only checks walls to camera-left and camera-right.
     // 4-Direction mode: Also checks walls in front and behind (world +X, -X, +Z, -Z).
     // Use 4-direction for mechanics that need to know about walls in all directions.
     // Performance note: 4-direction mode does 4 physics casts instead of 2.
 
-    [Tooltip("How often to update 4-direction wall cache (seconds). Lower = more responsive but more CPU.")]
+    [Tooltip(
+        "How often to update 4-direction wall cache (seconds). Lower = more responsive but more CPU."
+    )]
     [Range(0.01f, 0.5f)]
     public float fullWallCheckInterval = 0.1f;
+
     // 4-direction checks run on a timer for performance.
     // 0.1 = 10 times per second, good balance of responsiveness and performance.
     // 0.01 = 100 times per second, very responsive but may impact performance.
@@ -296,18 +323,21 @@ public class FezPlayerController : MonoBehaviour
     // -------------------------------------------------------------------------
     // Private Rotation State - Internal tracking variables
     // -------------------------------------------------------------------------
-    
+
     private bool isFrozenForRotation = false;
+
     // TRUE while player is frozen during rotation animation.
     // Prevents movement updates and physics simulation.
     // Set TRUE in FreezeForRotation(), set FALSE in UnfreezeFromRotation().
 
     private Vector3 frozenPosition;
+
     // The position where the player was frozen.
     // Used to hold player in place during rotation.
     // Stored when FreezeForRotation() is called.
 
     private Vector3 velocityBeforeFreeze;
+
     // The velocity the player had before being frozen.
     // Used to restore/transform momentum after rotation.
     // Stored when FreezeForRotation() is called.
@@ -329,19 +359,21 @@ public class FezPlayerController : MonoBehaviour
     #region DEBUG GIZMOS
 
     [Header("Debug Gizmos")]
-
     [Tooltip("Draw wall detection boxes in world-space coordinates.")]
     public bool showWorldSpaceGizmos = true;
+
     // Shows the actual physics cast boxes in world coordinates.
     // Useful for understanding where detection is happening.
 
     [Tooltip("Draw wall detection boxes relative to current camera view.")]
     public bool showCameraRelativeGizmos = true;
+
     // Shows boxes rotated to match current camera perspective.
     // Helps visualize how detection changes after rotation.
 
     [Tooltip("Highlight detected walls with different colors.")]
     public bool showDetectionResults = true;
+
     // Changes gizmo colors based on detection state.
     // Green = no wall, Red = wall detected.
 
@@ -358,6 +390,7 @@ public class FezPlayerController : MonoBehaviour
     #region FAST FALL
 
     private bool isFastFalling;
+
     // TRUE while player is actively fast-falling.
     // Increases gravity multiplier for faster descent.
 
@@ -403,7 +436,7 @@ public class FezPlayerController : MonoBehaviour
 
         // Set initial facing angle (0 = right, 180 = left)
         facingAngle = isFacingRight ? 0f : 180f;
-        
+
         // --- INITIALIZE WORLD ROTATION ---
         // Set up event subscriptions with FezWorldRotation controller
         InitializeWorldRotation();
@@ -439,13 +472,13 @@ public class FezPlayerController : MonoBehaviour
         // If frozen for rotation, skip all update logic
         if (isFrozenForRotation)
         {
-            return;  // Player is frozen - do nothing
+            return; // Player is frozen - do nothing
         }
 
         // Check if movement is allowed by current state
         if (!currentStateData.canMove)
         {
-            return;  // Movement disabled
+            return; // Movement disabled
         }
 
         // --- UPDATE DETECTION STATES ---
@@ -493,8 +526,12 @@ public class FezPlayerController : MonoBehaviour
             return;
         }
 
-        if (!isDashing)
+        if (!isDashing && !isDamaged)
         {
+            if (!isAttachedToWallIce)
+            {
+                ApplyMovement(); // Horizontal movement with acceleration
+            }
             ApplyMovement();
             ApplyWallSlide();
             ApplyWallCling();
@@ -515,14 +552,15 @@ public class FezPlayerController : MonoBehaviour
     private void LateUpdate()
     {
         // Need visual transform reference
-        if (visualTransform == null) return;
+        if (visualTransform == null)
+            return;
 
         // --- CALCULATE CAMERA ANGLE ---
         // We need to know which way the camera is facing so the sprite
         // always faces the camera correctly (billboard effect).
-        
-        float cameraAngle = 0f;  // Default to facing +Z
-        
+
+        float cameraAngle = 0f; // Default to facing +Z
+
         // Try to get angle from rotation controller's rig
         if (worldRotationController != null)
         {
@@ -564,14 +602,14 @@ public class FezPlayerController : MonoBehaviour
         // Skip initialization if rotation integration is disabled
         if (!useWorldRotation)
         {
-            return;  // Not using rotation - nothing to initialize
+            return; // Not using rotation - nothing to initialize
         }
 
         // --- GET CONTROLLER REFERENCE ---
         // If no controller was assigned in Inspector, try to find it via singleton
         if (worldRotationController == null)
         {
-            worldRotationController = FezWorldRotation.Instance;  // Singleton pattern
+            worldRotationController = FezWorldRotation.Instance; // Singleton pattern
         }
 
         // --- VALIDATE CONTROLLER ---
@@ -579,17 +617,19 @@ public class FezPlayerController : MonoBehaviour
         if (worldRotationController == null)
         {
             // No controller found - log warning and disable integration
-            Debug.LogWarning("[_FezPlayerController] World rotation enabled but no FezWorldRotation found in scene!");
-            useWorldRotation = false;  // Disable to prevent null reference errors
+            Debug.LogWarning(
+                "[_FezPlayerController] World rotation enabled but no FezWorldRotation found in scene!"
+            );
+            useWorldRotation = false; // Disable to prevent null reference errors
             return;
         }
 
         // --- SUBSCRIBE TO EVENTS ---
         // Connect our callbacks to the rotation controller's events
-        
+
         // OnRotationStarted fires when rotation begins (freeze player here)
         worldRotationController.OnRotationStarted += OnWorldRotationStarted;
-        
+
         // OnRotationCompleted fires when rotation ends (unfreeze player here)
         worldRotationController.OnRotationCompleted += OnWorldRotationCompleted;
     }
@@ -619,7 +659,7 @@ public class FezPlayerController : MonoBehaviour
         // Only freeze if both rotation and freezing are enabled
         if (!useWorldRotation || !freezeDuringRotation)
         {
-            return;  // Don't freeze
+            return; // Don't freeze
         }
 
         // --- FREEZE THE PLAYER ---
@@ -669,13 +709,13 @@ public class FezPlayerController : MonoBehaviour
     {
         // Mark as frozen (checked in Update/FixedUpdate)
         isFrozenForRotation = true;
-        
+
         // Store current position (we'll hold player here)
         frozenPosition = transform.position;
-        
+
         // Store current velocity (may restore/transform after unfreeze)
         velocityBeforeFreeze = rb.linearVelocity;
-        
+
         // Make rigidbody kinematic to stop all physics simulation
         // This prevents gravity, collisions, etc. during freeze
         rb.isKinematic = true;
@@ -689,8 +729,8 @@ public class FezPlayerController : MonoBehaviour
     private void UnfreezeFromRotation(int faceIndex)
     {
         // --- RE-ENABLE PHYSICS ---
-        rb.isKinematic = false;  // Allow physics simulation again
-        
+        rb.isKinematic = false; // Allow physics simulation again
+
         // Mark as no longer frozen
         isFrozenForRotation = false;
 
@@ -703,28 +743,27 @@ public class FezPlayerController : MonoBehaviour
                 velocityBeforeFreeze.x,
                 velocityBeforeFreeze.z
             ).magnitude;
-            
+
             // Get the new "right" direction from the rotation controller
             // After rotation, "right" points in a different world direction
             Vector3 newRight = worldRotationController.GetCurrentRight();
-            
+
             // Determine if player was moving right (+1) or left (-1)
             // Dot product: positive = same direction, negative = opposite
-            float direction = Mathf.Sign(
-                Vector3.Dot(velocityBeforeFreeze.normalized, newRight)
-            );
-            
+            float direction = Mathf.Sign(Vector3.Dot(velocityBeforeFreeze.normalized, newRight));
+
             // Handle edge case where player wasn't really moving
             // (Avoid NaN from normalizing zero vector)
-            if (Mathf.Abs(direction) < 0.1f) direction = 1f;
+            if (Mathf.Abs(direction) < 0.1f)
+                direction = 1f;
 
             // Build new velocity vector:
             // - Horizontal: previous speed in new right direction
             // - Vertical: preserved from before (keep falling/rising)
             Vector3 newVelocity = new Vector3(
-                newRight.x * horizontalSpeed * direction,  // X = right.x * speed
-                velocityBeforeFreeze.y,                    // Y = preserved vertical
-                newRight.z * horizontalSpeed * direction   // Z = right.z * speed
+                newRight.x * horizontalSpeed * direction, // X = right.x * speed
+                velocityBeforeFreeze.y, // Y = preserved vertical
+                newRight.z * horizontalSpeed * direction // Z = right.z * speed
             );
 
             // --- CLEAR DEPTH VELOCITY ---
@@ -737,11 +776,11 @@ public class FezPlayerController : MonoBehaviour
                 // Face 1 (East) and 3 (West): X is depth
                 if (faceIndex % 2 == 0) // North/South - Z is into screen
                 {
-                    newVelocity.z = 0f;  // Clear Z velocity
+                    newVelocity.z = 0f; // Clear Z velocity
                 }
                 else // East/West - X is into screen
                 {
-                    newVelocity.x = 0f;  // Clear X velocity
+                    newVelocity.x = 0f; // Clear X velocity
                 }
             }
 
@@ -802,7 +841,7 @@ public class FezPlayerController : MonoBehaviour
         // Check if rotation system is active and controller exists
         if (!useWorldRotation || worldRotationController == null)
         {
-            return false;  // Not using rotation, so never "rotating"
+            return false; // Not using rotation, so never "rotating"
         }
 
         // Query the controller for rotation state
@@ -826,7 +865,8 @@ public class FezPlayerController : MonoBehaviour
     private void UpdatePhysicsConstraints(int faceIndex)
     {
         // Need rigidbody reference
-        if (rb == null) return;
+        if (rb == null)
+            return;
 
         // Store old constraints to detect changes
         var oldConstraints = rb.constraints;
@@ -834,9 +874,11 @@ public class FezPlayerController : MonoBehaviour
         // --- BUILD BASE CONSTRAINTS ---
         // Always freeze all rotation (player shouldn't tip over)
         RigidbodyConstraints constraints =
-            RigidbodyConstraints.FreezeRotationX |    // No tipping forward/back
-            RigidbodyConstraints.FreezeRotationZ |    // No tipping left/right
-            RigidbodyConstraints.FreezeRotationY;     // No spinning
+            RigidbodyConstraints.FreezeRotationX
+            | // No tipping forward/back
+            RigidbodyConstraints.FreezeRotationZ
+            | // No tipping left/right
+            RigidbodyConstraints.FreezeRotationY; // No spinning
 
         // Get current velocity (may need to clear depth component)
         Vector3 velocity = rb.linearVelocity;
@@ -844,12 +886,12 @@ public class FezPlayerController : MonoBehaviour
         // --- ADD DEPTH CONSTRAINT BASED ON FACE ---
         // The "depth" axis is the one going into the screen
         // We constrain movement on this axis to keep player in 2D plane
-        
+
         if (faceIndex % 2 == 0) // Face 0 (North) or 2 (South)
         {
             // Camera facing +Z or -Z, so Z is the depth axis
             constraints |= RigidbodyConstraints.FreezePositionZ;
-            
+
             // Clear Z velocity if constraints changed
             if (clearDepthVelocityOnRotation && oldConstraints != constraints)
             {
@@ -860,7 +902,7 @@ public class FezPlayerController : MonoBehaviour
         {
             // Camera facing +X or -X, so X is the depth axis
             constraints |= RigidbodyConstraints.FreezePositionX;
-            
+
             // Clear X velocity if constraints changed
             if (clearDepthVelocityOnRotation && oldConstraints != constraints)
             {
@@ -885,18 +927,30 @@ public class FezPlayerController : MonoBehaviour
 
     private void CheckGroundStatus()
     {
-        if (playerCollider == null) return;
+        if (playerCollider == null)
+            return;
 
         Vector3 boxCenter = transform.position - new Vector3(0, playerCollider.bounds.extents.y, 0);
         bool wasGrounded = isGrounded;
 
         // OverlapBox check
-        isGrounded = Physics.CheckBox(boxCenter, groundCheckSize / 2, Quaternion.identity, groundLayer);
+        isGrounded = Physics.CheckBox(
+            boxCenter,
+            groundCheckSize / 2,
+            Quaternion.identity,
+            groundLayer
+        );
 
         // Raycast for prediction
         RaycastHit hit;
         Vector3 rayStart = boxCenter + Vector3.up * 0.1f;
-        isAboutToLand = Physics.Raycast(rayStart, Vector3.down, out hit, groundRaycastDistance, groundLayer);
+        isAboutToLand = Physics.Raycast(
+            rayStart,
+            Vector3.down,
+            out hit,
+            groundRaycastDistance,
+            groundLayer
+        );
 
         // Slope detection (NEW)
         CheckSlopeStatus(boxCenter);
@@ -935,7 +989,15 @@ public class FezPlayerController : MonoBehaviour
 
         // Raycast down to get slope normal
         RaycastHit hit;
-        if (Physics.Raycast(groundCheckCenter + Vector3.up * 0.5f, Vector3.down, out hit, 1f, groundLayer))
+        if (
+            Physics.Raycast(
+                groundCheckCenter + Vector3.up * 0.5f,
+                Vector3.down,
+                out hit,
+                1f,
+                groundLayer
+            )
+        )
         {
             slopeNormal = hit.normal;
             currentSlopeAngle = Vector3.Angle(Vector3.up, slopeNormal);
@@ -962,8 +1024,10 @@ public class FezPlayerController : MonoBehaviour
 
         // Check for hard landing
         float fallSpeed = Mathf.Abs(landingVelocity);
-        if (currentStateData.landingLagMode != LandingLagMode.Disabled &&
-            fallSpeed >= currentStateData.hardLandingThreshold)
+        if (
+            currentStateData.landingLagMode != LandingLagMode.Disabled
+            && fallSpeed >= currentStateData.hardLandingThreshold
+        )
         {
             StartLandingLag(fallSpeed);
         }
@@ -1050,7 +1114,7 @@ public class FezPlayerController : MonoBehaviour
         {
             // Get current "right" direction from rotation controller
             Vector3 worldRight = worldRotationController.GetCurrentRight();
-            
+
             // Determine which world axis is more aligned with "right"
             // If Z is more significant, we're facing East/West (check on Z)
             // If X is more significant, we're facing North/South (check on X)
@@ -1060,7 +1124,7 @@ public class FezPlayerController : MonoBehaviour
                 return new Vector3(0, 0, 1);
             }
         }
-        
+
         // Default: check walls on X axis (world right)
         return Vector3.right;
     }
@@ -1077,7 +1141,7 @@ public class FezPlayerController : MonoBehaviour
         {
             // Get current face index to determine orientation
             int faceIndex = worldRotationController.GetCurrentFaceIndex();
-            
+
             if (faceIndex % 2 == 0) // Face 0 (North) or 2 (South)
             {
                 // Movement is on X axis - use standard size
@@ -1090,7 +1154,7 @@ public class FezPlayerController : MonoBehaviour
                 return new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x);
             }
         }
-        
+
         // Default: use configured size as-is
         return wallCheckSize;
     }
@@ -1104,15 +1168,15 @@ public class FezPlayerController : MonoBehaviour
     {
         // --- CHECK +X DIRECTION (World Right) ---
         wallStates[0] = Physics.CheckBox(
-            center + Vector3.right * 0.5f,                        // Offset to right
-            new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2,  // Thin box
-            Quaternion.identity,                                  // No rotation
-            wallLayer                                             // Layer mask
+            center + Vector3.right * 0.5f, // Offset to right
+            new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2, // Thin box
+            Quaternion.identity, // No rotation
+            wallLayer // Layer mask
         );
 
         // --- CHECK -X DIRECTION (World Left) ---
         wallStates[1] = Physics.CheckBox(
-            center + Vector3.left * 0.5f,                         // Offset to left
+            center + Vector3.left * 0.5f, // Offset to left
             new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2,
             Quaternion.identity,
             wallLayer
@@ -1120,8 +1184,8 @@ public class FezPlayerController : MonoBehaviour
 
         // --- CHECK +Z DIRECTION (World Forward) ---
         wallStates[2] = Physics.CheckBox(
-            center + Vector3.forward * 0.5f,                      // Offset forward
-            new Vector3(wallCheckSize.x, wallCheckSize.y, 0.1f) / 2,  // Thin on Z
+            center + Vector3.forward * 0.5f, // Offset forward
+            new Vector3(wallCheckSize.x, wallCheckSize.y, 0.1f) / 2, // Thin on Z
             Quaternion.identity,
             wallLayer
         );
@@ -1159,7 +1223,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void UpdateLandingLag()
     {
-        if (!isInLandingLag) return;
+        if (!isInLandingLag)
+            return;
 
         landingLagTimer -= Time.deltaTime;
         if (landingLagTimer <= 0f)
@@ -1173,7 +1238,8 @@ public class FezPlayerController : MonoBehaviour
     /// </summary>
     private bool IsActionBlockedByLandingLag()
     {
-        if (!isInLandingLag) return false;
+        if (!isInLandingLag)
+            return false;
 
         switch (currentStateData.landingLagMode)
         {
@@ -1191,7 +1257,8 @@ public class FezPlayerController : MonoBehaviour
     /// </summary>
     private float GetLandingLagMovementMultiplier()
     {
-        if (!isInLandingLag) return 1f;
+        if (!isInLandingLag)
+            return 1f;
 
         switch (currentStateData.landingLagMode)
         {
@@ -1242,12 +1309,14 @@ public class FezPlayerController : MonoBehaviour
     /// </summary>
     private float GetEffectiveAirControl()
     {
-        if (!currentStateData.hasAirControl) return 0f;
+        if (!currentStateData.hasAirControl)
+            return 0f;
 
         float baseControl = currentStateData.airControlMultiplier;
 
         // Apply delay
-        if (airControlDelayTimer > 0f) return 0f;
+        if (airControlDelayTimer > 0f)
+            return 0f;
 
         // Apply ramp
         baseControl *= airControlRampProgress;
@@ -1261,7 +1330,11 @@ public class FezPlayerController : MonoBehaviour
             }
             else
             {
-                baseControl = Mathf.Max(baseControl, currentStateData.apexAirControlMultiplier * currentStateData.airControlMultiplier);
+                baseControl = Mathf.Max(
+                    baseControl,
+                    currentStateData.apexAirControlMultiplier
+                        * currentStateData.airControlMultiplier
+                );
             }
         }
 
@@ -1319,7 +1392,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void ApplyWallCling()
     {
-        if (!isWallClinging) return;
+        if (!isWallClinging)
+            return;
 
         // Apply cling gravity (can be 0 for perfect stick)
         if (currentStateData.wallClingGravity > 0f)
@@ -1342,10 +1416,17 @@ public class FezPlayerController : MonoBehaviour
     /// </summary>
     private bool ShouldWallCling()
     {
-        if (currentStateData.wallClingMode == WallClingMode.Disabled) return false;
-        if (!isTouchingWall || isGrounded) return false;
-        if (wallClingStamina <= 0f) return false;
-        if (currentStateData.maxWallClingDuration > 0f && wallClingTimer >= currentStateData.maxWallClingDuration) return false;
+        if (currentStateData.wallClingMode == WallClingMode.Disabled)
+            return false;
+        if (!isTouchingWall || isGrounded)
+            return false;
+        if (wallClingStamina <= 0f)
+            return false;
+        if (
+            currentStateData.maxWallClingDuration > 0f
+            && wallClingTimer >= currentStateData.maxWallClingDuration
+        )
+            return false;
 
         switch (currentStateData.wallClingMode)
         {
@@ -1355,12 +1436,16 @@ public class FezPlayerController : MonoBehaviour
 
             case WallClingMode.InputToggle:
                 // Cling when pressing toward wall, slide otherwise
-                bool pushingToWall = (wallDirection > 0 && moveInput.x > 0) || (wallDirection < 0 && moveInput.x < 0);
+                bool pushingToWall =
+                    (wallDirection > 0 && moveInput.x > 0)
+                    || (wallDirection < 0 && moveInput.x < 0);
                 return pushingToWall;
 
             case WallClingMode.HoldToStick:
                 // Same as InputToggle but explicit
-                bool holding = (wallDirection > 0 && moveInput.x > 0) || (wallDirection < 0 && moveInput.x < 0);
+                bool holding =
+                    (wallDirection > 0 && moveInput.x > 0)
+                    || (wallDirection < 0 && moveInput.x < 0);
                 return holding;
 
             default:
@@ -1375,7 +1460,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void UpdateWallJumpLock()
     {
-        if (!isInWallJumpLock) return;
+        if (!isInWallJumpLock)
+            return;
 
         wallJumpLockTimer -= Time.deltaTime;
         if (wallJumpLockTimer <= 0f)
@@ -1387,8 +1473,9 @@ public class FezPlayerController : MonoBehaviour
         if (currentStateData.wallJumpLockOnlyOnReturn)
         {
             // If moving away from the wall we jumped from, release lock early
-            bool movingAway = (lastWallJumpDirection > 0 && moveInput.x < 0) ||
-                              (lastWallJumpDirection < 0 && moveInput.x > 0);
+            bool movingAway =
+                (lastWallJumpDirection > 0 && moveInput.x < 0)
+                || (lastWallJumpDirection < 0 && moveInput.x > 0);
             if (movingAway)
             {
                 isInWallJumpLock = false;
@@ -1398,7 +1485,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void StartWallJumpLock(int wallDir)
     {
-        if (!currentStateData.hasWallJumpControlLock) return;
+        if (!currentStateData.hasWallJumpControlLock)
+            return;
 
         isInWallJumpLock = true;
         wallJumpLockTimer = currentStateData.wallJumpControlLockDuration;
@@ -1433,7 +1521,10 @@ public class FezPlayerController : MonoBehaviour
         }
 
         // Recharge timer
-        if (currentDashCharges < currentStateData.maxDashCharges && currentStateData.dashRechargeTime > 0f)
+        if (
+            currentDashCharges < currentStateData.maxDashCharges
+            && currentStateData.dashRechargeTime > 0f
+        )
         {
             dashRechargeTimer += Time.deltaTime;
 
@@ -1455,7 +1546,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void HandleDashReset()
     {
-        if (!isGrounded) return;
+        if (!isGrounded)
+            return;
 
         if (currentStateData.dashRechargeMode == DashRechargeMode.ResetOnLand)
         {
@@ -1553,8 +1645,10 @@ public class FezPlayerController : MonoBehaviour
 
     private void TryJump()
     {
-        if (!currentStateData.canJump) return;
-        if (IsActionBlockedByLandingLag()) return;
+        if (!currentStateData.canJump)
+            return;
+        if (IsActionBlockedByLandingLag())
+            return;
 
         // Check steep slope jump
         if (isOnSteepSlope && !currentStateData.canJumpOnSteepSlope)
@@ -1563,12 +1657,17 @@ public class FezPlayerController : MonoBehaviour
         }
 
         bool canGroundJump = coyoteTimeTimer > 0 && !isJumping && !isDashing;
-        bool canAirJump = currentStateData.hasDoubleJump && airJumpsRemaining > 0 && !isGrounded && !isDashing;
+        bool canAirJump =
+            currentStateData.hasDoubleJump && airJumpsRemaining > 0 && !isGrounded && !isDashing;
 
         if (jumpBuffered)
         {
             // Priority 1: Wall jump (from cling or slide)
-            if (currentStateData.hasWallJump && (canWallJump || (isWallClinging && currentStateData.canJumpFromWallCling)) && !isGrounded)
+            if (
+                currentStateData.hasWallJump
+                && (canWallJump || (isWallClinging && currentStateData.canJumpFromWallCling))
+                && !isGrounded
+            )
             {
                 WallJump();
             }
@@ -1592,11 +1691,16 @@ public class FezPlayerController : MonoBehaviour
 
         if (isBunnyHop)
         {
-            bunnyHopBonus = Mathf.Min(bunnyHopBonus + currentStateData.bunnyHopSpeedBonus,
-                                      currentStateData.bunnyHopMaxSpeed - 1f);
+            bunnyHopBonus = Mathf.Min(
+                bunnyHopBonus + currentStateData.bunnyHopSpeedBonus,
+                currentStateData.bunnyHopMaxSpeed - 1f
+            );
             lastJumpWasBunnyHop = true;
         }
-        else if (currentStateData.hasBunnyHop && timeSinceLanding <= currentStateData.bunnyHopTimingWindow)
+        else if (
+            currentStateData.hasBunnyHop
+            && timeSinceLanding <= currentStateData.bunnyHopTimingWindow
+        )
         {
             bunnyHopBonus = currentStateData.bunnyHopSpeedBonus;
             lastJumpWasBunnyHop = true;
@@ -1629,7 +1733,8 @@ public class FezPlayerController : MonoBehaviour
         if (currentStateData.jumpMomentumBoost && Mathf.Abs(moveInput.x) > 0.1f)
         {
             Vector3 movementRight = GetMovementRight();
-            Vector3 horizontalBoost = movementRight * moveInput.x * currentStateData.jumpMomentumMultiplier;
+            Vector3 horizontalBoost =
+                movementRight * moveInput.x * currentStateData.jumpMomentumMultiplier;
             rb.AddForce(horizontalBoost, ForceMode.Impulse);
         }
 
@@ -1692,9 +1797,10 @@ public class FezPlayerController : MonoBehaviour
 
     private void WallJump()
     {
-        float verticalForce = currentStateData.wallJumpForce > 0
-            ? currentStateData.wallJumpForce
-            : currentStateData.jumpForce;
+        float verticalForce =
+            currentStateData.wallJumpForce > 0
+                ? currentStateData.wallJumpForce
+                : currentStateData.jumpForce;
 
         // Get push direction based on mode
         Vector3 pushDirection;
@@ -1749,7 +1855,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void UpdateBunnyHopTracking()
     {
-        if (!currentStateData.hasBunnyHop) return;
+        if (!currentStateData.hasBunnyHop)
+            return;
 
         if (isGrounded)
         {
@@ -1765,7 +1872,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void DecayBunnyHopBonus()
     {
-        if (!currentStateData.hasBunnyHop || bunnyHopBonus <= 0) return;
+        if (!currentStateData.hasBunnyHop || bunnyHopBonus <= 0)
+            return;
 
         bunnyHopBonus -= currentStateData.bunnyHopDecayRate * Time.fixedDeltaTime;
         bunnyHopBonus = Mathf.Max(bunnyHopBonus, 0f);
@@ -1800,12 +1908,16 @@ public class FezPlayerController : MonoBehaviour
 
     private void ApplyMovement()
     {
-        bool canMove = isGrounded ? currentStateData.canMoveOnGround : currentStateData.hasAirControl;
-        if (!canMove) return;
+        bool canMove = isGrounded
+            ? currentStateData.canMoveOnGround
+            : currentStateData.hasAirControl;
+        if (!canMove)
+            return;
 
         // Apply landing lag modifier
         float lagMultiplier = GetLandingLagMovementMultiplier();
-        if (lagMultiplier <= 0f) return;
+        if (lagMultiplier <= 0f)
+            return;
 
         Vector3 movementRight = GetMovementRight();
         Vector3 targetVelocity = movementRight * moveInput.x * currentStateData.moveSpeed;
@@ -1825,7 +1937,11 @@ public class FezPlayerController : MonoBehaviour
             // Air instant turn check
             if (!currentStateData.airInstantTurn)
             {
-                Vector3 currentHorizontal = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                Vector3 currentHorizontal = new Vector3(
+                    rb.linearVelocity.x,
+                    0,
+                    rb.linearVelocity.z
+                );
                 float dot = Vector3.Dot(currentHorizontal.normalized, targetVelocity.normalized);
                 if (dot < 0) // Trying to turn around
                 {
@@ -1852,8 +1968,8 @@ public class FezPlayerController : MonoBehaviour
         // Wall slide movement prevention
         if (isWallSliding || isWallClinging)
         {
-            bool tryingToMoveIntoWall = (wallDirection > 0 && moveInput.x > 0)
-                                     || (wallDirection < 0 && moveInput.x < 0);
+            bool tryingToMoveIntoWall =
+                (wallDirection > 0 && moveInput.x > 0) || (wallDirection < 0 && moveInput.x < 0);
             if (tryingToMoveIntoWall)
             {
                 targetVelocity = Vector3.zero;
@@ -1873,9 +1989,13 @@ public class FezPlayerController : MonoBehaviour
         if (targetHorizontalVel.magnitude > currentStateData.minimumMoveSpeed)
         {
             // Check for turn deceleration
-            if (currentStateData.decelerateOnTurn && Vector3.Dot(currentHorizontalVel.normalized, targetHorizontalVel.normalized) < 0)
+            if (
+                currentStateData.decelerateOnTurn
+                && Vector3.Dot(currentHorizontalVel.normalized, targetHorizontalVel.normalized) < 0
+            )
             {
-                accelRate = currentStateData.deceleration * currentStateData.turnDecelerationMultiplier;
+                accelRate =
+                    currentStateData.deceleration * currentStateData.turnDecelerationMultiplier;
             }
             else
             {
@@ -1884,11 +2004,17 @@ public class FezPlayerController : MonoBehaviour
         }
         else
         {
-            accelRate = isGrounded ? currentStateData.deceleration : currentStateData.airDeceleration;
+            accelRate = isGrounded
+                ? currentStateData.deceleration
+                : currentStateData.airDeceleration;
         }
 
         // Starting boost
-        if (isGrounded && currentHorizontalVel.magnitude < currentStateData.minimumMoveSpeed && targetHorizontalVel.magnitude > currentStateData.minimumMoveSpeed)
+        if (
+            isGrounded
+            && currentHorizontalVel.magnitude < currentStateData.minimumMoveSpeed
+            && targetHorizontalVel.magnitude > currentStateData.minimumMoveSpeed
+        )
         {
             velocityDifference *= currentStateData.startingSpeedBoost;
         }
@@ -1921,7 +2047,8 @@ public class FezPlayerController : MonoBehaviour
     private void ApplyGravity()
     {
         // Skip during wall slide/cling
-        if (isWallSliding || isWallClinging) return;
+        if (isWallSliding || isWallClinging)
+            return;
 
         float gravityMultiplier = 1f;
 
@@ -1956,7 +2083,10 @@ public class FezPlayerController : MonoBehaviour
             gravityMultiplier *= currentStateData.fastFallMultiplier;
         }
 
-        rb.AddForce(Vector3.down * currentStateData.gravity * gravityMultiplier * rb.mass, ForceMode.Force);
+        rb.AddForce(
+            Vector3.down * currentStateData.gravity * gravityMultiplier * rb.mass,
+            ForceMode.Force
+        );
 
         if (isGrounded)
         {
@@ -1969,10 +2099,13 @@ public class FezPlayerController : MonoBehaviour
     /// </summary>
     private void ApplySlopePhysics()
     {
-        if (!isOnSteepSlope) return;
+        if (!isOnSteepSlope)
+            return;
 
         // Calculate slide direction (down the slope)
-        Vector3 slideDirection = Vector3.Cross(Vector3.Cross(Vector3.up, slopeNormal), slopeNormal).normalized;
+        Vector3 slideDirection = Vector3
+            .Cross(Vector3.Cross(Vector3.up, slopeNormal), slopeNormal)
+            .normalized;
 
         // Apply slide force
         float slideForce = currentStateData.steepSlopeSlideSpeed * rb.mass;
@@ -2042,14 +2175,15 @@ public class FezPlayerController : MonoBehaviour
         // Input requirement
         if (requiresInput && canSlide)
         {
-            bool pushingTowardWall = (wallDirection > 0 && moveInput.x > 0)
-                                  || (wallDirection < 0 && moveInput.x < 0);
+            bool pushingTowardWall =
+                (wallDirection > 0 && moveInput.x > 0) || (wallDirection < 0 && moveInput.x < 0);
             canSlide = canSlide && pushingTowardWall;
         }
         else if (!requiresInput && canSlide)
         {
-            bool pushingAwayFromWall = (wallDirection > 0 && moveInput.x < -0.1f)
-                                    || (wallDirection < 0 && moveInput.x > 0.1f);
+            bool pushingAwayFromWall =
+                (wallDirection > 0 && moveInput.x < -0.1f)
+                || (wallDirection < 0 && moveInput.x > 0.1f);
             if (pushingAwayFromWall)
             {
                 canSlide = false;
@@ -2093,7 +2227,8 @@ public class FezPlayerController : MonoBehaviour
 
     private void StartFlip(bool flipToRight)
     {
-        if (isFlipping) return;
+        if (isFlipping)
+            return;
         StartCoroutine(FlipCoroutine(flipToRight));
     }
 
@@ -2172,13 +2307,17 @@ public class FezPlayerController : MonoBehaviour
 
     public void OnSwitchState(InputAction.CallbackContext ctx)
     {
-        if (!ctx.performed) return;
+        if (!ctx.performed)
+            return;
 
-        if (isFrozenForRotation || IsWorldRotating()) return;
+        if (isFrozenForRotation || IsWorldRotating())
+            return;
 
-        if (!currentStateData.canSwitchFromThisState) return;
+        if (!currentStateData.canSwitchFromThisState)
+            return;
 
-        if (!canSwitchState) return;
+        if (!canSwitchState)
+            return;
 
         if (isDashing)
         {
@@ -2196,13 +2335,16 @@ public class FezPlayerController : MonoBehaviour
             currentState = States.Fire;
             ApplyStateData(fireStateData);
         }
+        SwitchMode?.Invoke();
     }
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        if (isFrozenForRotation) return;
+        if (isFrozenForRotation)
+            return;
 
-        if (!currentStateData.canJump) return;
+        if (!currentStateData.canJump)
+            return;
 
         // JUMP PRESSED
         if (ctx.performed)
@@ -2214,9 +2356,15 @@ public class FezPlayerController : MonoBehaviour
             }
             else
             {
-                bool canJumpImmediately = isGrounded
-                                       || (currentStateData.hasWallJump && (canWallJump || (isWallClinging && currentStateData.canJumpFromWallCling)))
-                                       || (currentStateData.hasDoubleJump && airJumpsRemaining > 0);
+                bool canJumpImmediately =
+                    isGrounded
+                    || (
+                        currentStateData.hasWallJump
+                        && (
+                            canWallJump || (isWallClinging && currentStateData.canJumpFromWallCling)
+                        )
+                    )
+                    || (currentStateData.hasDoubleJump && airJumpsRemaining > 0);
 
                 if (canJumpImmediately)
                 {
@@ -2238,22 +2386,30 @@ public class FezPlayerController : MonoBehaviour
 
     public void OnDash(InputAction.CallbackContext ctx)
     {
-        if (!ctx.performed) return;
+        if (!ctx.performed)
+            return;
 
-        if (isFrozenForRotation) return;
+        if (isFrozenForRotation)
+            return;
 
-        if (!currentStateData.hasDash) return;
+        if (!currentStateData.hasDash)
+            return;
 
-        if (!isGrounded && !currentStateData.hasAirDash) return;
+        if (!isGrounded && !currentStateData.hasAirDash)
+            return;
 
-        if (IsActionBlockedByLandingLag()) return;
+        if (IsActionBlockedByLandingLag())
+            return;
 
         // Check charges
-        if (currentDashCharges <= 0) return;
+        if (currentDashCharges <= 0)
+            return;
 
-        if (dashCooldownTimer > 0) return;
+        if (dashCooldownTimer > 0)
+            return;
 
-        if (isDashing) return;
+        if (isDashing)
+            return;
 
         // Determine dash direction based on mode
         Vector3 dashDir = CalculateDashDirection();
@@ -2365,9 +2521,15 @@ public class FezPlayerController : MonoBehaviour
         dashDirection = direction;
 
         // Get settings
-        bool useInvincibility = overrideDashSettings ? dashHasInvincibility : currentStateData.dashHasInvincibility;
-        float invincDuration = overrideDashSettings ? dashInvincibilityDuration : currentStateData.dashInvincibilityDuration;
-        bool isFixedDistance = overrideDashSettings ? dashIsFixedDistance : currentStateData.dashIsFixedDistance;
+        bool useInvincibility = overrideDashSettings
+            ? dashHasInvincibility
+            : currentStateData.dashHasInvincibility;
+        float invincDuration = overrideDashSettings
+            ? dashInvincibilityDuration
+            : currentStateData.dashInvincibilityDuration;
+        bool isFixedDistance = overrideDashSettings
+            ? dashIsFixedDistance
+            : currentStateData.dashIsFixedDistance;
         float distance = overrideDashSettings ? dashDistance : currentStateData.dashDistance;
         float duration = overrideDashSettings ? dashDuration : currentStateData.dashDuration;
         float speed = overrideDashSettings ? dashSpeed : currentStateData.dashSpeed;
@@ -2401,7 +2563,12 @@ public class FezPlayerController : MonoBehaviour
                 if (currentStateData.dashHasGravity)
                 {
                     Vector3 currentTarget = Vector3.Lerp(startPos, targetPos, t);
-                    currentTarget.y -= currentStateData.gravity * currentStateData.dashGravityMultiplier * elapsed * elapsed * 0.5f;
+                    currentTarget.y -=
+                        currentStateData.gravity
+                        * currentStateData.dashGravityMultiplier
+                        * elapsed
+                        * elapsed
+                        * 0.5f;
                     transform.position = currentTarget;
                 }
                 else
@@ -2430,7 +2597,8 @@ public class FezPlayerController : MonoBehaviour
                 // Apply gravity during dash if enabled
                 if (currentStateData.dashHasGravity)
                 {
-                    dashVelocity.y -= currentStateData.gravity * currentStateData.dashGravityMultiplier;
+                    dashVelocity.y -=
+                        currentStateData.gravity * currentStateData.dashGravityMultiplier;
                 }
 
                 rb.linearVelocity = dashVelocity;
@@ -2495,7 +2663,8 @@ public class FezPlayerController : MonoBehaviour
                 case DashInvincibilityVisual.Trail:
                     // Trail would need a separate trail renderer component
                     // For now, use flicker as fallback
-                    bool trailVisible = Mathf.Sin(elapsed * currentStateData.dashFlickerSpeed * 0.5f) > 0;
+                    bool trailVisible =
+                        Mathf.Sin(elapsed * currentStateData.dashFlickerSpeed * 0.5f) > 0;
                     spriteRenderer.enabled = trailVisible;
                     break;
 
@@ -2519,18 +2688,31 @@ public class FezPlayerController : MonoBehaviour
     #region PUBLIC GETTERS
 
     public bool IsGrounded() => isGrounded;
+
     public bool IsDashing() => isDashing;
+
     public bool IsInvincible() => isInvincible;
+
     public bool IsWallSliding() => isWallSliding;
+
     public bool IsWallClinging() => isWallClinging;
+
     public bool IsOnSlope() => isOnSlope;
+
     public bool IsOnSteepSlope() => isOnSteepSlope;
+
     public float GetCurrentSlopeAngle() => currentSlopeAngle;
+
     public bool IsAtApex() => isAtApex;
+
     public bool IsInLandingLag() => isInLandingLag;
+
     public int GetCurrentDashCharges() => currentDashCharges;
+
     public int GetMaxDashCharges() => currentStateData?.maxDashCharges ?? 1;
+
     public float GetWallClingStamina() => wallClingStamina;
+
     public PlayerStateData GetCurrentStateData() => currentStateData;
 
     /// <summary>
@@ -2550,9 +2732,11 @@ public class FezPlayerController : MonoBehaviour
         {
             playerCollider = GetComponent<Collider>();
         }
-        if (playerCollider == null) return;
+        if (playerCollider == null)
+            return;
 
-        Vector3 groundCheckCenter = transform.position - new Vector3(0, playerCollider.bounds.extents.y, 0);
+        Vector3 groundCheckCenter =
+            transform.position - new Vector3(0, playerCollider.bounds.extents.y, 0);
 
         // Ground detection
         Gizmos.color = isGrounded ? Color.green : Color.red;
@@ -2570,7 +2754,10 @@ public class FezPlayerController : MonoBehaviour
             Gizmos.DrawRay(groundCheckCenter, slopeNormal * 2f);
 
 #if UNITY_EDITOR
-            UnityEditor.Handles.Label(groundCheckCenter + Vector3.up, $"Slope: {currentSlopeAngle:F1}°");
+            UnityEditor.Handles.Label(
+                groundCheckCenter + Vector3.up,
+                $"Slope: {currentSlopeAngle:F1}°"
+            );
 #endif
         }
 
@@ -2580,8 +2767,14 @@ public class FezPlayerController : MonoBehaviour
             Gizmos.color = new Color(0f, 0f, 1f, 0.3f);
             Gizmos.DrawWireCube(transform.position + Vector3.right * 0.5f, wallCheckSize);
             Gizmos.DrawWireCube(transform.position + Vector3.left * 0.5f, wallCheckSize);
-            Gizmos.DrawWireCube(transform.position + Vector3.forward * 0.5f, new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x));
-            Gizmos.DrawWireCube(transform.position + Vector3.back * 0.5f, new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x));
+            Gizmos.DrawWireCube(
+                transform.position + Vector3.forward * 0.5f,
+                new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x)
+            );
+            Gizmos.DrawWireCube(
+                transform.position + Vector3.back * 0.5f,
+                new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x)
+            );
         }
 
         // Camera-relative wall gizmos
@@ -2645,20 +2838,32 @@ public class FezPlayerController : MonoBehaviour
         if (useWorldRotation && worldRotationController != null)
         {
             Gizmos.color = Color.magenta;
-            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentRight() * 2f);
+            Gizmos.DrawRay(
+                transform.position + Vector3.up,
+                worldRotationController.GetCurrentRight() * 2f
+            );
             Gizmos.color = new Color(1f, 0.5f, 0f);
-            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentForward() * 2f);
+            Gizmos.DrawRay(
+                transform.position + Vector3.up,
+                worldRotationController.GetCurrentForward() * 2f
+            );
         }
 
         // State indicators
 #if UNITY_EDITOR
         string stateText = "";
-        if (isWallSliding) stateText += "SLIDE ";
-        if (isWallClinging) stateText += "CLING ";
-        if (isAtApex) stateText += "APEX ";
-        if (isInLandingLag) stateText += "LAG ";
-        if (isFastFalling) stateText += "FAST ";
-        if (isInWallJumpLock) stateText += "LOCK ";
+        if (isWallSliding)
+            stateText += "SLIDE ";
+        if (isWallClinging)
+            stateText += "CLING ";
+        if (isAtApex)
+            stateText += "APEX ";
+        if (isInLandingLag)
+            stateText += "LAG ";
+        if (isFastFalling)
+            stateText += "FAST ";
+        if (isInWallJumpLock)
+            stateText += "LOCK ";
 
         if (!string.IsNullOrEmpty(stateText))
         {

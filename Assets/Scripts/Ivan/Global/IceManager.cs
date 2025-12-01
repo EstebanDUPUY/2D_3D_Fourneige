@@ -8,7 +8,8 @@ public class IceManager : MonoBehaviour
     public IceBridgeData iceBridgeData;
     public IceWallData iceWallData;
 
-    public PlayerController player;
+    // public PlayerController player;
+    public FezPlayerController player;
     PlayerIceSystem playerIceSystem;
     PlayerDamageSystem playerDamageSystem;
 
@@ -75,7 +76,9 @@ public class IceManager : MonoBehaviour
 
     void PlayerModeCompareToEnvironment()
     {
-        if (player.currentState == PlayerController.States.Fire)
+        Debug.Log("Ice Manager -> PlayerModeCompareToEnvironment() call");
+        Debug.Log("player mode : " + player.currentState);
+        if (player.currentState == FezPlayerController.States.Fire)
         {
             switch (playerIceSystem.GetPlayerOnEnvironment())
             {

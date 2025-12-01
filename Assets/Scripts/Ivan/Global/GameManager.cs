@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public string homeScene = "HomeScene";
-    public string firstScene = "FirstScene";
+    public string firstScene = "Test";
 
     void Awake()
     {
