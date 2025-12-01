@@ -84,6 +84,7 @@ public class IceManager : MonoBehaviour
                 //     break;
                 case PlayerIceSystem.PlayerOnEnvironment.IceWall:
                     rb.linearDamping = playerIceSystem.linearDampingNormal;
+                    // rb.useGravity = true;
                     Debug.Log("Linear Damping Normal -> Fire on Ice Moving Wall");
                     break;
                 // case PlayerIceSystem.PlayerOnEnvironment.IceBridge:
@@ -103,6 +104,7 @@ public class IceManager : MonoBehaviour
             if (null == environmentGame)
             {
                 rb.linearDamping = playerIceSystem.linearDampingNormal;
+                // rb.useGravity = true;
             }
             else
             {
@@ -111,18 +113,23 @@ public class IceManager : MonoBehaviour
                     case PlayerIceSystem.PlayerOnEnvironment.IceSurface:
                         Debug.Log("Ice on Ice Surface");
                         rb.linearDamping = playerIceSystem.linearDampingNormal;
+                        // rb.useGravity = true;
                         break;
                     case PlayerIceSystem.PlayerOnEnvironment.IceWall:
                         IceWall iceWall = environmentGame.GetComponent<IceWall>();
                         rb.linearDamping = iceWall.dragOnIce;
+                        // rb.useGravity = false;
+                        // rb.AddForce(Physics.gravity * 0.2f * rb.mass, ForceMode.Acceleration);
                         Debug.Log("Ice on Ice Moving Wall");
                         break;
                     case PlayerIceSystem.PlayerOnEnvironment.IceBridge:
                         rb.linearDamping = playerIceSystem.linearDampingNormal;
+                        // rb.useGravity = true;
                         Debug.Log("Ice Fire on Ice Bridge");
                         break;
                     case PlayerIceSystem.PlayerOnEnvironment.SulfurCave:
                         rb.linearDamping = playerIceSystem.linearDampingNormal;
+                        // rb.useGravity = true;
                         Debug.Log("Ice Fire on Sulfer Cave");
                         break;
                 }
@@ -166,7 +173,6 @@ public class IceManager : MonoBehaviour
         PlayerModeCompareToEnvironment();
         player.isAttachedToWallIce = false;
     }
-
 
     // Other Functions
 

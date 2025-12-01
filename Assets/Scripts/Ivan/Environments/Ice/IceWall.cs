@@ -14,6 +14,8 @@ public class IceWall : EnvironmentGame
     float startY;
 
     Rigidbody rbPlayer;
+    bool movePlayer;
+    bool isMoving;
 
     void Awake()
     {
@@ -26,8 +28,12 @@ public class IceWall : EnvironmentGame
         if (player != null)
         {
             rbPlayer = player.rb;
+            movePlayer = true;
             iceWallData.PlayerEnter(this);
-            // StartCoroutine(MoveWall());
+            if (!isMoving)
+            {
+                StartCoroutine(MoveWall());
+            }
         }
     }
 
@@ -35,19 +41,25 @@ public class IceWall : EnvironmentGame
     {
         PlayerIceSystem player = other.gameObject.GetComponent<PlayerIceSystem>();
         if (player != null)
+        {
             iceWallData.PlayerExit();
+            movePlayer = false;
+        }
     }
 
     IEnumerator MoveWall()
     {
+        isMoving = true;
         float targetY = startY + range;
 
         while (transform.position.y < targetY)
         {
             velocity = Vector3.up * speed * Time.deltaTime;
             transform.Translate(velocity);
-            // rbPlayer.transform.Translate(velocity);
-
+            if (movePlayer)
+            {
+                rbPlayer.transform.Translate(velocity);
+            }
             yield return null; // attendre la prochaine frame
         }
 
@@ -58,5 +70,6 @@ public class IceWall : EnvironmentGame
             // rbPlayer.transform.Translate(velocity);
             yield return null;
         }
+        isMoving = false;
     }
 }
