@@ -118,7 +118,7 @@ public enum SteepSlopeBehavior
 /// Configure each state's capabilities by enabling/disabling features and tuning values.
 /// </summary>
 [CreateAssetMenu(fileName = "_New State Data", menuName = "_Player/State Data")]
-public class _PlayerStateData : ScriptableObject
+public class PlayerStateData : ScriptableObject
 {
     #region VARIABLES
 

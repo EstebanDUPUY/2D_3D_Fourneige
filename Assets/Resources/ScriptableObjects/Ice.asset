@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 154b2200a1e93814280cc6600645bb47, type: 3}
-  m_Name: _Ice_
+  m_Name: Ice
   m_EditorClassIdentifier: 
   stateName: Ice
   stateColor: {r: 0, g: 0, b: 1, a: 1}

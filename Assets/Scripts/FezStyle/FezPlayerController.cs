@@ -19,7 +19,7 @@ using System.Collections;
 /// - Fez-style world rotation integration
 /// - 4-directional wall detection (optional)
 /// </summary>
-public class _FezPlayerController : MonoBehaviour
+public class FezPlayerController : MonoBehaviour
 {
     #region Variables
 
@@ -38,9 +38,9 @@ public class _FezPlayerController : MonoBehaviour
 
     // State Data - ScriptableObjects containing all parameters for each state
     [Header("State Data")]
-    public _PlayerStateData fireStateData;
-    public _PlayerStateData iceStateData;
-    private _PlayerStateData currentStateData;
+    public PlayerStateData fireStateData;
+    public PlayerStateData iceStateData;
+    private PlayerStateData currentStateData;
 
     /// <summary>
     /// Enum defining the available player states.
@@ -197,84 +197,173 @@ public class _FezPlayerController : MonoBehaviour
 
     #endregion
 
-    // ==================== WORLD ROTATION (FEZ-STYLE) ====================
+    // ============================================================================
+    // WORLD ROTATION (FEZ-STYLE) - CINEMACHINE INTEGRATION
+    // ============================================================================
+    // This section handles integration with the FezWorldRotation controller.
+    // The rotation system works by:
+    // 1. Rotating a Cinemachine rig around the player (90° per step)
+    // 2. Freezing the player during rotation animation
+    // 3. Updating movement constraints after rotation
+    // 4. Preserving momentum in the new movement direction
+    // ============================================================================
     #region WORLD ROTATION VARIABLES
 
     [Header("World Rotation Settings")]
+    // -------------------------------------------------------------------------
+    // These settings control how the player interacts with the Fez rotation.
+    // The key concept: after rotation, "right" on the joystick still moves
+    // the player to the right side of the SCREEN, not world coordinates.
+    // -------------------------------------------------------------------------
 
-    [Tooltip("Enable Fez-style world rotation integration")]
+    [Tooltip("Enable Fez-style world rotation integration. If FALSE, all rotation features are disabled.")]
     public bool useWorldRotation = false;
+    // Master toggle for the entire rotation system.
+    // Set to TRUE when using FezWorldRotation in your scene.
+    // When FALSE, all rotation-related code is bypassed for performance.
 
-    [Tooltip("Use the rotation bridge (supports both original and Cinemachine controllers)")]
-    public bool useRotationBridge = true;
+    [Tooltip("Reference to the FezWorldRotation controller. Will auto-find via FezWorldRotation.Instance if left empty.")]
+    public FezWorldRotation worldRotationController;
+    // Direct reference to the rotation controller.
+    // Can be assigned in Inspector or left null for auto-detection.
+    // Auto-detection uses the singleton pattern: FezWorldRotation.Instance
 
-    [Tooltip("Reference to the world rotation controller (only used if useRotationBridge is false)")]
-    public _WorldRotationController worldRotationController;
-
-    [Tooltip("Freeze player during world rotation")]
+    [Tooltip("Freeze player movement and physics during rotation animation.")]
     public bool freezeDuringRotation = true;
+    // When TRUE: Player stops completely during the 90° rotation animation.
+    // When FALSE: Player can continue moving during rotation (can feel chaotic).
+    // RECOMMENDED: Keep TRUE for authentic Fez feel.
 
-    [Tooltip("Adapt movement direction to current camera view")]
+    [Tooltip("Movement input is relative to current camera view. 'Right' means screen-right, not world +X.")]
     public bool useRotationRelativeMovement = true;
+    // When TRUE: After rotating, pressing "right" still moves player right on screen.
+    // When FALSE: Controls are always world-relative (confusing after rotation).
+    // RECOMMENDED: Keep TRUE for intuitive controls.
 
-    [Tooltip("Snap to 2D plane after rotation completes")]
+    [Tooltip("Trigger depth snapping after rotation. FezDepthSnapper handles the actual snap.")]
     public bool snapAfterRotation = true;
+    // When TRUE: Signals that a depth snap should occur after rotation.
+    // The FezDepthSnapper component listens for rotation events and handles snapping.
+    // When FALSE: Player stays at their current position (may float or clip).
 
-    // Rotation physics (NEW)
+    // -------------------------------------------------------------------------
+    // Rotation Physics - How velocity is handled during/after rotation
+    // -------------------------------------------------------------------------
     [Header("Rotation Physics")]
 
-    [Tooltip("Clear depth velocity after rotation")]
+    [Tooltip("Zero out velocity in the depth direction (into/out of screen) after rotation.")]
     public bool clearDepthVelocityOnRotation = true;
+    // The "depth" direction is perpendicular to the screen (forward/backward).
+    // After rotation, you typically don't want the player drifting into the screen.
+    // When TRUE: Depth velocity is set to 0 after each rotation.
+    // When FALSE: Full 3D momentum is preserved (can cause player to drift off-screen).
 
-    [Tooltip("Preserve horizontal momentum through rotation")]
+    [Tooltip("Keep horizontal movement speed through rotation, just redirect it.")]
     public bool preserveHorizontalMomentum = true;
+    // When TRUE: If player was running right at 5 units/sec, they continue at 5 units/sec
+    //            in the new "right" direction after rotation.
+    // When FALSE: All velocity is preserved as-is (movement may suddenly be into screen).
+    // RECOMMENDED: TRUE for responsive, predictable movement.
 
-    [Tooltip("Delay wall checks after rotation")]
+    [Tooltip("Delay before wall detection resumes after rotation (prevents false positives).")]
     [Range(0f, 0.5f)]
     public float wallCheckDelayAfterRotation = 0.1f;
+    // After rotation, there's a brief moment where the player hasn't fully settled.
+    // Wall detection during this time can give incorrect results.
+    // This delay pauses wall checks for the specified duration.
+    // 0.1 seconds is usually enough for things to stabilize.
 
-    // Wall detection mode (NEW)
+    // -------------------------------------------------------------------------
+    // Wall Detection Mode - For advanced mechanics
+    // -------------------------------------------------------------------------
     [Header("Wall Detection Mode")]
 
-    [Tooltip("Use full 4-direction wall detection")]
+    [Tooltip("Check walls in all 4 world directions, not just camera-relative left/right.")]
     public bool use4DirectionalWallCheck = false;
+    // Standard mode: Only checks walls to camera-left and camera-right.
+    // 4-Direction mode: Also checks walls in front and behind (world +X, -X, +Z, -Z).
+    // Use 4-direction for mechanics that need to know about walls in all directions.
+    // Performance note: 4-direction mode does 4 physics casts instead of 2.
 
-    [Tooltip("Interval for 4-direction checks (performance)")]
+    [Tooltip("How often to update 4-direction wall cache (seconds). Lower = more responsive but more CPU.")]
     [Range(0.01f, 0.5f)]
     public float fullWallCheckInterval = 0.1f;
+    // 4-direction checks run on a timer for performance.
+    // 0.1 = 10 times per second, good balance of responsiveness and performance.
+    // 0.01 = 100 times per second, very responsive but may impact performance.
+    // 0.5 = 2 times per second, low CPU but walls may feel "sticky".
 
-    // Private rotation state
+    // -------------------------------------------------------------------------
+    // Private Rotation State - Internal tracking variables
+    // -------------------------------------------------------------------------
+    
     private bool isFrozenForRotation = false;
+    // TRUE while player is frozen during rotation animation.
+    // Prevents movement updates and physics simulation.
+    // Set TRUE in FreezeForRotation(), set FALSE in UnfreezeFromRotation().
+
     private Vector3 frozenPosition;
+    // The position where the player was frozen.
+    // Used to hold player in place during rotation.
+    // Stored when FreezeForRotation() is called.
+
     private Vector3 velocityBeforeFreeze;
+    // The velocity the player had before being frozen.
+    // Used to restore/transform momentum after rotation.
+    // Stored when FreezeForRotation() is called.
+
     private float wallCheckDelayTimer;
+    // Countdown timer for wall check delay after rotation.
+    // Decremented each frame in Update().
+    // Wall checks are skipped while this is > 0.
 
     #endregion
 
-    // ==================== DEBUG GIZMOS (NEW) ====================
+    // ============================================================================
+    // DEBUG GIZMOS - Visual debugging in Scene view
+    // ============================================================================
+    // These settings control what debug visuals are drawn in the Scene view.
+    // Gizmos help visualize hitboxes, detection areas, and system state.
+    // Only visible in Unity Editor, not in builds.
+    // ============================================================================
     #region DEBUG GIZMOS
 
     [Header("Debug Gizmos")]
 
-    [Tooltip("Show world-space wall detection boxes")]
+    [Tooltip("Draw wall detection boxes in world-space coordinates.")]
     public bool showWorldSpaceGizmos = true;
+    // Shows the actual physics cast boxes in world coordinates.
+    // Useful for understanding where detection is happening.
 
-    [Tooltip("Show camera-relative wall detection boxes")]
+    [Tooltip("Draw wall detection boxes relative to current camera view.")]
     public bool showCameraRelativeGizmos = true;
+    // Shows boxes rotated to match current camera perspective.
+    // Helps visualize how detection changes after rotation.
 
-    [Tooltip("Show detection results (highlight detected walls)")]
+    [Tooltip("Highlight detected walls with different colors.")]
     public bool showDetectionResults = true;
+    // Changes gizmo colors based on detection state.
+    // Green = no wall, Red = wall detected.
 
-    [Tooltip("Show slope detection")]
+    [Tooltip("Show slope detection normal and angle.")]
     public bool showSlopeGizmos = true;
+    // Draws the ground normal vector when standing on slopes.
+    // Also shows the calculated slope angle.
 
     #endregion
 
-    // ==================== FAST FALL (NEW) ====================
+    // ============================================================================
+    // FAST FALL - Quick descent mechanic
+    // ============================================================================
     #region FAST FALL
 
     private bool isFastFalling;
+    // TRUE while player is actively fast-falling.
+    // Increases gravity multiplier for faster descent.
+
     private bool fastFallPressed;
+    // Tracks if fast fall input is being held.
+    // Used to trigger and maintain fast fall state.
 
     #endregion
 
@@ -294,56 +383,73 @@ public class _FezPlayerController : MonoBehaviour
             Debug.LogError("Visual Transform is not assigned!");
         }
 
+        // Initialize visual rotation to default (facing +Z)
         if (visualTransform != null)
         {
             visualTransform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
+    /// <summary>
+    /// Called once when the game starts, after Awake.
+    /// Initializes state, world rotation, and physics constraints.
+    /// </summary>
     private void Start()
     {
+        // --- SET INITIAL STATE ---
+        // Start in Fire state by default
         currentState = States.Fire;
         ApplyStateData(fireStateData);
 
+        // Set initial facing angle (0 = right, 180 = left)
         facingAngle = isFacingRight ? 0f : 180f;
+        
+        // --- INITIALIZE WORLD ROTATION ---
+        // Set up event subscriptions with FezWorldRotation controller
         InitializeWorldRotation();
 
-        // Initialize dash charges
+        // --- INITIALIZE DASH CHARGES ---
+        // Set dash charges to max based on state data
         if (currentStateData != null)
         {
             currentDashCharges = currentStateData.maxDashCharges;
         }
 
-        // Get initial face index from appropriate controller
-        int initialFaceIndex = 0;
-        if (useWorldRotation)
+        // --- SET INITIAL PHYSICS CONSTRAINTS ---
+        // Constrain movement to the initial 2D plane
+        if (worldRotationController != null)
         {
-            if (useRotationBridge && FezRotationBridge.Instance.IsAvailable)
-            {
-                initialFaceIndex = FezRotationBridge.Instance.GetCurrentFaceIndex();
-            }
-            else if (worldRotationController != null)
-            {
-                initialFaceIndex = worldRotationController.GetCurrentFaceIndex();
-            }
+            // Use controller's current face to set constraints
+            UpdatePhysicsConstraints(worldRotationController.GetCurrentFaceIndex());
         }
-        UpdatePhysicsConstraints(initialFaceIndex);
+        else
+        {
+            // Default to face 0 (North) constraints
+            UpdatePhysicsConstraints(0);
+        }
     }
 
+    /// <summary>
+    /// Called every frame.
+    /// Handles input, detection updates, and timer management.
+    /// </summary>
     private void Update()
     {
-        // Handle frozen state
+        // --- CHECK FROZEN STATE ---
+        // If frozen for rotation, skip all update logic
         if (isFrozenForRotation)
         {
-            return;
+            return;  // Player is frozen - do nothing
         }
 
+        // Check if movement is allowed by current state
         if (!currentStateData.canMove)
         {
-            return;
+            return;  // Movement disabled
         }
 
-        // Update detection states
+        // --- UPDATE DETECTION STATES ---
+        // Check ground and wall status each frame
         CheckGroundStatus();
         CheckWallStatus();
 
@@ -400,267 +506,372 @@ public class _FezPlayerController : MonoBehaviour
         DecayBunnyHopBonus();
     }
 
+    // =========================================================================
+    // LateUpdate - Visual rotation and sprite facing
+    // =========================================================================
+    // LateUpdate runs after all Update() calls. We use it for visual updates
+    // that should happen after movement calculations are done.
+    // =========================================================================
     private void LateUpdate()
     {
+        // Need visual transform reference
         if (visualTransform == null) return;
 
-        float cameraAngle = 0f;
+        // --- CALCULATE CAMERA ANGLE ---
+        // We need to know which way the camera is facing so the sprite
+        // always faces the camera correctly (billboard effect).
         
-        // Get camera angle - try direct controller first, then fall back to Camera.main
-        if (!useRotationBridge && worldRotationController != null && worldRotationController.cameraTransform != null)
+        float cameraAngle = 0f;  // Default to facing +Z
+        
+        // Try to get angle from rotation controller's rig
+        if (worldRotationController != null)
         {
-            cameraAngle = worldRotationController.cameraTransform.eulerAngles.y;
+            // Get the current rotation angle from the controller
+            cameraAngle = worldRotationController.GetCurrentAngle();
         }
         else if (Camera.main != null)
         {
+            // Fallback: use main camera's Y rotation
             cameraAngle = Camera.main.transform.eulerAngles.y;
         }
 
+        // --- APPLY VISUAL ROTATION ---
+        // Combine camera angle with facing angle (0 or 180 for left/right)
         visualTransform.rotation = Quaternion.Euler(0, cameraAngle + facingAngle, 0);
     }
 
     #endregion
 
-    // ==================== WORLD ROTATION INTEGRATION ====================
+    // ============================================================================
+    // WORLD ROTATION INTEGRATION
+    // ============================================================================
+    // This region handles all communication with the FezWorldRotation controller.
+    // Key responsibilities:
+    // 1. Subscribe to rotation events (start/complete)
+    // 2. Freeze player during rotation
+    // 3. Unfreeze and update constraints after rotation
+    // 4. Provide direction queries for movement calculations
+    // ============================================================================
     #region WORLD ROTATION
 
+    /// <summary>
+    /// Initializes world rotation integration.
+    /// Called from Start() to set up event subscriptions.
+    /// </summary>
     private void InitializeWorldRotation()
     {
+        // --- CHECK IF ROTATION IS ENABLED ---
+        // Skip initialization if rotation integration is disabled
         if (!useWorldRotation)
         {
+            return;  // Not using rotation - nothing to initialize
+        }
+
+        // --- GET CONTROLLER REFERENCE ---
+        // If no controller was assigned in Inspector, try to find it via singleton
+        if (worldRotationController == null)
+        {
+            worldRotationController = FezWorldRotation.Instance;  // Singleton pattern
+        }
+
+        // --- VALIDATE CONTROLLER ---
+        // Make sure we actually found a controller
+        if (worldRotationController == null)
+        {
+            // No controller found - log warning and disable integration
+            Debug.LogWarning("[_FezPlayerController] World rotation enabled but no FezWorldRotation found in scene!");
+            useWorldRotation = false;  // Disable to prevent null reference errors
             return;
         }
 
-        if (useRotationBridge)
-        {
-            // Use the bridge for unified controller access
-            if (!FezRotationBridge.Instance.IsAvailable)
-            {
-                Debug.LogWarning("[_FezPlayerController] World rotation enabled but no controller found via bridge!");
-                useWorldRotation = false;
-                return;
-            }
-
-            FezRotationBridge.OnRotationStarted += OnWorldRotationStarted;
-            FezRotationBridge.OnRotationCompleted += OnWorldRotationCompleted;
-        }
-        else
-        {
-            // Legacy: Use direct controller reference
-            if (worldRotationController == null)
-            {
-                worldRotationController = _WorldRotationController.Instance;
-            }
-
-            if (worldRotationController == null)
-            {
-                Debug.LogWarning("[_FezPlayerController] World rotation enabled but no controller found!");
-                useWorldRotation = false;
-                return;
-            }
-
-            worldRotationController.OnRotationStarted += OnWorldRotationStarted;
-            worldRotationController.OnRotationCompleted += OnWorldRotationCompleted;
-        }
+        // --- SUBSCRIBE TO EVENTS ---
+        // Connect our callbacks to the rotation controller's events
+        
+        // OnRotationStarted fires when rotation begins (freeze player here)
+        worldRotationController.OnRotationStarted += OnWorldRotationStarted;
+        
+        // OnRotationCompleted fires when rotation ends (unfreeze player here)
+        worldRotationController.OnRotationCompleted += OnWorldRotationCompleted;
     }
 
+    /// <summary>
+    /// Called when this component is disabled.
+    /// IMPORTANT: Always unsubscribe from events to prevent memory leaks!
+    /// </summary>
     private void OnDisable()
     {
-        if (useRotationBridge)
+        // Only unsubscribe if we have a controller reference
+        if (worldRotationController != null)
         {
-            FezRotationBridge.OnRotationStarted -= OnWorldRotationStarted;
-            FezRotationBridge.OnRotationCompleted -= OnWorldRotationCompleted;
-        }
-        else if (worldRotationController != null)
-        {
+            // Remove our callbacks from the events
             worldRotationController.OnRotationStarted -= OnWorldRotationStarted;
             worldRotationController.OnRotationCompleted -= OnWorldRotationCompleted;
         }
     }
 
+    /// <summary>
+    /// Event callback: Called when world rotation STARTS.
+    /// </summary>
+    /// <param name="newFaceIndex">The face index we're rotating TO (0-3)</param>
     private void OnWorldRotationStarted(int newFaceIndex)
     {
+        // --- CHECK IF WE SHOULD FREEZE ---
+        // Only freeze if both rotation and freezing are enabled
         if (!useWorldRotation || !freezeDuringRotation)
         {
-            return;
+            return;  // Don't freeze
         }
 
+        // --- FREEZE THE PLAYER ---
         FreezeForRotation();
     }
 
+    /// <summary>
+    /// Event callback: Called when world rotation COMPLETES.
+    /// </summary>
+    /// <param name="faceIndex">The face index we've arrived at (0-3)</param>
     private void OnWorldRotationCompleted(int faceIndex)
     {
+        // Check if rotation integration is active
         if (!useWorldRotation)
         {
             return;
         }
 
+        // --- UNFREEZE PLAYER ---
+        // If we froze during rotation, now we unfreeze
         if (freezeDuringRotation)
         {
             UnfreezeFromRotation(faceIndex);
         }
 
+        // --- TRIGGER DEPTH SNAP ---
+        // Signal that a depth snap should occur (FezDepthSnapper handles this)
         if (snapAfterRotation)
         {
             SnapToCurrentPlane();
         }
 
+        // --- UPDATE PHYSICS CONSTRAINTS ---
+        // Adjust rigidbody constraints for new viewing angle
         UpdatePhysicsConstraints(faceIndex);
 
-        // Start wall check delay
+        // --- START WALL CHECK DELAY ---
+        // Brief pause on wall detection to prevent false positives
         wallCheckDelayTimer = wallCheckDelayAfterRotation;
     }
 
+    /// <summary>
+    /// Freezes the player in place during rotation.
+    /// Called when rotation starts.
+    /// </summary>
     private void FreezeForRotation()
     {
+        // Mark as frozen (checked in Update/FixedUpdate)
         isFrozenForRotation = true;
+        
+        // Store current position (we'll hold player here)
         frozenPosition = transform.position;
+        
+        // Store current velocity (may restore/transform after unfreeze)
         velocityBeforeFreeze = rb.linearVelocity;
+        
+        // Make rigidbody kinematic to stop all physics simulation
+        // This prevents gravity, collisions, etc. during freeze
         rb.isKinematic = true;
     }
 
+    /// <summary>
+    /// Unfreezes the player after rotation completes.
+    /// Handles momentum preservation/transformation.
+    /// </summary>
+    /// <param name="faceIndex">The new face index (0-3)</param>
     private void UnfreezeFromRotation(int faceIndex)
     {
-        rb.isKinematic = false;
+        // --- RE-ENABLE PHYSICS ---
+        rb.isKinematic = false;  // Allow physics simulation again
+        
+        // Mark as no longer frozen
         isFrozenForRotation = false;
 
-        if (preserveHorizontalMomentum)
+        // --- HANDLE MOMENTUM PRESERVATION ---
+        if (preserveHorizontalMomentum && worldRotationController != null)
         {
-            Vector3 newRight;
-            if (useRotationBridge)
-            {
-                newRight = FezRotationBridge.Instance.GetCurrentRight();
-            }
-            else if (worldRotationController != null)
-            {
-                newRight = worldRotationController.GetCurrentRight();
-            }
-            else
-            {
-                newRight = Vector3.right;
-            }
-
-            float horizontalSpeed = new Vector2(velocityBeforeFreeze.x, velocityBeforeFreeze.z).magnitude;
-            float direction = Mathf.Sign(Vector3.Dot(velocityBeforeFreeze.normalized, newRight));
+            // Calculate original horizontal speed (XZ plane only)
+            // This ignores vertical velocity - we always preserve that separately
+            float horizontalSpeed = new Vector2(
+                velocityBeforeFreeze.x,
+                velocityBeforeFreeze.z
+            ).magnitude;
+            
+            // Get the new "right" direction from the rotation controller
+            // After rotation, "right" points in a different world direction
+            Vector3 newRight = worldRotationController.GetCurrentRight();
+            
+            // Determine if player was moving right (+1) or left (-1)
+            // Dot product: positive = same direction, negative = opposite
+            float direction = Mathf.Sign(
+                Vector3.Dot(velocityBeforeFreeze.normalized, newRight)
+            );
+            
+            // Handle edge case where player wasn't really moving
+            // (Avoid NaN from normalizing zero vector)
             if (Mathf.Abs(direction) < 0.1f) direction = 1f;
 
+            // Build new velocity vector:
+            // - Horizontal: previous speed in new right direction
+            // - Vertical: preserved from before (keep falling/rising)
             Vector3 newVelocity = new Vector3(
-                newRight.x * horizontalSpeed * direction,
-                velocityBeforeFreeze.y,
-                newRight.z * horizontalSpeed * direction
+                newRight.x * horizontalSpeed * direction,  // X = right.x * speed
+                velocityBeforeFreeze.y,                    // Y = preserved vertical
+                newRight.z * horizontalSpeed * direction   // Z = right.z * speed
             );
 
-            // Clear depth velocity if enabled
+            // --- CLEAR DEPTH VELOCITY ---
+            // Optionally zero out velocity in the depth direction
+            // This prevents drifting into/out of the screen
             if (clearDepthVelocityOnRotation)
             {
-                if (faceIndex % 2 == 0) // North/South
+                // Determine which axis is "depth" based on current face
+                // Face 0 (North) and 2 (South): Z is depth
+                // Face 1 (East) and 3 (West): X is depth
+                if (faceIndex % 2 == 0) // North/South - Z is into screen
                 {
-                    newVelocity.z = 0f;
+                    newVelocity.z = 0f;  // Clear Z velocity
                 }
-                else // East/West
+                else // East/West - X is into screen
                 {
-                    newVelocity.x = 0f;
+                    newVelocity.x = 0f;  // Clear X velocity
                 }
             }
 
+            // Apply the transformed velocity
             rb.linearVelocity = newVelocity;
         }
         else
         {
+            // Not preserving momentum - just restore original velocity
+            // Note: This can feel weird because movement direction may change
             rb.linearVelocity = velocityBeforeFreeze;
         }
     }
 
+    /// <summary>
+    /// Placeholder for depth snapping signal.
+    /// Actual snapping is handled by FezDepthSnapper component.
+    /// </summary>
     private void SnapToCurrentPlane()
     {
-        // Check if we have a valid rotation system
-        bool hasRotationSystem = useRotationBridge 
-            ? FezRotationBridge.Instance.IsAvailable 
-            : worldRotationController != null;
-            
-        if (!hasRotationSystem)
+        // Validate we have controller reference
+        if (worldRotationController == null)
         {
             return;
         }
 
-        // Placeholder - _FezDepthSnapper handles complex snapping
+        // FezDepthSnapper component handles the actual snapping logic.
+        // This method exists as a signal/hook point if direct snapping is needed.
     }
 
+    /// <summary>
+    /// Gets the current "right" direction for movement.
+    /// When rotation-relative movement is enabled, "right" changes with camera rotation.
+    /// </summary>
+    /// <returns>The right direction vector (normalized)</returns>
     private Vector3 GetMovementRight()
     {
-        if (useWorldRotation && useRotationRelativeMovement)
+        // Check if we should use camera-relative movement
+        if (useWorldRotation && useRotationRelativeMovement && worldRotationController != null)
         {
-            if (useRotationBridge)
-            {
-                return FezRotationBridge.Instance.GetCurrentRight();
-            }
-            else if (worldRotationController != null)
-            {
-                return worldRotationController.GetCurrentRight();
-            }
+            // Get "right" from the rotation controller
+            // This changes based on current camera/face orientation
+            return worldRotationController.GetCurrentRight();
         }
 
+        // Fallback: world-space right (+X direction)
+        // Used when rotation integration is disabled
         return Vector3.right;
     }
 
+    /// <summary>
+    /// Checks if the world is currently mid-rotation.
+    /// Useful for preventing actions during rotation animation.
+    /// </summary>
+    /// <returns>TRUE if rotation animation is in progress</returns>
     public bool IsWorldRotating()
     {
-        if (!useWorldRotation)
+        // Check if rotation system is active and controller exists
+        if (!useWorldRotation || worldRotationController == null)
         {
-            return false;
+            return false;  // Not using rotation, so never "rotating"
         }
 
-        if (useRotationBridge)
-        {
-            return FezRotationBridge.Instance.IsRotating();
-        }
-        else if (worldRotationController != null)
-        {
-            return worldRotationController.IsRotating();
-        }
-
-        return false;
+        // Query the controller for rotation state
+        return worldRotationController.IsRotating();
     }
 
+    /// <summary>
+    /// Checks if player is currently frozen for rotation.
+    /// </summary>
+    /// <returns>TRUE if player is frozen</returns>
     public bool IsFrozenForRotation()
     {
         return isFrozenForRotation;
     }
 
+    /// <summary>
+    /// Updates rigidbody constraints based on current camera face.
+    /// Constrains movement to the 2D plane perpendicular to camera.
+    /// </summary>
+    /// <param name="faceIndex">Current face (0=North, 1=East, 2=South, 3=West)</param>
     private void UpdatePhysicsConstraints(int faceIndex)
     {
+        // Need rigidbody reference
         if (rb == null) return;
 
-        // Store old constraints
+        // Store old constraints to detect changes
         var oldConstraints = rb.constraints;
 
-        // Base constraints
+        // --- BUILD BASE CONSTRAINTS ---
+        // Always freeze all rotation (player shouldn't tip over)
         RigidbodyConstraints constraints =
-            RigidbodyConstraints.FreezeRotationX |
-            RigidbodyConstraints.FreezeRotationZ |
-            RigidbodyConstraints.FreezeRotationY;
+            RigidbodyConstraints.FreezeRotationX |    // No tipping forward/back
+            RigidbodyConstraints.FreezeRotationZ |    // No tipping left/right
+            RigidbodyConstraints.FreezeRotationY;     // No spinning
 
+        // Get current velocity (may need to clear depth component)
         Vector3 velocity = rb.linearVelocity;
 
-        if (faceIndex % 2 == 0) // North/South
+        // --- ADD DEPTH CONSTRAINT BASED ON FACE ---
+        // The "depth" axis is the one going into the screen
+        // We constrain movement on this axis to keep player in 2D plane
+        
+        if (faceIndex % 2 == 0) // Face 0 (North) or 2 (South)
         {
+            // Camera facing +Z or -Z, so Z is the depth axis
             constraints |= RigidbodyConstraints.FreezePositionZ;
+            
+            // Clear Z velocity if constraints changed
             if (clearDepthVelocityOnRotation && oldConstraints != constraints)
             {
                 velocity.z = 0f;
             }
         }
-        else // East/West
+        else // Face 1 (East) or 3 (West)
         {
+            // Camera facing +X or -X, so X is the depth axis
             constraints |= RigidbodyConstraints.FreezePositionX;
+            
+            // Clear X velocity if constraints changed
             if (clearDepthVelocityOnRotation && oldConstraints != constraints)
             {
                 velocity.x = 0f;
             }
         }
 
+        // --- APPLY CONSTRAINTS ---
         rb.constraints = constraints;
 
+        // Apply modified velocity if constraints changed
         if (oldConstraints != constraints)
         {
             rb.linearVelocity = velocity;
@@ -829,91 +1040,88 @@ public class _FezPlayerController : MonoBehaviour
 
     /// <summary>
     /// Gets the wall check direction based on current camera face.
+    /// Wall checks happen perpendicular to the screen (left/right of player).
     /// </summary>
+    /// <returns>The axis to check for walls (X or Z direction)</returns>
     private Vector3 GetWallCheckDirection()
     {
-        if (useWorldRotation)
+        // Check if we're using rotation-aware wall detection
+        if (useWorldRotation && worldRotationController != null)
         {
-            Vector3 worldRight;
-            if (useRotationBridge)
-            {
-                worldRight = FezRotationBridge.Instance.GetCurrentRight();
-            }
-            else if (worldRotationController != null)
-            {
-                worldRight = worldRotationController.GetCurrentRight();
-            }
-            else
-            {
-                return Vector3.right;
-            }
+            // Get current "right" direction from rotation controller
+            Vector3 worldRight = worldRotationController.GetCurrentRight();
             
+            // Determine which world axis is more aligned with "right"
+            // If Z is more significant, we're facing East/West (check on Z)
+            // If X is more significant, we're facing North/South (check on X)
             if (Mathf.Abs(worldRight.z) > Mathf.Abs(worldRight.x))
             {
+                // Right is mostly Z - check walls on Z axis
                 return new Vector3(0, 0, 1);
             }
         }
+        
+        // Default: check walls on X axis (world right)
         return Vector3.right;
     }
 
     /// <summary>
-    /// Gets the wall check box size, swapping dimensions based on face.
+    /// Gets the wall check box size, rotating dimensions based on current face.
+    /// This ensures wall detection boxes are always oriented correctly.
     /// </summary>
+    /// <returns>Wall check size with dimensions swapped if needed</returns>
     private Vector3 GetWallCheckSize()
     {
-        if (useWorldRotation)
+        // Check if we're using rotation-aware sizing
+        if (useWorldRotation && worldRotationController != null)
         {
-            int faceIndex;
-            if (useRotationBridge)
-            {
-                faceIndex = FezRotationBridge.Instance.GetCurrentFaceIndex();
-            }
-            else if (worldRotationController != null)
-            {
-                faceIndex = worldRotationController.GetCurrentFaceIndex();
-            }
-            else
-            {
-                return wallCheckSize;
-            }
+            // Get current face index to determine orientation
+            int faceIndex = worldRotationController.GetCurrentFaceIndex();
             
-            if (faceIndex % 2 == 0) // North/South - moving on X
+            if (faceIndex % 2 == 0) // Face 0 (North) or 2 (South)
             {
+                // Movement is on X axis - use standard size
                 return new Vector3(wallCheckSize.x, wallCheckSize.y, wallCheckSize.z);
             }
-            else // East/West - moving on Z
+            else // Face 1 (East) or 3 (West)
             {
+                // Movement is on Z axis - swap X and Z dimensions
+                // This rotates the check box to match the new orientation
                 return new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x);
             }
         }
+        
+        // Default: use configured size as-is
         return wallCheckSize;
     }
 
     /// <summary>
     /// Checks all 4 cardinal directions for walls (optional mode).
+    /// Results stored in wallStates array: [+X, -X, +Z, -Z]
     /// </summary>
+    /// <param name="center">Center point to check from</param>
     private void CheckAllWallDirections(Vector3 center)
     {
-        // +X
+        // --- CHECK +X DIRECTION (World Right) ---
         wallStates[0] = Physics.CheckBox(
-            center + Vector3.right * 0.5f,
-            new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2,
-            Quaternion.identity,
-            wallLayer
+            center + Vector3.right * 0.5f,                        // Offset to right
+            new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2,  // Thin box
+            Quaternion.identity,                                  // No rotation
+            wallLayer                                             // Layer mask
         );
 
-        // -X
+        // --- CHECK -X DIRECTION (World Left) ---
         wallStates[1] = Physics.CheckBox(
-            center + Vector3.left * 0.5f,
+            center + Vector3.left * 0.5f,                         // Offset to left
             new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2,
             Quaternion.identity,
             wallLayer
         );
 
-        // +Z
+        // --- CHECK +Z DIRECTION (World Forward) ---
         wallStates[2] = Physics.CheckBox(
-            center + Vector3.forward * 0.5f,
-            new Vector3(wallCheckSize.x, wallCheckSize.y, 0.1f) / 2,
+            center + Vector3.forward * 0.5f,                      // Offset forward
+            new Vector3(wallCheckSize.x, wallCheckSize.y, 0.1f) / 2,  // Thin on Z
             Quaternion.identity,
             wallLayer
         );
@@ -1568,7 +1776,7 @@ public class _FezPlayerController : MonoBehaviour
     // ==================== APPLY METHODS ====================
     #region APPLY THINGS
 
-    private void ApplyStateData(_PlayerStateData data)
+    private void ApplyStateData(PlayerStateData data)
     {
         currentStateData = data;
         rb.mass = data.weight;
@@ -2323,7 +2531,7 @@ public class _FezPlayerController : MonoBehaviour
     public int GetCurrentDashCharges() => currentDashCharges;
     public int GetMaxDashCharges() => currentStateData?.maxDashCharges ?? 1;
     public float GetWallClingStamina() => wallClingStamina;
-    public _PlayerStateData GetCurrentStateData() => currentStateData;
+    public PlayerStateData GetCurrentStateData() => currentStateData;
 
     /// <summary>
     /// Gets the 4-direction wall states if enabled.
@@ -2434,36 +2642,12 @@ public class _FezPlayerController : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + facingDir * wallRaycastDistance);
 
         // World rotation direction indicators
-        if (useWorldRotation)
+        if (useWorldRotation && worldRotationController != null)
         {
-            Vector3 currentRight, currentForward;
-            bool hasRotation = false;
-            
-            if (useRotationBridge && FezRotationBridge.Instance.IsAvailable)
-            {
-                currentRight = FezRotationBridge.Instance.GetCurrentRight();
-                currentForward = FezRotationBridge.Instance.GetCurrentForward();
-                hasRotation = true;
-            }
-            else if (worldRotationController != null)
-            {
-                currentRight = worldRotationController.GetCurrentRight();
-                currentForward = worldRotationController.GetCurrentForward();
-                hasRotation = true;
-            }
-            else
-            {
-                currentRight = Vector3.right;
-                currentForward = Vector3.forward;
-            }
-            
-            if (hasRotation)
-            {
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawRay(transform.position + Vector3.up, currentRight * 2f);
-                Gizmos.color = new Color(1f, 0.5f, 0f);
-                Gizmos.DrawRay(transform.position + Vector3.up, currentForward * 2f);
-            }
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentRight() * 2f);
+            Gizmos.color = new Color(1f, 0.5f, 0f);
+            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentForward() * 2f);
         }
 
         // State indicators

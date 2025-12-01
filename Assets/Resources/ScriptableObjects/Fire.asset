@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 154b2200a1e93814280cc6600645bb47, type: 3}
-  m_Name: _Fire_
+  m_Name: Fire
   m_EditorClassIdentifier: 
   stateName: Fire
   stateColor: {r: 1, g: 0, b: 0, a: 1}
@@ -30,7 +30,7 @@ MonoBehaviour:
   steepSlopeBehavior: 2
   steepSlopeSlideSpeed: 10
   steepSlopeControlMultiplier: 0.3
-  canJumpOnSteepSlope: 1
+  canJumpOnSteepSlope: 0
   hasAirControl: 1
   airControlMultiplier: 0.8
   airControlDelay: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
   wallSlideDelay: 0
   canWallSlideWhileRising: 0
   wallClingMode: 1
-  maxWallClingDuration: 0.8
+  maxWallClingDuration: 0.1
   wallClingStaminaCost: 0
   canJumpFromWallCling: 1
   wallClingGravity: 0
