@@ -34,7 +34,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Singleton instance for easy access from trigger zones and other scripts.
-    /// Access via _WorldRotationController.Instance
     /// </summary>
     public static _WorldRotationController Instance { get; private set; }
 
@@ -63,24 +62,18 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Master toggle - if FALSE, completely disables all rotation functionality.
-    /// Useful for cutscenes, menus, or specific gameplay sections.
-    /// Overrides both Input Mode and Trigger Mode.
     /// </summary>
     [Tooltip("Master toggle - disables ALL rotation when false")]
     public bool canRotate = true;
 
     /// <summary>
     /// If TRUE, player can rotate the world using keyboard/gamepad inputs.
-    /// Default: Q/E keys or LB/RB on gamepad.
-    /// Can be toggled at runtime via SetInputModeEnabled().
     /// </summary>
     [Tooltip("Enable rotation via keyboard (Q/E) or gamepad (LB/RB)")]
     public bool inputModeEnabled = true;
 
     /// <summary>
     /// If TRUE, entering trigger zones can cause world rotation.
-    /// Requires _RotationTriggerZone components on trigger colliders.
-    /// Can be toggled at runtime via SetTriggerModeEnabled().
     /// </summary>
     [Tooltip("Enable rotation via trigger zones in the level")]
     public bool triggerModeEnabled = true;
@@ -94,8 +87,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Duration of the 90-degree rotation animation in seconds.
-    /// Lower values = snappier rotation. Higher values = more cinematic.
-    /// Typical range: 0.3 - 0.8 seconds
     /// </summary>
     [Tooltip("Duration of rotation animation in seconds")]
     [Range(0.1f, 2f)]
@@ -103,24 +94,18 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Distance from the pivot point to the camera.
-    /// Affects how "zoomed out" the view appears.
-    /// Typical range: 10 - 30 units
     /// </summary>
     [Tooltip("Distance from pivot to camera")]
     public float cameraDistance = 15f;
 
     /// <summary>
     /// Height offset of the camera relative to the pivot point.
-    /// Positive values angle the camera down, negative values angle up.
-    /// Typical range: 0 - 5 units
     /// </summary>
     [Tooltip("Camera height offset from pivot")]
     public float cameraHeightOffset = 2f;
 
     /// <summary>
     /// Animation curve for rotation easing.
-    /// Default: EaseInOut for smooth start and stop.
-    /// Customize for different feels (linear, bounce, etc.)
     /// </summary>
     [Tooltip("Easing curve for rotation animation")]
     public AnimationCurve rotationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
@@ -134,15 +119,12 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Speed at which the pivot follows the target.
-    /// Higher values = more responsive following.
-    /// Only used when followTarget is assigned.
     /// </summary>
     [Tooltip("How fast the pivot follows the target")]
     public float followSpeed = 5f;
 
     /// <summary>
     /// If TRUE, pivot continues following target during rotation animation.
-    /// If FALSE, pivot freezes during rotation for stability.
     /// </summary>
     [Tooltip("Continue following target during rotation animation")]
     public bool followDuringRotation = false;
@@ -155,16 +137,13 @@ public class _WorldRotationController : MonoBehaviour
     [Header("Trigger Settings")]
 
     /// <summary>
-    /// Cooldown between trigger-initiated rotations in seconds.
-    /// Prevents rapid consecutive rotations when moving through trigger zones.
-    /// Does NOT affect input-based rotation.
+    /// Cooldown between trigger-initiated rotations.
     /// </summary>
     [Tooltip("Cooldown between trigger rotations (prevents spam)")]
     public float triggerCooldown = 0.5f;
 
     /// <summary>
     /// If TRUE, trigger zones can interrupt an ongoing rotation.
-    /// If FALSE, triggers are ignored while already rotating.
     /// </summary>
     [Tooltip("Allow triggers to interrupt ongoing rotation")]
     public bool triggerCanInterrupt = false;
@@ -209,25 +188,21 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Fired when rotation begins. Parameter: new face index (0-3)
-    /// Use this to freeze player, pause physics, trigger effects, etc.
     /// </summary>
     public event System.Action<int> OnRotationStarted;
 
     /// <summary>
     /// Fired when rotation completes. Parameter: final face index (0-3)
-    /// Use this to unfreeze player, snap positions, resume gameplay, etc.
     /// </summary>
     public event System.Action<int> OnRotationCompleted;
 
     /// <summary>
     /// Fired every frame during rotation. Parameter: progress (0-1)
-    /// Use this for visual effects, UI updates, etc.
     /// </summary>
     public event System.Action<float> OnRotationProgress;
 
     /// <summary>
     /// Fired when any mode toggle changes. Parameters: mode name, new state
-    /// Use this to update UI or react to mode changes.
     /// </summary>
     public event System.Action<string, bool> OnModeToggled;
 
@@ -296,7 +271,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Initializes missing references with sensible defaults.
-    /// Called automatically in Start().
     /// </summary>
     private void InitializeReferences()
     {
@@ -331,13 +305,7 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Called by Unity's Input System via PlayerInput component.
-    /// Connect this to your "RotateLeft" action in the PlayerInput component.
-    /// 
-    /// Setup:
-    /// 1. Add PlayerInput component to this GameObject (or player)
-    /// 2. Set Behavior to "Invoke Unity Events"
-    /// 3. Expand Events > Player (or your action map name)
-    /// 4. Find RotateLeft action and add this method
+    /// Connect this to your "RotateLeft" action.
     /// </summary>
     public void OnRotateLeft(InputAction.CallbackContext ctx)
     {
@@ -356,13 +324,7 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Called by Unity's Input System via PlayerInput component.
-    /// Connect this to your "RotateRight" action in the PlayerInput component.
-    /// 
-    /// Setup:
-    /// 1. Add PlayerInput component to this GameObject (or player)
-    /// 2. Set Behavior to "Invoke Unity Events"
-    /// 3. Expand Events > Player (or your action map name)
-    /// 4. Find RotateRight action and add this method
+    /// Connect this to your "RotateRight" action.
     /// </summary>
     public void OnRotateRight(InputAction.CallbackContext ctx)
     {
@@ -386,7 +348,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Checks if rotation via input is currently allowed.
-    /// Must have: canRotate enabled, inputModeEnabled, and not currently rotating.
     /// </summary>
     private bool CanRotateViaInput()
     {
@@ -413,7 +374,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Checks if rotation via trigger is currently allowed.
-    /// Must have: canRotate enabled, triggerModeEnabled, cooldown expired, and not rotating (unless interrupt allowed).
     /// </summary>
     private bool CanRotateViaTrigger()
     {
@@ -444,7 +404,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Initiates a 90-degree world rotation.
-    /// Called by input callbacks or trigger zones.
     /// </summary>
     /// <param name="direction">-1 for left (counter-clockwise), 1 for right (clockwise)</param>
     public void RotateWorld(int direction)
@@ -472,9 +431,7 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Called by trigger zones to request rotation.
-    /// Respects trigger-specific settings (cooldown, interrupt).
     /// </summary>
-    /// <param name="direction">-1 for left, 1 for right</param>
     public void RotateFromTrigger(int direction)
     {
         if (!CanRotateViaTrigger())
@@ -496,9 +453,7 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Rotates to a specific face index (0-3).
-    /// Calculates shortest rotation path automatically.
     /// </summary>
-    /// <param name="targetFaceIndex">Target face: 0=North, 1=East, 2=South, 3=West</param>
     public void RotateToFace(int targetFaceIndex)
     {
         if (!canRotate || isRotating)
@@ -524,7 +479,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Called by trigger zones to rotate to a specific face.
-    /// Respects trigger-specific settings.
     /// </summary>
     public void RotateToFaceFromTrigger(int targetFaceIndex)
     {
@@ -539,7 +493,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Coroutine that performs the animated rotation.
-    /// Fires events at start, during (progress), and end of rotation.
     /// </summary>
     private IEnumerator RotateCoroutine(int direction)
     {
@@ -598,7 +551,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Normalizes currentAngle to 0-360 range.
-    /// Called after rotation completes to prevent angle drift.
     /// </summary>
     private void NormalizeAngle()
     {
@@ -613,7 +565,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Updates camera position based on current angle.
-    /// Camera orbits around pivot at specified distance and height.
     /// </summary>
     private void UpdateCameraPosition(float angle)
     {
@@ -636,7 +587,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Updates pivot position to follow target.
-    /// Only runs when followTarget is assigned and following is allowed.
     /// </summary>
     private void UpdatePivotFollow()
     {
@@ -671,7 +621,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Enables or disables the entire rotation system.
-    /// When disabled, neither input nor triggers will work.
     /// </summary>
     public void SetSystemEnabled(bool enabled)
     {
@@ -685,8 +634,7 @@ public class _WorldRotationController : MonoBehaviour
     }
 
     /// <summary>
-    /// Enables or disables input-based rotation (Q/E keys, LB/RB buttons).
-    /// Does not affect trigger-based rotation.
+    /// Enables or disables input-based rotation.
     /// </summary>
     public void SetInputModeEnabled(bool enabled)
     {
@@ -701,7 +649,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Enables or disables trigger-based rotation.
-    /// Does not affect input-based rotation.
     /// </summary>
     public void SetTriggerModeEnabled(bool enabled)
     {
@@ -721,7 +668,6 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Gets the current forward direction in world space based on camera rotation.
-    /// Useful for player movement relative to camera view.
     /// </summary>
     public Vector3 GetCurrentForward()
     {
@@ -731,20 +677,15 @@ public class _WorldRotationController : MonoBehaviour
 
     /// <summary>
     /// Gets the current right direction in world space based on camera rotation.
-    /// Useful for player movement relative to camera view.
     /// </summary>
     public Vector3 GetCurrentRight()
     {
         float radians = currentAngle * Mathf.Deg2Rad;
-
-        // FIXED: Negated the calculation to match Camera's view direction.
-        // Previously this pointed "Stage Left" relative to the camera.
         return new Vector3(-Mathf.Cos(radians), 0f, Mathf.Sin(radians));
     }
 
     /// <summary>
     /// Gets the current face index (0-3).
-    /// 0=North, 1=East, 2=South, 3=West
     /// </summary>
     public int GetCurrentFaceIndex()
     {

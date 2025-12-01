@@ -3,32 +3,26 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Handles depth snapping after world rotation.
-/// This is the "magic" that makes Fez's rotation work - when the world rotates,
-/// platforms that were at different depths can become aligned, and the player
-/// needs to snap to valid positions.
+/// When the world rotates, platforms at different depths can become aligned,
+/// and the player needs to snap to valid positions.
 /// 
 /// Core Systems:
 /// - Raycasts in depth direction to find valid platforms
 /// - Snaps player to nearest valid surface after rotation
 /// - Configurable delay for visual effect timing
 /// - Debug visualization for level design
-/// 
-/// Usage:
-/// 1. Attach to a manager GameObject in your scene
-/// 2. Assign player and rotation controller references
-/// 3. Configure platform layer mask
-/// 4. Adjust snap settings as needed
 /// </summary>
 public class _FezDepthSnapper : MonoBehaviour
 {
     #region Variables
 
     // ==================== REFERENCES ====================
-    #region REFERENCES
-
     [Header("References")]
 
-    [Tooltip("Reference to the world rotation controller. Auto-finds if null")]
+    [Tooltip("Use the rotation bridge (supports both original and Cinemachine controllers)")]
+    public bool useRotationBridge = true;
+
+    [Tooltip("Reference to the world rotation controller (only used if useRotationBridge is false)")]
     public _WorldRotationController worldRotation;
 
     [Tooltip("The player's transform. Auto-finds _FezPlayerController if null")]
@@ -37,80 +31,83 @@ public class _FezDepthSnapper : MonoBehaviour
     [Tooltip("The player's rigidbody for position updates")]
     public Rigidbody playerRigidbody;
 
-    #endregion
-
     // ==================== MASTER CONTROLS ====================
-    #region MASTER CONTROLS
-
     [Header("Master Controls")]
 
     /// <summary>
     /// Master toggle - if FALSE, disables all depth snapping.
-    /// Useful for debugging or specific gameplay sections.
     /// </summary>
     [Tooltip("Enable/disable depth snapping")]
     public bool snapEnabled = true;
 
     /// <summary>
     /// If TRUE, snapping happens automatically after rotation.
-    /// If FALSE, snapping must be triggered manually via SnapPlayer().
     /// </summary>
     [Tooltip("Automatically snap after rotation completes")]
     public bool autoSnapAfterRotation = true;
 
-    #endregion
-
     // ==================== SNAP SETTINGS ====================
-    #region SNAP SETTINGS
-
     [Header("Snap Settings")]
 
     /// <summary>
-    /// Maximum distance to search for valid platforms in depth direction.
-    /// Larger values = more forgiving but potentially unexpected snaps.
+    /// Maximum distance to search for valid platforms.
     /// </summary>
     [Tooltip("Max distance to search for platforms")]
     public float maxSnapDistance = 10f;
 
     /// <summary>
-    /// Layers to consider as valid platforms for snapping.
-    /// Should match your ground/platform layers.
+    /// Layers to consider as valid platforms.
     /// </summary>
     [Tooltip("Layers considered as platforms")]
     public LayerMask platformLayer = ~0;
 
     /// <summary>
-    /// Small offset to apply when snapping to prevent clipping.
+    /// Small offset to apply when snapping.
     /// </summary>
     [Tooltip("Offset from surface when snapping")]
     public float snapOffset = 0.1f;
 
     /// <summary>
     /// Delay after rotation before snapping occurs.
-    /// Allows rotation animation to complete first for better visuals.
     /// </summary>
     [Tooltip("Delay before snapping (for visual timing)")]
     public float snapDelay = 0.1f;
 
     /// <summary>
     /// If TRUE, smoothly interpolates to snap position.
-    /// If FALSE, instantly teleports to snap position.
     /// </summary>
     [Tooltip("Smooth transition to snap position")]
     public bool smoothSnap = false;
 
     /// <summary>
     /// Duration of smooth snap transition.
-    /// Only used when smoothSnap is TRUE.
     /// </summary>
     [Tooltip("Duration of smooth snap")]
     public float smoothSnapDuration = 0.2f;
 
-    #endregion
+    // ==================== ADVANCED SETTINGS ====================
+    [Header("Advanced Settings")]
+
+    /// <summary>
+    /// Maximum vertical distance to consider valid.
+    /// </summary>
+    [Tooltip("Max vertical difference for valid snap")]
+    public float maxVerticalDifference = 3f;
+
+    /// <summary>
+    /// Prefer snapping to ground vs in-air.
+    /// </summary>
+    [Tooltip("Prioritize ground snapping")]
+    public bool preferGroundSnap = true;
+
+    /// <summary>
+    /// Search step size for ground finding.
+    /// </summary>
+    [Tooltip("Step size for depth search")]
+    [Range(0.1f, 2f)]
+    public float searchStepSize = 0.5f;
 
     // ==================== DEBUG ====================
-    #region DEBUG
-
     [Header("Debug")]
 
     [Tooltip("Show debug info in console")]
@@ -122,15 +119,8 @@ public class _FezDepthSnapper : MonoBehaviour
     [Tooltip("Duration to show debug rays")]
     public float debugRayDuration = 2f;
 
-    #endregion
-
     // ==================== PRIVATE VARIABLES ====================
-    #region PRIVATE VARIABLES
-
-    // Coroutine reference for delayed/smooth snap
     private Coroutine activeSnapCoroutine;
-
-    #endregion
 
     #endregion
 
@@ -153,23 +143,30 @@ public class _FezDepthSnapper : MonoBehaviour
     // ==================== INITIALIZATION ====================
     #region INITIALIZATION
 
-    /// <summary>
-    /// Finds and assigns missing references.
-    /// </summary>
     private void InitializeReferences()
     {
-        // Find rotation controller
-        if (worldRotation == null)
+        if (!useRotationBridge)
         {
-            worldRotation = _WorldRotationController.Instance;
-
+            // Legacy mode: use direct controller reference
             if (worldRotation == null)
             {
-                Debug.LogError("[_FezDepthSnapper] No _WorldRotationController found!");
+                worldRotation = _WorldRotationController.Instance;
+
+                if (worldRotation == null)
+                {
+                    Debug.LogError("[_FezDepthSnapper] No _WorldRotationController found!");
+                }
+            }
+        }
+        else
+        {
+            // Bridge mode: ensure bridge is initialized
+            if (!FezRotationBridge.Instance.IsAvailable)
+            {
+                Debug.LogError("[_FezDepthSnapper] No rotation controller found via bridge!");
             }
         }
 
-        // Find player
         if (playerTransform == null)
         {
             var playerController = FindObjectOfType<_FezPlayerController>();
@@ -194,23 +191,25 @@ public class _FezDepthSnapper : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Subscribes to rotation controller events.
-    /// </summary>
     private void SubscribeToEvents()
     {
-        if (worldRotation != null)
+        if (useRotationBridge)
+        {
+            FezRotationBridge.OnRotationCompleted += OnRotationCompleted;
+        }
+        else if (worldRotation != null)
         {
             worldRotation.OnRotationCompleted += OnRotationCompleted;
         }
     }
 
-    /// <summary>
-    /// Unsubscribes from rotation controller events.
-    /// </summary>
     private void UnsubscribeFromEvents()
     {
-        if (worldRotation != null)
+        if (useRotationBridge)
+        {
+            FezRotationBridge.OnRotationCompleted -= OnRotationCompleted;
+        }
+        else if (worldRotation != null)
         {
             worldRotation.OnRotationCompleted -= OnRotationCompleted;
         }
@@ -221,10 +220,6 @@ public class _FezDepthSnapper : MonoBehaviour
     // ==================== EVENT CALLBACKS ====================
     #region EVENT CALLBACKS
 
-    /// <summary>
-    /// Called when world rotation completes.
-    /// Initiates snap process if auto-snap is enabled.
-    /// </summary>
     private void OnRotationCompleted(int newFaceIndex)
     {
         if (!snapEnabled || !autoSnapAfterRotation)
@@ -232,13 +227,11 @@ public class _FezDepthSnapper : MonoBehaviour
             return;
         }
 
-        // Stop any existing snap
         if (activeSnapCoroutine != null)
         {
             StopCoroutine(activeSnapCoroutine);
         }
 
-        // Start snap with delay
         if (snapDelay > 0f)
         {
             activeSnapCoroutine = StartCoroutine(DelayedSnapCoroutine(newFaceIndex));
@@ -254,9 +247,6 @@ public class _FezDepthSnapper : MonoBehaviour
     // ==================== SNAP LOGIC ====================
     #region SNAP LOGIC
 
-    /// <summary>
-    /// Coroutine for delayed snap.
-    /// </summary>
     private System.Collections.IEnumerator DelayedSnapCoroutine(int faceIndex)
     {
         yield return new WaitForSeconds(snapDelay);
@@ -264,20 +254,33 @@ public class _FezDepthSnapper : MonoBehaviour
         activeSnapCoroutine = null;
     }
 
-    /// <summary>
-    /// Main snap logic. Finds valid position and moves player.
-    /// </summary>
     public void SnapPlayerToValidPosition(int faceIndex)
     {
-        if (!snapEnabled || playerTransform == null || worldRotation == null)
+        if (!snapEnabled || playerTransform == null)
         {
             return;
         }
 
-        Vector3 currentPos = playerTransform.position;
-        Vector3 depthDirection = worldRotation.GetCurrentForward();
+        // Get depth direction from appropriate controller
+        Vector3 depthDirection;
+        if (useRotationBridge)
+        {
+            if (!FezRotationBridge.Instance.IsAvailable)
+            {
+                return;
+            }
+            depthDirection = FezRotationBridge.Instance.GetCurrentForward();
+        }
+        else
+        {
+            if (worldRotation == null)
+            {
+                return;
+            }
+            depthDirection = worldRotation.GetCurrentForward();
+        }
 
-        // Find valid snap position
+        Vector3 currentPos = playerTransform.position;
         Vector3? snapPosition = FindSnapPosition(currentPos, depthDirection);
 
         if (snapPosition.HasValue)
@@ -298,9 +301,6 @@ public class _FezDepthSnapper : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Searches for valid snap position using raycasts.
-    /// </summary>
     private Vector3? FindSnapPosition(Vector3 currentPos, Vector3 depthDirection)
     {
         // First check: is current position valid?
@@ -309,7 +309,7 @@ public class _FezDepthSnapper : MonoBehaviour
             return null; // No snap needed
         }
 
-        List<Vector3> candidates = new List<Vector3>();
+        List<SnapCandidate> candidates = new List<SnapCandidate>();
 
         // Cast rays in both depth directions
         SearchForPlatforms(currentPos, depthDirection, candidates);
@@ -322,85 +322,89 @@ public class _FezDepthSnapper : MonoBehaviour
             Debug.DrawRay(currentPos, -depthDirection * maxSnapDistance, Color.red, debugRayDuration);
         }
 
-        // If no direct hits, search for ground below at various depths
+        // If no direct hits, search for ground at various depths
         if (candidates.Count == 0)
         {
             SearchForGround(currentPos, depthDirection, candidates);
         }
 
-        // Return nearest valid position
+        // Sort and return best candidate
         if (candidates.Count > 0)
         {
+            // Sort by priority (ground first if preferred) then by distance
             candidates.Sort((a, b) =>
-                Vector3.Distance(currentPos, a).CompareTo(Vector3.Distance(currentPos, b)));
+            {
+                if (preferGroundSnap)
+                {
+                    if (a.hasGround != b.hasGround)
+                    {
+                        return b.hasGround.CompareTo(a.hasGround);
+                    }
+                }
+                return a.distance.CompareTo(b.distance);
+            });
 
             if (showDebugRays)
             {
-                Debug.DrawLine(currentPos, candidates[0], Color.yellow, debugRayDuration);
+                Debug.DrawLine(currentPos, candidates[0].position, Color.yellow, debugRayDuration);
             }
 
-            return candidates[0];
+            return candidates[0].position;
         }
 
         return null;
     }
 
-    /// <summary>
-    /// Searches for platforms in a given direction.
-    /// </summary>
-    private void SearchForPlatforms(Vector3 origin, Vector3 direction, List<Vector3> candidates)
+    private void SearchForPlatforms(Vector3 origin, Vector3 direction, List<SnapCandidate> candidates)
     {
         RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxSnapDistance, platformLayer);
 
         foreach (var hit in hits)
         {
-            // Calculate candidate position (offset from surface)
             Vector3 candidate = hit.point - direction * snapOffset;
 
-            // Verify this position is valid (has ground below)
             if (IsPositionValid(candidate))
             {
-                candidates.Add(candidate);
+                float distance = Vector3.Distance(origin, candidate);
+                candidates.Add(new SnapCandidate
+                {
+                    position = candidate,
+                    distance = distance,
+                    hasGround = true
+                });
             }
         }
     }
 
-    /// <summary>
-    /// Searches for ground at various depth positions.
-    /// </summary>
-    private void SearchForGround(Vector3 currentPos, Vector3 depthDirection, List<Vector3> candidates)
+    private void SearchForGround(Vector3 currentPos, Vector3 depthDirection, List<SnapCandidate> candidates)
     {
-        float searchStep = 0.5f;
-
-        for (float depth = -maxSnapDistance; depth <= maxSnapDistance; depth += searchStep)
+        for (float depth = -maxSnapDistance; depth <= maxSnapDistance; depth += searchStepSize)
         {
             Vector3 searchPos = currentPos + depthDirection * depth;
 
-            // Raycast down to find ground
             if (Physics.Raycast(searchPos + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 10f, platformLayer))
             {
                 Vector3 candidate = hit.point + Vector3.up * snapOffset;
 
-                // Check if this position is reasonable (not too far vertically)
-                if (Mathf.Abs(candidate.y - currentPos.y) < 3f)
+                if (Mathf.Abs(candidate.y - currentPos.y) < maxVerticalDifference)
                 {
-                    candidates.Add(candidate);
+                    float distance = Vector3.Distance(currentPos, candidate);
+                    candidates.Add(new SnapCandidate
+                    {
+                        position = candidate,
+                        distance = distance,
+                        hasGround = true
+                    });
                 }
             }
         }
     }
 
-    /// <summary>
-    /// Checks if a position is valid (has ground below).
-    /// </summary>
     private bool IsPositionValid(Vector3 position)
     {
         return Physics.Raycast(position + Vector3.up * 0.5f, Vector3.down, 1f, platformLayer);
     }
 
-    /// <summary>
-    /// Applies the snap to the target position.
-    /// </summary>
     private void ApplySnap(Vector3 targetPosition)
     {
         if (smoothSnap)
@@ -409,7 +413,6 @@ public class _FezDepthSnapper : MonoBehaviour
         }
         else
         {
-            // Instant snap
             if (playerRigidbody != null)
             {
                 playerRigidbody.position = targetPosition;
@@ -421,9 +424,6 @@ public class _FezDepthSnapper : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Coroutine for smooth snap transition.
-    /// </summary>
     private System.Collections.IEnumerator SmoothSnapCoroutine(Vector3 targetPosition)
     {
         Vector3 startPosition = playerTransform.position;
@@ -449,7 +449,6 @@ public class _FezDepthSnapper : MonoBehaviour
             yield return null;
         }
 
-        // Ensure final position is exact
         if (playerRigidbody != null)
         {
             playerRigidbody.position = targetPosition;
@@ -462,25 +461,41 @@ public class _FezDepthSnapper : MonoBehaviour
 
     #endregion
 
+    // ==================== HELPER STRUCTS ====================
+    #region HELPER STRUCTS
+
+    private struct SnapCandidate
+    {
+        public Vector3 position;
+        public float distance;
+        public bool hasGround;
+    }
+
+    #endregion
+
     // ==================== PUBLIC METHODS ====================
     #region PUBLIC METHODS
 
-    /// <summary>
-    /// Manually triggers a snap check.
-    /// Useful for debugging or scripted events.
-    /// </summary>
     [ContextMenu("Force Snap Check")]
     public void ForceSnapCheck()
     {
-        if (worldRotation != null)
+        int faceIndex;
+        if (useRotationBridge)
         {
-            SnapPlayerToValidPosition(worldRotation.GetCurrentFaceIndex());
+            faceIndex = FezRotationBridge.Instance.GetCurrentFaceIndex();
         }
+        else if (worldRotation != null)
+        {
+            faceIndex = worldRotation.GetCurrentFaceIndex();
+        }
+        else
+        {
+            faceIndex = 0;
+        }
+        
+        SnapPlayerToValidPosition(faceIndex);
     }
 
-    /// <summary>
-    /// Enables or disables the snap system.
-    /// </summary>
     public void SetSnapEnabled(bool enabled)
     {
         snapEnabled = enabled;
@@ -509,19 +524,44 @@ public class _FezDepthSnapper : MonoBehaviour
         Gizmos.DrawWireSphere(playerTransform.position, maxSnapDistance);
 
         // Draw depth directions
-        if (worldRotation != null || Application.isPlaying)
+        Vector3 forward = Vector3.forward;
+        bool hasRotation = false;
+        
+        if (Application.isPlaying)
         {
-            var rotation = worldRotation != null ? worldRotation : _WorldRotationController.Instance;
-            if (rotation != null)
+            if (useRotationBridge && FezRotationBridge.Instance.IsAvailable)
             {
-                Vector3 forward = rotation.GetCurrentForward();
-
-                Gizmos.color = Color.green;
-                Gizmos.DrawRay(playerTransform.position, forward * maxSnapDistance);
-
-                Gizmos.color = Color.red;
-                Gizmos.DrawRay(playerTransform.position, -forward * maxSnapDistance);
+                forward = FezRotationBridge.Instance.GetCurrentForward();
+                hasRotation = true;
             }
+            else if (worldRotation != null)
+            {
+                forward = worldRotation.GetCurrentForward();
+                hasRotation = true;
+            }
+            else
+            {
+                var rotation = _WorldRotationController.Instance;
+                if (rotation != null)
+                {
+                    forward = rotation.GetCurrentForward();
+                    hasRotation = true;
+                }
+            }
+        }
+        else if (worldRotation != null)
+        {
+            forward = worldRotation.GetCurrentForward();
+            hasRotation = true;
+        }
+        
+        if (hasRotation)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(playerTransform.position, forward * maxSnapDistance);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(playerTransform.position, -forward * maxSnapDistance);
         }
     }
 #endif

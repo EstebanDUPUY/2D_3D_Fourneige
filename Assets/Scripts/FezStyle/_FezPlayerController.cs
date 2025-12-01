@@ -3,21 +3,21 @@ using UnityEngine.InputSystem;
 using System.Collections;
 
 /// <summary>
-/// Fully modular player controller for 2.5D platformer.
+/// Fully modular player controller for 2.5D platformer with Fez-style world rotation.
 /// All features are toggle-based through ScriptableObject states.
 /// 
 /// Core Systems:
 /// - Data-driven state system (no hardcoded state exclusivity)
-/// - Hybrid ground/wall detection (Raycast + OverlapBox)
-/// - Variable-height jumping (optional per state)
-/// - Wall slide and wall jump (optional per state)
-/// - Dash system with invincibility (optional per state)
-/// - Bunny hop mechanic (optional per state)
-/// - Double jump (optional per state)
-/// - Air control (optional per state)
-/// - State switching with cooldown
-/// - Master movement lock
-/// - Fez-style world rotation integration (optional)
+/// - Hybrid ground/wall detection with slope support
+/// - Variable-height jumping with apex hang
+/// - Wall slide, wall cling, and wall jump
+/// - Dash system with charges and invincibility
+/// - Bunny hop mechanic
+/// - Double jump with configurable resets
+/// - Air control with timing options
+/// - Landing lag system
+/// - Fez-style world rotation integration
+/// - 4-directional wall detection (optional)
 /// </summary>
 public class _FezPlayerController : MonoBehaviour
 {
@@ -27,8 +27,9 @@ public class _FezPlayerController : MonoBehaviour
     #region REFERENCES
 
     // Core Components
-    private Rigidbody rb; // Physics body for movement and forces
-    private SpriteRenderer spriteRenderer; // For visual feedback and sprite flipping effects
+    private Rigidbody rb;
+    private SpriteRenderer spriteRenderer;
+    private Collider playerCollider;
 
     // Visual Transform - the child GameObject that rotates for sprite flipping
     [Header("Visual References")]
@@ -36,91 +37,92 @@ public class _FezPlayerController : MonoBehaviour
     public Transform visualTransform;
 
     // State Data - ScriptableObjects containing all parameters for each state
-    public _PlayerStateData fireStateData; // First state option
-    public _PlayerStateData iceStateData; // Second state option
-    private _PlayerStateData currentStateData; // Currently active state data
+    [Header("State Data")]
+    public _PlayerStateData fireStateData;
+    public _PlayerStateData iceStateData;
+    private _PlayerStateData currentStateData;
 
     /// <summary>
-    /// Enum defining the two available player states.
-    /// States are NOT hardcoded with exclusive features - all features are defined in ScriptableObjects.
+    /// Enum defining the available player states.
     /// </summary>
     public enum States { Fire, Ice }
-    public States currentState; // Current active state
+    public States currentState;
 
     #endregion
 
     // ==================== MOVEMENT VARIABLES ====================
     #region MOVEMENT VARIABLES
 
-    private float facingAngle = 0f; // Tracks local facing (0=Right, 180=Left)
-    private Vector2 moveInput; // Raw input from keyboard/controller (-1 to 1 on X axis)
-    private float currentSpeed; // Current movement speed (not actively used but kept for future features)
-    private bool isFacingRight = true; // Tracks which direction the sprite is facing
-    private bool isFlipping = false; // Prevents multiple flip coroutines from running simultaneously
+    private float facingAngle = 0f;
+    private Vector2 moveInput;
+    private float currentSpeed;
+    private bool isFacingRight = true;
+    private bool isFlipping = false;
 
     #endregion
 
     // ==================== GROUND & WALL DETECTION ====================
     #region GROUND & WALL DETECTION
 
-    /// <summary>
-    /// Detection uses a hybrid approach:
-    /// 1. OverlapBox: Confirms solid contact (reliable, no false negatives)
-    /// 2. Raycast: Predicts upcoming contact (enables coyote time and buffering)
-    /// 
-    /// This combination provides both reliability and predictive capabilities.
-    /// </summary>
     [Header("Detection Settings")]
-    public LayerMask groundLayer; // Layer(s) considered as ground
-    public LayerMask wallLayer; // Layer(s) considered as walls
+    public LayerMask groundLayer;
+    public LayerMask wallLayer;
 
-    // Size of detection boxes
-    public Vector3 groundCheckSize = new Vector3(0.9f, 0.1f, 0.9f); // Flat box at feet
-    public Vector3 wallCheckSize = new Vector3(0.1f, 0.9f, 0.9f); // Tall box at sides
+    [Header("Ground Detection")]
+    public Vector3 groundCheckSize = new Vector3(0.9f, 0.1f, 0.9f);
+    public float groundRaycastDistance = 0.2f;
 
-    // Distance of predictive raycasts
-    public float groundRaycastDistance = 0.2f; // How far ahead to check for ground
-    public float wallRaycastDistance = 0.2f; // How far ahead to check for walls
+    [Header("Wall Detection")]
+    public Vector3 wallCheckSize = new Vector3(0.1f, 0.9f, 0.9f);
+    public float wallRaycastDistance = 0.2f;
 
     // Detection states
-    private bool isGrounded; // TRUE when OverlapBox detects ground contact
-    private bool isAboutToLand; // TRUE when Raycast predicts ground within distance
-    private bool isTouchingWall; // TRUE when either side detects a wall
-    private bool isWallAhead; // TRUE when Raycast detects wall in facing direction
-    private int wallDirection; // -1 = wall on left, 1 = wall on right, 0 = no wall
+    private bool isGrounded;
+    private bool isAboutToLand;
+    private bool isTouchingWall;
+    private bool isWallAhead;
+    private int wallDirection; // -1 = left, 1 = right, 0 = none
+
+    // Slope detection (NEW)
+    private bool isOnSlope;
+    private float currentSlopeAngle;
+    private Vector3 slopeNormal;
+    private bool isOnSteepSlope;
+
+    // 4-Direction wall detection cache (NEW)
+    private bool[] wallStates = new bool[4]; // +X, -X, +Z, -Z
+    private float fullWallCheckTimer = 0f;
 
     #endregion
 
     // ==================== JUMP VARIABLES ====================
     #region JUMP VARIABLES
 
-    /// <summary>
-    /// Jump system supports:
-    /// - Coyote Time: Grace period after leaving ground (optional)
-    /// - Jump Buffering: Remember input before landing (optional)
-    /// - Variable Height: Hold jump for higher jumps (optional)
-    /// - Double Jump: Jump again while airborne (optional)
-    /// </summary>
-    private bool isJumping; // TRUE from jump initiation until landing
-    private bool jumpBuffered; // TRUE when jump input is waiting to be executed
-    private float jumpBufferTimer; // Countdown timer for jump buffer window
-    private float coyoteTimeTimer; // Countdown timer for coyote time window
-    private float jumpHoldTimer; // Tracks how long jump button has been held
-    private bool isHoldingJump; // TRUE while jump button is held during ascent
-    private int airJumpsRemaining; // Number of air jumps left (for double jump)
+    private bool isJumping;
+    private bool jumpBuffered;
+    private float jumpBufferTimer;
+    private float coyoteTimeTimer;
+    private float jumpHoldTimer;
+    private bool isHoldingJump;
+    private int airJumpsRemaining;
+
+    // Air control timing (NEW)
+    private float airControlDelayTimer;
+    private float airControlRampProgress;
+    private float timeInAir;
+
+    #endregion
+
+    // ==================== APEX HANG (NEW) ====================
+    #region APEX HANG
+
+    private bool isAtApex;
 
     #endregion
 
     // ==================== DASH VARIABLES ====================
     #region DASH VARIABLES
 
-    /// <summary>
-    /// Dash system features:
-    /// - Optional invincibility with visual feedback (sprite flicker)
-    /// - Two modes: Fixed Distance OR Fixed Duration
-    /// - Directional based on movement input or facing direction
-    /// - Optional cooldown system
-    /// </summary>
     [Header("Dash Settings (Inspector Overrides)")]
     [Tooltip("If TRUE, uses these inspector values instead of ScriptableObject values")]
     public bool overrideDashSettings = false;
@@ -131,83 +133,85 @@ public class _FezPlayerController : MonoBehaviour
     public float dashDuration = 0.3f;
     public float dashSpeed = 20f;
 
-    private bool isDashing; // TRUE during dash execution (disables normal movement)
-    private bool isInvincible; // TRUE during invincibility frames
-    private bool canDash = true; // FALSE after dash until cooldown expires
-    private float dashCooldownTimer; // Countdown for dash cooldown
-    private Vector3 dashDirection; // Normalized direction vector for current dash
+    private bool isDashing;
+    private bool isInvincible;
+    private bool canDash = true;
+    private float dashCooldownTimer;
+    private Vector3 dashDirection;
+
+    // Dash charges (NEW)
+    private int currentDashCharges;
+    private float dashRechargeTimer;
+    private float dashRechargeDelayTimer;
 
     #endregion
 
     // ==================== WALL MECHANICS ====================
     #region WALL MECHANICS
 
-    /// <summary>
-    /// Wall mechanics include:
-    /// - Wall Slide: Reduces fall speed when touching wall (optional)
-    /// - Wall Jump: Jump away from wall while sliding (optional)
-    /// - Optional input requirement for wall stick
-    /// </summary>
     [Header("Wall Settings (Inspector Overrides)")]
     [Tooltip("If TRUE, uses this inspector value instead of ScriptableObject value")]
     public bool overrideWallStickRequiresInput = false;
     public bool wallStickRequiresInput = false;
 
-    private bool isWallSliding; // TRUE when sliding down a wall
-    private bool canWallJump; // TRUE when wall jump is available
+    private bool isWallSliding;
+    private bool canWallJump;
+    private float wallSlideDelayTimer;
+
+    // Wall cling (NEW)
+    private bool isWallClinging;
+    private float wallClingTimer;
+    private float wallClingStamina = 100f;
+
+    // Wall jump control lock (NEW)
+    private bool isInWallJumpLock;
+    private float wallJumpLockTimer;
+    private int lastWallJumpDirection;
 
     #endregion
 
     // ==================== BUNNY HOP VARIABLES ====================
     #region BUNNY HOP VARIABLES
 
-    /// <summary>
-    /// Bunny hop system:
-    /// - Rewards landing and immediately jumping with speed bonus
-    /// - Bonus stacks with successful chains
-    /// - Decays over time if not chained
-    /// - Creates "flow" gameplay feel
-    /// </summary>
-    private float bunnyHopBonus; // Current speed multiplier from bunny hopping (0 to bunnyHopMaxSpeed-1)
-    private float timeSinceLanding; // Tracks time since last landing for timing window
-    private bool canBunnyHop; // TRUE when within timing window after landing
-    private bool lastJumpWasBunnyHop; // Tracks if last jump maintained the chain
+    private float bunnyHopBonus;
+    private float timeSinceLanding;
+    private bool canBunnyHop;
+    private bool lastJumpWasBunnyHop;
+
+    #endregion
+
+    // ==================== LANDING LAG (NEW) ====================
+    #region LANDING LAG
+
+    private bool isInLandingLag;
+    private float landingLagTimer;
+    private float landingVelocity;
 
     #endregion
 
     // ==================== STATE SWITCHING ====================
     #region STATE SWITCHING
 
-    /// <summary>
-    /// State switching with cooldown system.
-    /// Prevents rapid state spam and allows for strategic state management.
-    /// </summary>
-    private float stateSwitchCooldownTimer; // Countdown until next switch allowed
-    private bool canSwitchState = true; // FALSE during cooldown
+    private float stateSwitchCooldownTimer;
+    private bool canSwitchState = true;
 
     #endregion
 
     // ==================== WORLD ROTATION (FEZ-STYLE) ====================
     #region WORLD ROTATION VARIABLES
 
-    /// <summary>
-    /// Fez-style world rotation integration.
-    /// Features:
-    /// - Freeze player during rotation (optional)
-    /// - Adapt movement to current camera view (optional)
-    /// - Snap to 2D plane after rotation (optional)
-    /// 
-    /// Requires _WorldRotationController in scene.
-    /// </summary>
     [Header("World Rotation Settings")]
 
     [Tooltip("Enable Fez-style world rotation integration")]
     public bool useWorldRotation = false;
 
-    [Tooltip("Reference to the world rotation controller. Auto-finds if null")]
+    [Tooltip("Use the rotation bridge (supports both original and Cinemachine controllers)")]
+    public bool useRotationBridge = true;
+
+    [Tooltip("Reference to the world rotation controller (only used if useRotationBridge is false)")]
     public _WorldRotationController worldRotationController;
 
-    [Tooltip("Freeze player during world rotation (like Fez)")]
+    [Tooltip("Freeze player during world rotation")]
     public bool freezeDuringRotation = true;
 
     [Tooltip("Adapt movement direction to current camera view")]
@@ -216,10 +220,61 @@ public class _FezPlayerController : MonoBehaviour
     [Tooltip("Snap to 2D plane after rotation completes")]
     public bool snapAfterRotation = true;
 
+    // Rotation physics (NEW)
+    [Header("Rotation Physics")]
+
+    [Tooltip("Clear depth velocity after rotation")]
+    public bool clearDepthVelocityOnRotation = true;
+
+    [Tooltip("Preserve horizontal momentum through rotation")]
+    public bool preserveHorizontalMomentum = true;
+
+    [Tooltip("Delay wall checks after rotation")]
+    [Range(0f, 0.5f)]
+    public float wallCheckDelayAfterRotation = 0.1f;
+
+    // Wall detection mode (NEW)
+    [Header("Wall Detection Mode")]
+
+    [Tooltip("Use full 4-direction wall detection")]
+    public bool use4DirectionalWallCheck = false;
+
+    [Tooltip("Interval for 4-direction checks (performance)")]
+    [Range(0.01f, 0.5f)]
+    public float fullWallCheckInterval = 0.1f;
+
     // Private rotation state
-    private bool isFrozenForRotation = false; // TRUE during world rotation freeze
-    private Vector3 frozenPosition; // Position when frozen
-    private Vector3 velocityBeforeFreeze; // Velocity to restore after unfreeze
+    private bool isFrozenForRotation = false;
+    private Vector3 frozenPosition;
+    private Vector3 velocityBeforeFreeze;
+    private float wallCheckDelayTimer;
+
+    #endregion
+
+    // ==================== DEBUG GIZMOS (NEW) ====================
+    #region DEBUG GIZMOS
+
+    [Header("Debug Gizmos")]
+
+    [Tooltip("Show world-space wall detection boxes")]
+    public bool showWorldSpaceGizmos = true;
+
+    [Tooltip("Show camera-relative wall detection boxes")]
+    public bool showCameraRelativeGizmos = true;
+
+    [Tooltip("Show detection results (highlight detected walls)")]
+    public bool showDetectionResults = true;
+
+    [Tooltip("Show slope detection")]
+    public bool showSlopeGizmos = true;
+
+    #endregion
+
+    // ==================== FAST FALL (NEW) ====================
+    #region FAST FALL
+
+    private bool isFastFalling;
+    private bool fastFallPressed;
 
     #endregion
 
@@ -228,70 +283,61 @@ public class _FezPlayerController : MonoBehaviour
     // ==================== UNITY LIFECYCLE METHODS ====================
     #region START, UPDATE, ETC...
 
-    /// <summary>
-    /// Awake is called before Start. Used for getting component references.
-    /// IMPORTANT: SpriteRenderer must be on a child GameObject (Visual/Sprite).
-    /// </summary>
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-
-        // Get SpriteRenderer from child (it's no longer on this GameObject)
+        playerCollider = GetComponent<Collider>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        // Validate that visualTransform is assigned
         if (visualTransform == null)
         {
-            Debug.LogError("Visual Transform is not assigned! Please drag the 'Visual' child GameObject to the PlayerController's visualTransform field in the Inspector.");
+            Debug.LogError("Visual Transform is not assigned!");
         }
 
-        // Ensure visual starts at correct rotation
         if (visualTransform != null)
         {
-            visualTransform.rotation = Quaternion.Euler(0, 0, 0); // Start facing right
+            visualTransform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
-    /// <summary>
-    /// Initialize the player state and apply starting configuration.
-    /// </summary>
     private void Start()
     {
-        currentState = States.Fire; // Always start in Fire state
-        ApplyStateData(fireStateData); // Load Fire state parameters
+        currentState = States.Fire;
+        ApplyStateData(fireStateData);
 
         facingAngle = isFacingRight ? 0f : 180f;
-        // Initialize world rotation if enabled
         InitializeWorldRotation();
 
-        if (worldRotationController != null)
+        // Initialize dash charges
+        if (currentStateData != null)
         {
-            UpdatePhysicsConstraints(worldRotationController.GetCurrentFaceIndex());
+            currentDashCharges = currentStateData.maxDashCharges;
         }
-        else
+
+        // Get initial face index from appropriate controller
+        int initialFaceIndex = 0;
+        if (useWorldRotation)
         {
-            // Default to Standard 2D (Lock Z) if no rotation system found
-            UpdatePhysicsConstraints(0);
+            if (useRotationBridge && FezRotationBridge.Instance.IsAvailable)
+            {
+                initialFaceIndex = FezRotationBridge.Instance.GetCurrentFaceIndex();
+            }
+            else if (worldRotationController != null)
+            {
+                initialFaceIndex = worldRotationController.GetCurrentFaceIndex();
+            }
         }
+        UpdatePhysicsConstraints(initialFaceIndex);
     }
 
-    /// <summary>
-    /// Update runs every frame. Handles:
-    /// - Detection updates (ground/wall checks)
-    /// - Timer updates (coyote time, jump buffer, cooldowns)
-    /// - Jump logic evaluation
-    /// - Bunny hop tracking
-    /// - Dash availability reset
-    /// </summary>
     private void Update()
     {
-        // Early exit if frozen for world rotation
+        // Handle frozen state
         if (isFrozenForRotation)
         {
             return;
         }
 
-        // Early exit if movement is completely disabled
         if (!currentStateData.canMove)
         {
             return;
@@ -301,31 +347,34 @@ public class _FezPlayerController : MonoBehaviour
         CheckGroundStatus();
         CheckWallStatus();
 
-        // Update gameplay timers
+        // Update timers
         UpdateTimers();
         UpdateCooldowns();
+        UpdateAirControlTiming();
+        UpdateWallCling();
+        UpdateWallJumpLock();
+        UpdateLandingLag();
+        UpdateDashCharges();
 
         // Track bunny hop timing
         UpdateBunnyHopTracking();
 
-        // Evaluate if jump should execute
+        // Evaluate jump
         TryJump();
 
-        // Reset dash when landing (if no cooldown system AND dash was actually used)
-        // FIXED: Only reset if dash was used, not if cooldown is active
-        if (isGrounded && !canDash && currentStateData.dashCooldown <= 0 && dashCooldownTimer <= 0)
+        // Reset dash when landing (based on mode)
+        HandleDashReset();
+
+        // Update wall check delay
+        if (wallCheckDelayTimer > 0f)
         {
-            canDash = true;
+            wallCheckDelayTimer -= Time.deltaTime;
         }
     }
 
-    /// <summary>
-    /// FixedUpdate runs at fixed intervals for physics calculations.
-    /// Normal movement is disabled during dash or when canMove is FALSE.
-    /// </summary>
     private void FixedUpdate()
     {
-        // Handle frozen state for world rotation
+        // Handle frozen state
         if (isFrozenForRotation)
         {
             rb.linearVelocity = Vector3.zero;
@@ -333,7 +382,6 @@ public class _FezPlayerController : MonoBehaviour
             return;
         }
 
-        // Early exit if movement is completely disabled
         if (!currentStateData.canMove)
         {
             return;
@@ -341,12 +389,14 @@ public class _FezPlayerController : MonoBehaviour
 
         if (!isDashing)
         {
-            ApplyMovement(); // Horizontal movement with acceleration
-            ApplyWallSlide(); // Wall slide friction
-            ApplyGravity(); // Custom gravity with variable jump multipliers
+            ApplyMovement();
+            ApplyWallSlide();
+            ApplyWallCling();
+            ApplyGravity();
+            ApplySlopePhysics();
+            ClampFallSpeed();
         }
 
-        // Decay bunny hop bonus over time
         DecayBunnyHopBonus();
     }
 
@@ -354,9 +404,10 @@ public class _FezPlayerController : MonoBehaviour
     {
         if (visualTransform == null) return;
 
-        // 1. Get the current Camera Y Rotation
         float cameraAngle = 0f;
-        if (worldRotationController != null && worldRotationController.cameraTransform != null)
+        
+        // Get camera angle - try direct controller first, then fall back to Camera.main
+        if (!useRotationBridge && worldRotationController != null && worldRotationController.cameraTransform != null)
         {
             cameraAngle = worldRotationController.cameraTransform.eulerAngles.y;
         }
@@ -365,8 +416,6 @@ public class _FezPlayerController : MonoBehaviour
             cameraAngle = Camera.main.transform.eulerAngles.y;
         }
 
-        // 2. Apply Rotation: Camera Angle + Your Facing Angle
-        // This effectively "parents" the sprite rotation to the camera view
         visualTransform.rotation = Quaternion.Euler(0, cameraAngle + facingAngle, 0);
     }
 
@@ -375,10 +424,6 @@ public class _FezPlayerController : MonoBehaviour
     // ==================== WORLD ROTATION INTEGRATION ====================
     #region WORLD ROTATION
 
-    /// <summary>
-    /// Initializes world rotation integration if enabled.
-    /// Subscribes to rotation events from _WorldRotationController.
-    /// </summary>
     private void InitializeWorldRotation()
     {
         if (!useWorldRotation)
@@ -386,40 +431,53 @@ public class _FezPlayerController : MonoBehaviour
             return;
         }
 
-        // Find controller if not assigned
-        if (worldRotationController == null)
+        if (useRotationBridge)
         {
-            worldRotationController = _WorldRotationController.Instance;
-        }
+            // Use the bridge for unified controller access
+            if (!FezRotationBridge.Instance.IsAvailable)
+            {
+                Debug.LogWarning("[_FezPlayerController] World rotation enabled but no controller found via bridge!");
+                useWorldRotation = false;
+                return;
+            }
 
-        if (worldRotationController == null)
+            FezRotationBridge.OnRotationStarted += OnWorldRotationStarted;
+            FezRotationBridge.OnRotationCompleted += OnWorldRotationCompleted;
+        }
+        else
         {
-            Debug.LogWarning("[_PlayerController] World rotation enabled but no _WorldRotationController found in scene!");
-            useWorldRotation = false;
-            return;
-        }
+            // Legacy: Use direct controller reference
+            if (worldRotationController == null)
+            {
+                worldRotationController = _WorldRotationController.Instance;
+            }
 
-        // Subscribe to rotation events
-        worldRotationController.OnRotationStarted += OnWorldRotationStarted;
-        worldRotationController.OnRotationCompleted += OnWorldRotationCompleted;
+            if (worldRotationController == null)
+            {
+                Debug.LogWarning("[_FezPlayerController] World rotation enabled but no controller found!");
+                useWorldRotation = false;
+                return;
+            }
+
+            worldRotationController.OnRotationStarted += OnWorldRotationStarted;
+            worldRotationController.OnRotationCompleted += OnWorldRotationCompleted;
+        }
     }
 
-    /// <summary>
-    /// Unsubscribes from rotation events on disable.
-    /// </summary>
     private void OnDisable()
     {
-        if (worldRotationController != null)
+        if (useRotationBridge)
+        {
+            FezRotationBridge.OnRotationStarted -= OnWorldRotationStarted;
+            FezRotationBridge.OnRotationCompleted -= OnWorldRotationCompleted;
+        }
+        else if (worldRotationController != null)
         {
             worldRotationController.OnRotationStarted -= OnWorldRotationStarted;
             worldRotationController.OnRotationCompleted -= OnWorldRotationCompleted;
         }
     }
 
-    /// <summary>
-    /// Called when world rotation begins.
-    /// Freezes player if freezeDuringRotation is enabled.
-    /// </summary>
     private void OnWorldRotationStarted(int newFaceIndex)
     {
         if (!useWorldRotation || !freezeDuringRotation)
@@ -430,10 +488,6 @@ public class _FezPlayerController : MonoBehaviour
         FreezeForRotation();
     }
 
-    /// <summary>
-    /// Called when world rotation completes.
-    /// Unfreezes player and optionally snaps to 2D plane.
-    /// </summary>
     private void OnWorldRotationCompleted(int faceIndex)
     {
         if (!useWorldRotation)
@@ -443,7 +497,7 @@ public class _FezPlayerController : MonoBehaviour
 
         if (freezeDuringRotation)
         {
-            UnfreezeFromRotation();
+            UnfreezeFromRotation(faceIndex);
         }
 
         if (snapAfterRotation)
@@ -452,12 +506,11 @@ public class _FezPlayerController : MonoBehaviour
         }
 
         UpdatePhysicsConstraints(faceIndex);
+
+        // Start wall check delay
+        wallCheckDelayTimer = wallCheckDelayAfterRotation;
     }
 
-    /// <summary>
-    /// Freezes player in place during world rotation.
-    /// Stores current position and velocity for later restoration.
-    /// </summary>
     private void FreezeForRotation()
     {
         isFrozenForRotation = true;
@@ -466,33 +519,51 @@ public class _FezPlayerController : MonoBehaviour
         rb.isKinematic = true;
     }
 
-    /// <summary>
-    /// Unfreezes player after world rotation.
-    /// Restores velocity in the new camera-relative direction.
-    /// </summary>
-    private void UnfreezeFromRotation()
+    private void UnfreezeFromRotation(int faceIndex)
     {
         rb.isKinematic = false;
         isFrozenForRotation = false;
 
-        // Restore velocity adapted to new direction
-        if (useRotationRelativeMovement && worldRotationController != null)
+        if (preserveHorizontalMomentum)
         {
-            // Calculate horizontal speed from old velocity
+            Vector3 newRight;
+            if (useRotationBridge)
+            {
+                newRight = FezRotationBridge.Instance.GetCurrentRight();
+            }
+            else if (worldRotationController != null)
+            {
+                newRight = worldRotationController.GetCurrentRight();
+            }
+            else
+            {
+                newRight = Vector3.right;
+            }
+
             float horizontalSpeed = new Vector2(velocityBeforeFreeze.x, velocityBeforeFreeze.z).magnitude;
-
-            // Get new right direction
-            Vector3 newRight = worldRotationController.GetCurrentRight();
-
-            // Maintain direction (left/right) of movement
             float direction = Mathf.Sign(Vector3.Dot(velocityBeforeFreeze.normalized, newRight));
             if (Mathf.Abs(direction) < 0.1f) direction = 1f;
 
-            rb.linearVelocity = new Vector3(
+            Vector3 newVelocity = new Vector3(
                 newRight.x * horizontalSpeed * direction,
                 velocityBeforeFreeze.y,
                 newRight.z * horizontalSpeed * direction
             );
+
+            // Clear depth velocity if enabled
+            if (clearDepthVelocityOnRotation)
+            {
+                if (faceIndex % 2 == 0) // North/South
+                {
+                    newVelocity.z = 0f;
+                }
+                else // East/West
+                {
+                    newVelocity.x = 0f;
+                }
+            }
+
+            rb.linearVelocity = newVelocity;
         }
         else
         {
@@ -500,101 +571,704 @@ public class _FezPlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Snaps player to the 2D plane based on current camera view.
-    /// Called after rotation completes to prevent depth-related issues.
-    /// </summary>
     private void SnapToCurrentPlane()
     {
-        if (worldRotationController == null)
+        // Check if we have a valid rotation system
+        bool hasRotationSystem = useRotationBridge 
+            ? FezRotationBridge.Instance.IsAvailable 
+            : worldRotationController != null;
+            
+        if (!hasRotationSystem)
         {
             return;
         }
 
-        // Get current face for determining snap behavior
-        int faceIndex = worldRotationController.GetCurrentFaceIndex();
-
-        // In a full implementation, you would raycast to find valid platforms
-        // For now, this is a placeholder for the depth snapper system
-        // The _FezDepthSnapper component handles more complex snapping logic
+        // Placeholder - _FezDepthSnapper handles complex snapping
     }
 
-    /// <summary>
-    /// Gets the movement direction based on world rotation state.
-    /// Returns world right if rotation disabled, or camera-relative right if enabled.
-    /// </summary>
     private Vector3 GetMovementRight()
     {
-        if (useWorldRotation && useRotationRelativeMovement && worldRotationController != null)
+        if (useWorldRotation && useRotationRelativeMovement)
         {
-            return worldRotationController.GetCurrentRight();
+            if (useRotationBridge)
+            {
+                return FezRotationBridge.Instance.GetCurrentRight();
+            }
+            else if (worldRotationController != null)
+            {
+                return worldRotationController.GetCurrentRight();
+            }
         }
 
         return Vector3.right;
     }
 
-    /// <summary>
-    /// Returns TRUE if world is currently rotating.
-    /// Used to prevent actions during rotation.
-    /// </summary>
     public bool IsWorldRotating()
     {
-        if (!useWorldRotation || worldRotationController == null)
+        if (!useWorldRotation)
         {
             return false;
         }
 
-        return worldRotationController.IsRotating();
+        if (useRotationBridge)
+        {
+            return FezRotationBridge.Instance.IsRotating();
+        }
+        else if (worldRotationController != null)
+        {
+            return worldRotationController.IsRotating();
+        }
+
+        return false;
     }
 
-    /// <summary>
-    /// Returns TRUE if player is frozen for world rotation.
-    /// </summary>
     public bool IsFrozenForRotation()
     {
         return isFrozenForRotation;
     }
 
-    /// <summary>
-    /// Dynamically locks the physics axis perpendicular to the camera.
-    /// This ensures true 2D movement on the current plane.
-    /// </summary>
     private void UpdatePhysicsConstraints(int faceIndex)
     {
         if (rb == null) return;
 
-        // Standard constraints: Always freeze rotation X and Z (so player doesn't tip over)
-        RigidbodyConstraints constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        // Store old constraints
+        var oldConstraints = rb.constraints;
 
-        // Even Faces (0: North, 2: South) = View is along Z-axis.
-        // We move on X, so we must FREEZE Z (Depth).
-        if (faceIndex % 2 == 0)
+        // Base constraints
+        RigidbodyConstraints constraints =
+            RigidbodyConstraints.FreezeRotationX |
+            RigidbodyConstraints.FreezeRotationZ |
+            RigidbodyConstraints.FreezeRotationY;
+
+        Vector3 velocity = rb.linearVelocity;
+
+        if (faceIndex % 2 == 0) // North/South
         {
             constraints |= RigidbodyConstraints.FreezePositionZ;
+            if (clearDepthVelocityOnRotation && oldConstraints != constraints)
+            {
+                velocity.z = 0f;
+            }
         }
-        // Odd Faces (1: East, 3: West) = View is along X-axis.
-        // We move on Z, so we must FREEZE X (Depth).
-        else
+        else // East/West
         {
             constraints |= RigidbodyConstraints.FreezePositionX;
+            if (clearDepthVelocityOnRotation && oldConstraints != constraints)
+            {
+                velocity.x = 0f;
+            }
         }
 
         rb.constraints = constraints;
+
+        if (oldConstraints != constraints)
+        {
+            rb.linearVelocity = velocity;
+        }
     }
 
     #endregion
 
+    // ==================== GROUND DETECTION ====================
+    #region GROUND DETECTION
+
+    private void CheckGroundStatus()
+    {
+        if (playerCollider == null) return;
+
+        Vector3 boxCenter = transform.position - new Vector3(0, playerCollider.bounds.extents.y, 0);
+        bool wasGrounded = isGrounded;
+
+        // OverlapBox check
+        isGrounded = Physics.CheckBox(boxCenter, groundCheckSize / 2, Quaternion.identity, groundLayer);
+
+        // Raycast for prediction
+        RaycastHit hit;
+        Vector3 rayStart = boxCenter + Vector3.up * 0.1f;
+        isAboutToLand = Physics.Raycast(rayStart, Vector3.down, out hit, groundRaycastDistance, groundLayer);
+
+        // Slope detection (NEW)
+        CheckSlopeStatus(boxCenter);
+
+        // Landing detection
+        if (!wasGrounded && isGrounded)
+        {
+            OnLanded();
+        }
+
+        // Track time in air
+        if (!isGrounded)
+        {
+            timeInAir += Time.deltaTime;
+        }
+        else
+        {
+            timeInAir = 0f;
+        }
+    }
+
+    /// <summary>
+    /// Checks slope angle and updates slope-related states.
+    /// </summary>
+    private void CheckSlopeStatus(Vector3 groundCheckCenter)
+    {
+        isOnSlope = false;
+        isOnSteepSlope = false;
+        currentSlopeAngle = 0f;
+        slopeNormal = Vector3.up;
+
+        if (!currentStateData.canWalkOnSlopes)
+        {
+            return;
+        }
+
+        // Raycast down to get slope normal
+        RaycastHit hit;
+        if (Physics.Raycast(groundCheckCenter + Vector3.up * 0.5f, Vector3.down, out hit, 1f, groundLayer))
+        {
+            slopeNormal = hit.normal;
+            currentSlopeAngle = Vector3.Angle(Vector3.up, slopeNormal);
+
+            if (currentSlopeAngle > 0.1f)
+            {
+                isOnSlope = true;
+
+                if (currentSlopeAngle > currentStateData.maxSlopeAngle)
+                {
+                    isOnSteepSlope = true;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Called when player lands on ground.
+    /// </summary>
+    private void OnLanded()
+    {
+        timeSinceLanding = 0f;
+        isJumping = false;
+
+        // Check for hard landing
+        float fallSpeed = Mathf.Abs(landingVelocity);
+        if (currentStateData.landingLagMode != LandingLagMode.Disabled &&
+            fallSpeed >= currentStateData.hardLandingThreshold)
+        {
+            StartLandingLag(fallSpeed);
+        }
+
+        // Reset wall jump lock
+        isInWallJumpLock = false;
+        wallJumpLockTimer = 0f;
+
+        // Reset air control timing
+        airControlDelayTimer = 0f;
+        airControlRampProgress = 1f;
+
+        // Fast fall reset
+        isFastFalling = false;
+    }
+
+    #endregion
+
+    // ==================== WALL DETECTION ====================
+    #region WALL DETECTION
+
+    private void CheckWallStatus()
+    {
+        // Skip wall checks during delay after rotation
+        if (wallCheckDelayTimer > 0f)
+        {
+            isTouchingWall = false;
+            wallDirection = 0;
+            return;
+        }
+
+        Vector3 boxCenter = transform.position;
+
+        // Get check direction based on camera
+        Vector3 checkDirection = GetWallCheckDirection();
+
+        // Get wall check size based on face
+        Vector3 checkSize = GetWallCheckSize();
+
+        // Check Right Side
+        bool rightWall = Physics.CheckBox(
+            boxCenter + checkDirection * 0.5f,
+            checkSize / 2,
+            Quaternion.identity,
+            wallLayer
+        );
+
+        // Check Left Side
+        bool leftWall = Physics.CheckBox(
+            boxCenter - checkDirection * 0.5f,
+            checkSize / 2,
+            Quaternion.identity,
+            wallLayer
+        );
+
+        isTouchingWall = rightWall || leftWall;
+        wallDirection = rightWall ? 1 : (leftWall ? -1 : 0);
+
+        // Raycast for wall ahead
+        Vector3 facingDir = isFacingRight ? checkDirection : -checkDirection;
+        isWallAhead = Physics.Raycast(boxCenter, facingDir, wallRaycastDistance, wallLayer);
+
+        // 4-Direction check (optional)
+        if (use4DirectionalWallCheck)
+        {
+            fullWallCheckTimer -= Time.deltaTime;
+            if (fullWallCheckTimer <= 0f)
+            {
+                CheckAllWallDirections(boxCenter);
+                fullWallCheckTimer = fullWallCheckInterval;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the wall check direction based on current camera face.
+    /// </summary>
+    private Vector3 GetWallCheckDirection()
+    {
+        if (useWorldRotation)
+        {
+            Vector3 worldRight;
+            if (useRotationBridge)
+            {
+                worldRight = FezRotationBridge.Instance.GetCurrentRight();
+            }
+            else if (worldRotationController != null)
+            {
+                worldRight = worldRotationController.GetCurrentRight();
+            }
+            else
+            {
+                return Vector3.right;
+            }
+            
+            if (Mathf.Abs(worldRight.z) > Mathf.Abs(worldRight.x))
+            {
+                return new Vector3(0, 0, 1);
+            }
+        }
+        return Vector3.right;
+    }
+
+    /// <summary>
+    /// Gets the wall check box size, swapping dimensions based on face.
+    /// </summary>
+    private Vector3 GetWallCheckSize()
+    {
+        if (useWorldRotation)
+        {
+            int faceIndex;
+            if (useRotationBridge)
+            {
+                faceIndex = FezRotationBridge.Instance.GetCurrentFaceIndex();
+            }
+            else if (worldRotationController != null)
+            {
+                faceIndex = worldRotationController.GetCurrentFaceIndex();
+            }
+            else
+            {
+                return wallCheckSize;
+            }
+            
+            if (faceIndex % 2 == 0) // North/South - moving on X
+            {
+                return new Vector3(wallCheckSize.x, wallCheckSize.y, wallCheckSize.z);
+            }
+            else // East/West - moving on Z
+            {
+                return new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x);
+            }
+        }
+        return wallCheckSize;
+    }
+
+    /// <summary>
+    /// Checks all 4 cardinal directions for walls (optional mode).
+    /// </summary>
+    private void CheckAllWallDirections(Vector3 center)
+    {
+        // +X
+        wallStates[0] = Physics.CheckBox(
+            center + Vector3.right * 0.5f,
+            new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2,
+            Quaternion.identity,
+            wallLayer
+        );
+
+        // -X
+        wallStates[1] = Physics.CheckBox(
+            center + Vector3.left * 0.5f,
+            new Vector3(0.1f, wallCheckSize.y, wallCheckSize.z) / 2,
+            Quaternion.identity,
+            wallLayer
+        );
+
+        // +Z
+        wallStates[2] = Physics.CheckBox(
+            center + Vector3.forward * 0.5f,
+            new Vector3(wallCheckSize.x, wallCheckSize.y, 0.1f) / 2,
+            Quaternion.identity,
+            wallLayer
+        );
+
+        // -Z
+        wallStates[3] = Physics.CheckBox(
+            center + Vector3.back * 0.5f,
+            new Vector3(wallCheckSize.x, wallCheckSize.y, 0.1f) / 2,
+            Quaternion.identity,
+            wallLayer
+        );
+    }
+
+    #endregion
+
+    // ==================== LANDING LAG (NEW) ====================
+    #region LANDING LAG
+
+    private void StartLandingLag(float fallSpeed)
+    {
+        float duration = currentStateData.landingLagDuration;
+
+        // Reduce if jump is buffered
+        if (currentStateData.reduceLandingLagOnJumpBuffer && jumpBuffered)
+        {
+            duration *= currentStateData.landingLagReductionMultiplier;
+        }
+
+        if (duration > 0f)
+        {
+            isInLandingLag = true;
+            landingLagTimer = duration;
+        }
+    }
+
+    private void UpdateLandingLag()
+    {
+        if (!isInLandingLag) return;
+
+        landingLagTimer -= Time.deltaTime;
+        if (landingLagTimer <= 0f)
+        {
+            isInLandingLag = false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if an action is blocked by landing lag.
+    /// </summary>
+    private bool IsActionBlockedByLandingLag()
+    {
+        if (!isInLandingLag) return false;
+
+        switch (currentStateData.landingLagMode)
+        {
+            case LandingLagMode.FreezeAll:
+                return true;
+            case LandingLagMode.PreventActionsOnly:
+                return true; // Actions (jump/dash) blocked, movement allowed
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if movement is affected by landing lag.
+    /// </summary>
+    private float GetLandingLagMovementMultiplier()
+    {
+        if (!isInLandingLag) return 1f;
+
+        switch (currentStateData.landingLagMode)
+        {
+            case LandingLagMode.FreezeAll:
+                return 0f;
+            case LandingLagMode.ReducedMovement:
+                return currentStateData.landingLagMovementMultiplier;
+            default:
+                return 1f;
+        }
+    }
+
+    #endregion
+
+    // ==================== AIR CONTROL TIMING (NEW) ====================
+    #region AIR CONTROL TIMING
+
+    private void UpdateAirControlTiming()
+    {
+        if (isGrounded)
+        {
+            airControlDelayTimer = currentStateData.airControlDelay;
+            airControlRampProgress = 0f;
+            return;
+        }
+
+        // Delay countdown
+        if (airControlDelayTimer > 0f)
+        {
+            airControlDelayTimer -= Time.deltaTime;
+            return;
+        }
+
+        // Ramp up
+        if (currentStateData.airControlRampUpTime > 0f && airControlRampProgress < 1f)
+        {
+            airControlRampProgress += Time.deltaTime / currentStateData.airControlRampUpTime;
+            airControlRampProgress = Mathf.Clamp01(airControlRampProgress);
+        }
+        else
+        {
+            airControlRampProgress = 1f;
+        }
+    }
+
+    /// <summary>
+    /// Gets the effective air control multiplier including timing.
+    /// </summary>
+    private float GetEffectiveAirControl()
+    {
+        if (!currentStateData.hasAirControl) return 0f;
+
+        float baseControl = currentStateData.airControlMultiplier;
+
+        // Apply delay
+        if (airControlDelayTimer > 0f) return 0f;
+
+        // Apply ramp
+        baseControl *= airControlRampProgress;
+
+        // Apply apex bonus
+        if (currentStateData.hasApexHang && isAtApex)
+        {
+            if (currentStateData.apexControlStacks)
+            {
+                baseControl *= currentStateData.apexAirControlMultiplier;
+            }
+            else
+            {
+                baseControl = Mathf.Max(baseControl, currentStateData.apexAirControlMultiplier * currentStateData.airControlMultiplier);
+            }
+        }
+
+        // Apply wall jump lock
+        if (isInWallJumpLock)
+        {
+            baseControl *= currentStateData.wallJumpControlLockMultiplier;
+        }
+
+        return baseControl;
+    }
+
+    #endregion
+
+    // ==================== WALL CLING (NEW) ====================
+    #region WALL CLING
+
+    private void UpdateWallCling()
+    {
+        if (currentStateData.wallClingMode == WallClingMode.Disabled)
+        {
+            isWallClinging = false;
+            return;
+        }
+
+        // Check if cling duration expired
+        if (isWallClinging && currentStateData.maxWallClingDuration > 0f)
+        {
+            wallClingTimer += Time.deltaTime;
+            if (wallClingTimer >= currentStateData.maxWallClingDuration)
+            {
+                // Force transition to slide
+                isWallClinging = false;
+            }
+        }
+
+        // Check stamina
+        if (isWallClinging && currentStateData.wallClingStaminaCost > 0f)
+        {
+            wallClingStamina -= currentStateData.wallClingStaminaCost * Time.deltaTime;
+            if (wallClingStamina <= 0f)
+            {
+                isWallClinging = false;
+                wallClingStamina = 0f;
+            }
+        }
+
+        // Restore stamina when grounded
+        if (isGrounded)
+        {
+            wallClingStamina = 100f;
+            wallClingTimer = 0f;
+        }
+    }
+
+    private void ApplyWallCling()
+    {
+        if (!isWallClinging) return;
+
+        // Apply cling gravity (can be 0 for perfect stick)
+        if (currentStateData.wallClingGravity > 0f)
+        {
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                Mathf.Max(rb.linearVelocity.y, -currentStateData.wallClingGravity),
+                rb.linearVelocity.z
+            );
+        }
+        else
+        {
+            // Perfect stick - zero vertical velocity
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        }
+    }
+
+    /// <summary>
+    /// Determines if player should enter wall cling state.
+    /// </summary>
+    private bool ShouldWallCling()
+    {
+        if (currentStateData.wallClingMode == WallClingMode.Disabled) return false;
+        if (!isTouchingWall || isGrounded) return false;
+        if (wallClingStamina <= 0f) return false;
+        if (currentStateData.maxWallClingDuration > 0f && wallClingTimer >= currentStateData.maxWallClingDuration) return false;
+
+        switch (currentStateData.wallClingMode)
+        {
+            case WallClingMode.ClingThenSlide:
+                // Auto cling until duration expires
+                return wallClingTimer < currentStateData.maxWallClingDuration;
+
+            case WallClingMode.InputToggle:
+                // Cling when pressing toward wall, slide otherwise
+                bool pushingToWall = (wallDirection > 0 && moveInput.x > 0) || (wallDirection < 0 && moveInput.x < 0);
+                return pushingToWall;
+
+            case WallClingMode.HoldToStick:
+                // Same as InputToggle but explicit
+                bool holding = (wallDirection > 0 && moveInput.x > 0) || (wallDirection < 0 && moveInput.x < 0);
+                return holding;
+
+            default:
+                return false;
+        }
+    }
+
+    #endregion
+
+    // ==================== WALL JUMP CONTROL LOCK (NEW) ====================
+    #region WALL JUMP LOCK
+
+    private void UpdateWallJumpLock()
+    {
+        if (!isInWallJumpLock) return;
+
+        wallJumpLockTimer -= Time.deltaTime;
+        if (wallJumpLockTimer <= 0f)
+        {
+            isInWallJumpLock = false;
+        }
+
+        // Check if lock only applies when returning to same wall
+        if (currentStateData.wallJumpLockOnlyOnReturn)
+        {
+            // If moving away from the wall we jumped from, release lock early
+            bool movingAway = (lastWallJumpDirection > 0 && moveInput.x < 0) ||
+                              (lastWallJumpDirection < 0 && moveInput.x > 0);
+            if (movingAway)
+            {
+                isInWallJumpLock = false;
+            }
+        }
+    }
+
+    private void StartWallJumpLock(int wallDir)
+    {
+        if (!currentStateData.hasWallJumpControlLock) return;
+
+        isInWallJumpLock = true;
+        wallJumpLockTimer = currentStateData.wallJumpControlLockDuration;
+        lastWallJumpDirection = wallDir;
+    }
+
+    #endregion
+
+    // ==================== DASH CHARGES (NEW) ====================
+    #region DASH CHARGES
+
+    private void UpdateDashCharges()
+    {
+        if (currentStateData.dashRechargeMode == DashRechargeMode.ResetOnLand)
+        {
+            // Handled in HandleDashReset
+            return;
+        }
+
+        // Check recharge conditions
+        if (currentStateData.dashRechargeOnlyGrounded && !isGrounded)
+        {
+            dashRechargeDelayTimer = currentStateData.dashRechargeDelay;
+            return;
+        }
+
+        // Recharge delay
+        if (dashRechargeDelayTimer > 0f)
+        {
+            dashRechargeDelayTimer -= Time.deltaTime;
+            return;
+        }
+
+        // Recharge timer
+        if (currentDashCharges < currentStateData.maxDashCharges && currentStateData.dashRechargeTime > 0f)
+        {
+            dashRechargeTimer += Time.deltaTime;
+
+            if (dashRechargeTimer >= currentStateData.dashRechargeTime)
+            {
+                dashRechargeTimer = 0f;
+
+                if (currentStateData.dashRechargeMode == DashRechargeMode.AllAtOnce)
+                {
+                    currentDashCharges = currentStateData.maxDashCharges;
+                }
+                else // OneAtATime
+                {
+                    currentDashCharges++;
+                }
+            }
+        }
+    }
+
+    private void HandleDashReset()
+    {
+        if (!isGrounded) return;
+
+        if (currentStateData.dashRechargeMode == DashRechargeMode.ResetOnLand)
+        {
+            currentDashCharges = currentStateData.maxDashCharges;
+            dashRechargeTimer = 0f;
+        }
+
+        // Reset cooldown-based dash
+        if (currentStateData.dashCooldown <= 0 && dashCooldownTimer <= 0)
+        {
+            canDash = true;
+        }
+    }
+
+    #endregion
     // ==================== JUMP SYSTEM ====================
     #region JUMP
 
-    /// <summary>
-    /// Updates all timing systems for jump mechanics.
-    /// Called every frame in Update().
-    /// Respects state toggles for coyote time and jump buffer.
-    /// </summary>
     private void UpdateTimers()
     {
-        // Coyote Time: Grace period after leaving ground (if enabled)
+        // Coyote Time
         if (currentStateData.hasCoyoteTime)
         {
             if (isGrounded)
@@ -608,11 +1282,10 @@ public class _FezPlayerController : MonoBehaviour
         }
         else
         {
-            // If coyote time disabled, only allow jump while grounded
             coyoteTimeTimer = isGrounded ? 0.1f : 0f;
         }
 
-        // Jump Buffer: Remember jump input before landing (if enabled)
+        // Jump Buffer
         if (currentStateData.hasJumpBuffer)
         {
             if (jumpBufferTimer > 0)
@@ -626,11 +1299,10 @@ public class _FezPlayerController : MonoBehaviour
         }
         else
         {
-            // If jump buffer disabled, clear buffer immediately
             jumpBuffered = false;
         }
 
-        // Jump Hold Timer: Track hold duration for variable height (if enabled)
+        // Jump Hold Timer
         if (currentStateData.hasVariableJump && isHoldingJump)
         {
             jumpHoldTimer += Time.deltaTime;
@@ -640,11 +1312,14 @@ public class _FezPlayerController : MonoBehaviour
                 isHoldingJump = false;
             }
         }
+
+        // Track landing velocity for landing lag
+        if (!isGrounded)
+        {
+            landingVelocity = rb.linearVelocity.y;
+        }
     }
 
-    /// <summary>
-    /// Updates cooldown timers for dash and state switching.
-    /// </summary>
     private void UpdateCooldowns()
     {
         // Dash cooldown
@@ -668,28 +1343,24 @@ public class _FezPlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Evaluates conditions for ground jump, air jump, and wall jump.
-    /// Respects all state toggles and cooldowns.
-    /// </summary>
     private void TryJump()
     {
-        // Early exit if jumping is disabled for this state
-        if (!currentStateData.canJump)
+        if (!currentStateData.canJump) return;
+        if (IsActionBlockedByLandingLag()) return;
+
+        // Check steep slope jump
+        if (isOnSteepSlope && !currentStateData.canJumpOnSteepSlope)
         {
             return;
         }
 
-        // Can ground jump if: within coyote time AND not already jumping AND not dashing
         bool canGroundJump = coyoteTimeTimer > 0 && !isJumping && !isDashing;
-
-        // Can air jump if: double jump enabled AND jumps remaining AND not dashing
         bool canAirJump = currentStateData.hasDoubleJump && airJumpsRemaining > 0 && !isGrounded && !isDashing;
 
         if (jumpBuffered)
         {
-            // Priority 1: Wall jump (if available and enabled)
-            if (currentStateData.hasWallJump && canWallJump && !isGrounded)
+            // Priority 1: Wall jump (from cling or slide)
+            if (currentStateData.hasWallJump && (canWallJump || (isWallClinging && currentStateData.canJumpFromWallCling)) && !isGrounded)
             {
                 WallJump();
             }
@@ -698,7 +1369,7 @@ public class _FezPlayerController : MonoBehaviour
             {
                 Jump();
             }
-            // Priority 3: Air jump (double jump)
+            // Priority 3: Air jump
             else if (canAirJump)
             {
                 AirJump();
@@ -706,26 +1377,19 @@ public class _FezPlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Executes a standard ground jump.
-    /// Resets vertical velocity to ensure consistent jump height.
-    /// Checks for bunny hop and applies bonus if within timing window.
-    /// </summary>
     private void Jump()
     {
-        // Check bunny hop timing
+        // Bunny hop check
         bool isBunnyHop = currentStateData.hasBunnyHop && canBunnyHop && bunnyHopBonus > 0;
 
         if (isBunnyHop)
         {
-            // Successful bunny hop - increase bonus
             bunnyHopBonus = Mathf.Min(bunnyHopBonus + currentStateData.bunnyHopSpeedBonus,
                                       currentStateData.bunnyHopMaxSpeed - 1f);
             lastJumpWasBunnyHop = true;
         }
         else if (currentStateData.hasBunnyHop && timeSinceLanding <= currentStateData.bunnyHopTimingWindow)
         {
-            // First bunny hop - start the bonus
             bunnyHopBonus = currentStateData.bunnyHopSpeedBonus;
             lastJumpWasBunnyHop = true;
         }
@@ -734,16 +1398,37 @@ public class _FezPlayerController : MonoBehaviour
             lastJumpWasBunnyHop = false;
         }
 
-        // Reset vertical velocity completely for consistent jumps
+        // Reset vertical velocity
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
-        // Apply upward impulse force
-        rb.AddForce(Vector3.up * currentStateData.jumpForce, ForceMode.Impulse);
+        // Calculate jump force
+        float force = currentStateData.jumpForce;
 
-        // Guarantee minimum upward velocity
+        // Moving jump bonus
+        if (currentStateData.movingJumpBonus > 1f)
+        {
+            float horizontalSpeed = new Vector2(rb.linearVelocity.x, rb.linearVelocity.z).magnitude;
+            if (horizontalSpeed >= currentStateData.movingJumpSpeedThreshold)
+            {
+                force *= currentStateData.movingJumpBonus;
+            }
+        }
+
+        // Apply jump
+        rb.AddForce(Vector3.up * force, ForceMode.Impulse);
+
+        // Jump momentum boost
+        if (currentStateData.jumpMomentumBoost && Mathf.Abs(moveInput.x) > 0.1f)
+        {
+            Vector3 movementRight = GetMovementRight();
+            Vector3 horizontalBoost = movementRight * moveInput.x * currentStateData.jumpMomentumMultiplier;
+            rb.AddForce(horizontalBoost, ForceMode.Impulse);
+        }
+
+        // Guarantee minimum velocity
         StartCoroutine(GuaranteeJumpVelocity());
 
-        // Reset jump-related states
+        // Reset states
         isJumping = true;
         isHoldingJump = currentStateData.hasVariableJump;
         jumpHoldTimer = 0f;
@@ -751,49 +1436,41 @@ public class _FezPlayerController : MonoBehaviour
         coyoteTimeTimer = 0f;
         canBunnyHop = false;
 
-        // Reset air jumps (only if state allows double jump)
+        // Reset air jumps
         if (currentStateData.hasDoubleJump)
         {
             airJumpsRemaining = currentStateData.maxAirJumps;
         }
         else
         {
-            airJumpsRemaining = 0; // No air jumps if double jump disabled
+            airJumpsRemaining = 0;
         }
+
+        // Reset fast fall
+        isFastFalling = false;
     }
 
-    /// <summary>
-    /// Executes an air jump (double jump).
-    /// Uses airJumpForceMultiplier for potentially different jump height.
-    /// </summary>
     private void AirJump()
     {
-        // Reset vertical velocity
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
-        // Apply upward impulse force with multiplier
         float airJumpForce = currentStateData.jumpForce * currentStateData.airJumpForceMultiplier;
         rb.AddForce(Vector3.up * airJumpForce, ForceMode.Impulse);
 
-        // Consume one air jump
         airJumpsRemaining--;
 
-        // Reset states
         isHoldingJump = currentStateData.hasVariableJump;
         jumpHoldTimer = 0f;
         jumpBuffered = false;
+
+        // Reset fast fall
+        isFastFalling = false;
     }
 
-    /// <summary>
-    /// Ensures jump maintains minimum velocity for one frame.
-    /// Prevents external forces (slopes, moving platforms) from reducing jump height.
-    /// </summary>
     private IEnumerator GuaranteeJumpVelocity()
     {
-        // Wait for physics to apply forces
         yield return new WaitForFixedUpdate();
 
-        // If upward velocity is less than expected, boost it
         float expectedMinVelocity = currentStateData.jumpForce * 0.9f;
         if (rb.linearVelocity.y < expectedMinVelocity)
         {
@@ -805,27 +1482,37 @@ public class _FezPlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Executes a wall jump, pushing the player away from the wall.
-    /// Uses wallJumpForce and wallJumpHorizontalMultiplier from state data.
-    /// </summary>
     private void WallJump()
     {
-        // Determine jump force (use wallJumpForce if set, otherwise use regular jumpForce)
         float verticalForce = currentStateData.wallJumpForce > 0
             ? currentStateData.wallJumpForce
             : currentStateData.jumpForce;
 
-        // Reset all velocity for consistent wall jump
+        // Get push direction based on mode
+        Vector3 pushDirection;
+        if (currentStateData.wallJumpPushMode == WallJumpPushMode.CameraRelative)
+        {
+            Vector3 cameraRight = GetMovementRight();
+            pushDirection = -wallDirection * cameraRight;
+        }
+        else // WallNormal
+        {
+            pushDirection = new Vector3(-wallDirection, 0, 0);
+        }
+
+        // Reset velocity
         rb.linearVelocity = new Vector3(0, 0, rb.linearVelocity.z);
 
-        // Apply force: upward + away from wall
-        Vector3 wallJumpForce = new Vector3(
-            -wallDirection * verticalForce * currentStateData.wallJumpHorizontalMultiplier,
+        // Apply wall jump
+        Vector3 wallJumpVelocity = new Vector3(
+            pushDirection.x * verticalForce * currentStateData.wallJumpHorizontalMultiplier,
             verticalForce,
-            0
+            pushDirection.z * verticalForce * currentStateData.wallJumpHorizontalMultiplier
         );
-        rb.AddForce(wallJumpForce, ForceMode.Impulse);
+        rb.AddForce(wallJumpVelocity, ForceMode.Impulse);
+
+        // Start wall jump lock
+        StartWallJumpLock(wallDirection);
 
         // Reset states
         isJumping = true;
@@ -834,9 +1521,17 @@ public class _FezPlayerController : MonoBehaviour
         jumpBuffered = false;
         canWallJump = false;
         isWallSliding = false;
+        isWallClinging = false;
+        wallClingTimer = 0f;
 
-        // Reset air jumps
-        airJumpsRemaining = currentStateData.maxAirJumps;
+        // Reset air jumps if enabled
+        if (currentStateData.resetAirJumpsOnWallJump)
+        {
+            airJumpsRemaining = currentStateData.maxAirJumps;
+        }
+
+        // Reset fast fall
+        isFastFalling = false;
     }
 
     #endregion
@@ -844,51 +1539,26 @@ public class _FezPlayerController : MonoBehaviour
     // ==================== BUNNY HOP SYSTEM ====================
     #region BUNNY HOP
 
-    /// <summary>
-    /// Tracks timing window for bunny hop after landing.
-    /// Updates timeSinceLanding and canBunnyHop flag.
-    /// </summary>
     private void UpdateBunnyHopTracking()
     {
-        if (!currentStateData.hasBunnyHop)
-        {
-            return;
-        }
+        if (!currentStateData.hasBunnyHop) return;
 
         if (isGrounded)
         {
             timeSinceLanding += Time.deltaTime;
-
-            // Check if within timing window
-            if (timeSinceLanding <= currentStateData.bunnyHopTimingWindow)
-            {
-                canBunnyHop = true;
-            }
-            else
-            {
-                canBunnyHop = false;
-            }
+            canBunnyHop = timeSinceLanding <= currentStateData.bunnyHopTimingWindow;
         }
         else
         {
-            // Reset timer when airborne
             timeSinceLanding = 0f;
             canBunnyHop = false;
         }
     }
 
-    /// <summary>
-    /// Gradually decays bunny hop bonus when not chaining hops.
-    /// Called in FixedUpdate for consistent decay rate.
-    /// </summary>
     private void DecayBunnyHopBonus()
     {
-        if (!currentStateData.hasBunnyHop || bunnyHopBonus <= 0)
-        {
-            return;
-        }
+        if (!currentStateData.hasBunnyHop || bunnyHopBonus <= 0) return;
 
-        // Decay bonus over time
         bunnyHopBonus -= currentStateData.bunnyHopDecayRate * Time.fixedDeltaTime;
         bunnyHopBonus = Mathf.Max(bunnyHopBonus, 0f);
     }
@@ -898,116 +1568,129 @@ public class _FezPlayerController : MonoBehaviour
     // ==================== APPLY METHODS ====================
     #region APPLY THINGS
 
-    /// <summary>
-    /// Switches to a new state by loading its ScriptableObject data.
-    /// Updates Rigidbody mass and provides visual feedback via sprite color.
-    /// 
-    /// FIXED: Only resets air jumps when grounded to prevent infinite flight exploit.
-    /// FIXED: Preserves dash cooldown across state switches.
-    /// </summary>
     private void ApplyStateData(_PlayerStateData data)
     {
         currentStateData = data;
         rb.mass = data.weight;
-
-        // Visual feedback using state color
         spriteRenderer.color = data.stateColor;
 
-        // FIXED: Only reset air jumps when grounded
-        // This prevents exploit: jump -> switch state -> get new air jumps -> fly infinitely
         if (isGrounded)
         {
             airJumpsRemaining = data.maxAirJumps;
         }
         else
         {
-            // When switching states mid-air, recalculate remaining jumps
-            // Use the LOWER value between current remaining and new state's max
             airJumpsRemaining = Mathf.Min(airJumpsRemaining, data.maxAirJumps);
         }
 
-        // Start state switch cooldown
         stateSwitchCooldownTimer = data.stateSwitchCooldown;
         canSwitchState = false;
 
-        // FIXED: Preserve dash availability across state switches
-        // Don't reset canDash here - let cooldown system handle it
+        // Reset dash charges
+        currentDashCharges = data.maxDashCharges;
     }
 
-    /// <summary>
-    /// Handles horizontal movement with acceleration/deceleration.
-    /// Features:
-    /// - Respects canMoveOnGround toggle
-    /// - Air control with multiplier (if enabled)
-    /// - Bunny hop speed bonus
-    /// - Starting speed boost for responsiveness
-    /// - Ground friction when not moving
-    /// - Prevents pushing into wall during wall slide
-    /// - Automatic sprite flipping
-    /// - Optional rotation-relative movement for Fez-style gameplay
-    /// </summary>
     private void ApplyMovement()
     {
-        // Check if ground movement is enabled
         bool canMove = isGrounded ? currentStateData.canMoveOnGround : currentStateData.hasAirControl;
-        if (!canMove)
-        {
-            return;
-        }
+        if (!canMove) return;
 
-        // Get movement direction (world or camera-relative)
+        // Apply landing lag modifier
+        float lagMultiplier = GetLandingLagMovementMultiplier();
+        if (lagMultiplier <= 0f) return;
+
         Vector3 movementRight = GetMovementRight();
-
-        // Calculate target velocity from input
         Vector3 targetVelocity = movementRight * moveInput.x * currentStateData.moveSpeed;
 
-        // Apply bunny hop bonus if active
+        // Bunny hop bonus
         if (currentStateData.hasBunnyHop && bunnyHopBonus > 0)
         {
             targetVelocity *= (1f + bunnyHopBonus);
         }
 
-        // Apply air control multiplier if in air
-        if (!isGrounded && currentStateData.hasAirControl)
+        // Air control
+        if (!isGrounded)
         {
-            targetVelocity *= currentStateData.airControlMultiplier;
+            float airControl = GetEffectiveAirControl();
+            targetVelocity *= airControl;
+
+            // Air instant turn check
+            if (!currentStateData.airInstantTurn)
+            {
+                Vector3 currentHorizontal = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                float dot = Vector3.Dot(currentHorizontal.normalized, targetVelocity.normalized);
+                if (dot < 0) // Trying to turn around
+                {
+                    targetVelocity *= 0.5f; // Reduced turning
+                }
+            }
         }
 
-        // If wall sliding, prevent movement toward the wall
-        if (isWallSliding)
+        // Steep slope handling
+        if (isOnSteepSlope)
+        {
+            switch (currentStateData.steepSlopeBehavior)
+            {
+                case SteepSlopeBehavior.ForcedSlide:
+                    targetVelocity = Vector3.zero;
+                    break;
+                case SteepSlopeBehavior.SlideReducedControl:
+                    targetVelocity *= currentStateData.steepSlopeControlMultiplier;
+                    break;
+                // SlideWithControl - no modification
+            }
+        }
+
+        // Wall slide movement prevention
+        if (isWallSliding || isWallClinging)
         {
             bool tryingToMoveIntoWall = (wallDirection > 0 && moveInput.x > 0)
                                      || (wallDirection < 0 && moveInput.x < 0);
-
             if (tryingToMoveIntoWall)
             {
                 targetVelocity = Vector3.zero;
             }
         }
 
-        // Calculate current horizontal velocity
+        // Landing lag multiplier
+        targetVelocity *= lagMultiplier;
+
+        // Calculate velocity difference
         Vector3 currentHorizontalVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         Vector3 targetHorizontalVel = new Vector3(targetVelocity.x, 0, targetVelocity.z);
-
         Vector3 velocityDifference = targetHorizontalVel - currentHorizontalVel;
 
-        // Choose between acceleration (moving) or deceleration (stopping)
-        float accelRate = (targetHorizontalVel.magnitude > 0.01f)
-            ? currentStateData.acceleration
-            : currentStateData.deceleration;
+        // Acceleration/Deceleration
+        float accelRate;
+        if (targetHorizontalVel.magnitude > currentStateData.minimumMoveSpeed)
+        {
+            // Check for turn deceleration
+            if (currentStateData.decelerateOnTurn && Vector3.Dot(currentHorizontalVel.normalized, targetHorizontalVel.normalized) < 0)
+            {
+                accelRate = currentStateData.deceleration * currentStateData.turnDecelerationMultiplier;
+            }
+            else
+            {
+                accelRate = currentStateData.acceleration;
+            }
+        }
+        else
+        {
+            accelRate = isGrounded ? currentStateData.deceleration : currentStateData.airDeceleration;
+        }
 
-        // Apply starting boost when beginning movement from standstill (ground only)
-        if (isGrounded && currentHorizontalVel.magnitude < 0.01f && targetHorizontalVel.magnitude > 0.01f)
+        // Starting boost
+        if (isGrounded && currentHorizontalVel.magnitude < currentStateData.minimumMoveSpeed && targetHorizontalVel.magnitude > currentStateData.minimumMoveSpeed)
         {
             velocityDifference *= currentStateData.startingSpeedBoost;
         }
 
-        // Calculate and apply force
+        // Apply force
         Vector3 movement = velocityDifference * accelRate;
         rb.AddForce(movement, ForceMode.Force);
 
-        // Apply ground friction when grounded and not inputting movement
-        if (isGrounded && Mathf.Abs(moveInput.x) < 0.01f)
+        // Ground friction
+        if (isGrounded && Mathf.Abs(moveInput.x) < 0.01f && !isOnSteepSlope)
         {
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x * (1 - currentStateData.groundFriction * Time.fixedDeltaTime),
@@ -1016,51 +1699,57 @@ public class _FezPlayerController : MonoBehaviour
             );
         }
 
-        // Handle sprite flipping based on movement direction
-        if (moveInput.x > 0 && !isFacingRight)
+        // Sprite flipping
+        if (moveInput.x > 0.1f && !isFacingRight)
         {
             StartFlip(true);
         }
-        else if (moveInput.x < 0 && isFacingRight)
+        else if (moveInput.x < -0.1f && isFacingRight)
         {
             StartFlip(false);
         }
     }
 
-    /// <summary>
-    /// Applies custom gravity with multipliers for variable jump height.
-    /// Respects hasVariableJump toggle - if disabled, always uses base gravity.
-    /// Skips gravity when wall sliding to prevent overpowering wall friction.
-    /// </summary>
     private void ApplyGravity()
     {
-        // Don't apply gravity when wall sliding
-        if (isWallSliding)
-        {
-            return;
-        }
+        // Skip during wall slide/cling
+        if (isWallSliding || isWallClinging) return;
 
         float gravityMultiplier = 1f;
 
-        // Only apply variable gravity if enabled for this state
-        if (currentStateData.hasVariableJump)
+        // Check apex hang
+        isAtApex = false;
+        if (currentStateData.hasApexHang && !isGrounded)
         {
-            // Reduce gravity while holding jump and moving upward
+            float absYVel = Mathf.Abs(rb.linearVelocity.y);
+            if (absYVel < currentStateData.apexVelocityThreshold && rb.linearVelocity.y > -1f)
+            {
+                isAtApex = true;
+                gravityMultiplier = currentStateData.apexGravityMultiplier;
+            }
+        }
+
+        // Variable jump gravity
+        if (!isAtApex && currentStateData.hasVariableJump)
+        {
             if (isHoldingJump && rb.linearVelocity.y > 0)
             {
                 gravityMultiplier = currentStateData.jumpHoldGravityMultiplier;
             }
-            // Increase gravity when falling or when jump released early
             else if (rb.linearVelocity.y < 0 || (!isHoldingJump && rb.linearVelocity.y > 0))
             {
                 gravityMultiplier = currentStateData.jumpReleaseGravityMultiplier;
             }
         }
 
-        // Apply gravity force with multiplier
+        // Fast fall
+        if (isFastFalling && currentStateData.hasFastFall)
+        {
+            gravityMultiplier *= currentStateData.fastFallMultiplier;
+        }
+
         rb.AddForce(Vector3.down * currentStateData.gravity * gravityMultiplier * rb.mass, ForceMode.Force);
 
-        // Reset jumping flag when grounded
         if (isGrounded)
         {
             isJumping = false;
@@ -1068,13 +1757,37 @@ public class _FezPlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Applies wall slide mechanics when conditions are met.
-    /// Only active if hasWallSlide is TRUE in current state.
-    /// Respects wallSlideRequiresInput toggle.
+    /// Applies slope physics when on steep slopes.
     /// </summary>
+    private void ApplySlopePhysics()
+    {
+        if (!isOnSteepSlope) return;
+
+        // Calculate slide direction (down the slope)
+        Vector3 slideDirection = Vector3.Cross(Vector3.Cross(Vector3.up, slopeNormal), slopeNormal).normalized;
+
+        // Apply slide force
+        float slideForce = currentStateData.steepSlopeSlideSpeed * rb.mass;
+        rb.AddForce(slideDirection * slideForce, ForceMode.Force);
+    }
+
+    /// <summary>
+    /// Clamps fall speed to max.
+    /// </summary>
+    private void ClampFallSpeed()
+    {
+        if (rb.linearVelocity.y < -currentStateData.maxFallSpeed)
+        {
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                -currentStateData.maxFallSpeed,
+                rb.linearVelocity.z
+            );
+        }
+    }
+
     private void ApplyWallSlide()
     {
-        // Early exit if wall slide is disabled for this state
         if (!currentStateData.hasWallSlide)
         {
             isWallSliding = false;
@@ -1082,39 +1795,64 @@ public class _FezPlayerController : MonoBehaviour
             return;
         }
 
-        // Use inspector override if enabled, otherwise use SO value
+        // Check for wall cling first
+        if (ShouldWallCling())
+        {
+            isWallClinging = true;
+            isWallSliding = false;
+            canWallJump = currentStateData.canJumpFromWallCling;
+            return;
+        }
+        else
+        {
+            isWallClinging = false;
+        }
+
         bool requiresInput = overrideWallStickRequiresInput
             ? wallStickRequiresInput
             : currentStateData.wallSlideRequiresInput;
 
-        // Base conditions: touching wall, airborne, falling
-        bool shouldWallSlide = isTouchingWall && !isGrounded && rb.linearVelocity.y < 0;
+        // Base conditions
+        bool canSlide = isTouchingWall && !isGrounded;
 
-        // Check input requirement
-        if (requiresInput)
+        // Check rising vs falling
+        if (!currentStateData.canWallSlideWhileRising && rb.linearVelocity.y > 0)
         {
-            bool pushingTowardWall = (wallDirection > 0 && moveInput.x > 0)
-                                  || (wallDirection < 0 && moveInput.x < 0);
-            shouldWallSlide = shouldWallSlide && pushingTowardWall;
+            canSlide = false;
         }
-        else
-        {
-            // If no input required, allow pushing away to drop off
-            bool pushingAwayFromWall = (wallDirection > 0 && moveInput.x < -0.1f)
-                                    || (wallDirection < 0 && moveInput.x > 0.1f);
 
-            if (pushingAwayFromWall)
+        // Check wall slide delay
+        if (canSlide && currentStateData.wallSlideDelay > 0f)
+        {
+            if (wallSlideDelayTimer < currentStateData.wallSlideDelay)
             {
-                shouldWallSlide = false;
+                wallSlideDelayTimer += Time.deltaTime;
+                canSlide = false;
             }
         }
 
-        if (shouldWallSlide)
+        // Input requirement
+        if (requiresInput && canSlide)
+        {
+            bool pushingTowardWall = (wallDirection > 0 && moveInput.x > 0)
+                                  || (wallDirection < 0 && moveInput.x < 0);
+            canSlide = canSlide && pushingTowardWall;
+        }
+        else if (!requiresInput && canSlide)
+        {
+            bool pushingAwayFromWall = (wallDirection > 0 && moveInput.x < -0.1f)
+                                    || (wallDirection < 0 && moveInput.x > 0.1f);
+            if (pushingAwayFromWall)
+            {
+                canSlide = false;
+            }
+        }
+
+        if (canSlide && rb.linearVelocity.y < 0)
         {
             isWallSliding = true;
-            canWallJump = currentStateData.hasWallJump; // Only enable wall jump if state allows it
+            canWallJump = currentStateData.hasWallJump;
 
-            // Apply wall slide friction (clamp fall speed)
             float slideSpeed = currentStateData.wallSlideFriction;
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
@@ -1126,27 +1864,66 @@ public class _FezPlayerController : MonoBehaviour
         {
             isWallSliding = false;
 
-            // Reset wall jump availability when landing
             if (isGrounded)
             {
                 canWallJump = false;
+                wallSlideDelayTimer = 0f;
             }
+        }
+
+        // Reset delay timer when not touching wall
+        if (!isTouchingWall)
+        {
+            wallSlideDelayTimer = 0f;
         }
     }
 
     #endregion
 
+    // ==================== SPRITE FLIPPING ====================
+    #region SPRITE FLIP
+
+    private void StartFlip(bool flipToRight)
+    {
+        if (isFlipping) return;
+        StartCoroutine(FlipCoroutine(flipToRight));
+    }
+
+    private IEnumerator FlipCoroutine(bool flipToRight)
+    {
+        isFlipping = true;
+
+        if (visualTransform == null)
+        {
+            isFlipping = false;
+            yield break;
+        }
+
+        float startAngle = facingAngle;
+        float targetAngle = flipToRight ? 0f : 180f;
+
+        float elapsed = 0f;
+        float flipDuration = 0.15f;
+
+        while (elapsed < flipDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / flipDuration;
+            facingAngle = Mathf.Lerp(startAngle, targetAngle, t);
+            yield return null;
+        }
+
+        facingAngle = targetAngle;
+        isFacingRight = flipToRight;
+        isFlipping = false;
+    }
+
+    #endregion
     // ==================== INPUT HANDLERS ====================
     #region INPUT
 
-    /// <summary>
-    /// Called by Unity's Input System when movement input changes.
-    /// Receives Vector2 from keyboard/controller.
-    /// Respects canMove master toggle and world rotation freeze.
-    /// </summary>
     public void OnMove(InputAction.CallbackContext ctx)
     {
-        // Block input during rotation freeze
         if (isFrozenForRotation)
         {
             moveInput = Vector2.zero;
@@ -1160,49 +1937,47 @@ public class _FezPlayerController : MonoBehaviour
         }
 
         moveInput = ctx.ReadValue<Vector2>();
+
+        // Fast fall input detection
+        if (currentStateData.hasFastFall && !isGrounded)
+        {
+            if (currentStateData.fastFallRequiresPress)
+            {
+                if (ctx.performed && moveInput.y < -0.5f && !fastFallPressed)
+                {
+                    fastFallPressed = true;
+                    isFastFalling = true;
+                }
+            }
+            else
+            {
+                isFastFalling = moveInput.y < -0.5f;
+            }
+        }
+
+        // Reset fast fall press tracking when grounded
+        if (isGrounded)
+        {
+            fastFallPressed = false;
+        }
     }
 
-    /// <summary>
-    /// Called when state switch input is pressed.
-    /// Toggles between Fire and Ice states.
-    /// Respects canSwitchFromThisState toggle and cooldown system.
-    /// 
-    /// FIXED: Prevents state switching abuse for infinite flight.
-    /// FIXED: Blocks state switching during world rotation.
-    /// </summary>
     public void OnSwitchState(InputAction.CallbackContext ctx)
     {
-        if (!ctx.performed)
-        {
-            return;
-        }
+        if (!ctx.performed) return;
 
-        // Block during world rotation
-        if (isFrozenForRotation || IsWorldRotating())
-        {
-            return;
-        }
+        if (isFrozenForRotation || IsWorldRotating()) return;
 
-        // Check if switching is allowed from current state
-        if (!currentStateData.canSwitchFromThisState)
-        {
-            return;
-        }
+        if (!currentStateData.canSwitchFromThisState) return;
 
-        // Check cooldown
-        if (!canSwitchState)
-        {
-            return;
-        }
+        if (!canSwitchState) return;
 
-        // FIXED: Track if we're mid-dash to prevent dash spam via state switch
         if (isDashing)
         {
             Debug.Log("Cannot switch states while dashing!");
             return;
         }
 
-        // Perform state switch
         if (currentState == States.Fire)
         {
             currentState = States.Ice;
@@ -1215,49 +1990,30 @@ public class _FezPlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called by Unity's Input System for jump input.
-    /// 
-    /// On press (performed): Buffer the jump input if jump buffering is enabled
-    /// On release (canceled): Stop variable height control
-    /// 
-    /// FIXED: Jump buffer now activates ANYTIME, not just when close to ground.
-    /// </summary>
     public void OnJump(InputAction.CallbackContext ctx)
     {
-        // Block during rotation freeze
-        if (isFrozenForRotation)
-        {
-            return;
-        }
+        if (isFrozenForRotation) return;
 
-        // Early exit if jumping disabled
-        if (!currentStateData.canJump)
-        {
-            return;
-        }
+        if (!currentStateData.canJump) return;
 
         // JUMP PRESSED
         if (ctx.performed)
         {
-            // If jump buffering is ENABLED, always buffer the input
             if (currentStateData.hasJumpBuffer)
             {
                 jumpBuffered = true;
                 jumpBufferTimer = currentStateData.jumpBufferTime;
             }
-            // If jump buffering is DISABLED, only allow immediate execution
             else
             {
-                // Check if we can jump RIGHT NOW (no buffering)
                 bool canJumpImmediately = isGrounded
-                                       || (currentStateData.hasWallJump && canWallJump)
+                                       || (currentStateData.hasWallJump && (canWallJump || (isWallClinging && currentStateData.canJumpFromWallCling)))
                                        || (currentStateData.hasDoubleJump && airJumpsRemaining > 0);
 
                 if (canJumpImmediately)
                 {
                     jumpBuffered = true;
-                    jumpBufferTimer = 0.01f; // Tiny buffer for TryJump to catch it
+                    jumpBufferTimer = 0.01f;
                 }
             }
         }
@@ -1265,7 +2021,6 @@ public class _FezPlayerController : MonoBehaviour
         // JUMP RELEASED
         if (ctx.canceled)
         {
-            // Only stop holding if variable jump is enabled
             if (currentStateData.hasVariableJump)
             {
                 isHoldingJump = false;
@@ -1273,79 +2028,121 @@ public class _FezPlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called when dash input is pressed.
-    /// Only works if hasDash is TRUE in current state.
-    /// Respects hasAirDash toggle and cooldown system.
-    /// </summary>
     public void OnDash(InputAction.CallbackContext ctx)
     {
-        if (!ctx.performed)
-        {
-            return;
-        }
+        if (!ctx.performed) return;
 
-        // Block during rotation freeze
-        if (isFrozenForRotation)
-        {
-            return;
-        }
+        if (isFrozenForRotation) return;
 
-        // Check if dash is enabled for this state
-        if (!currentStateData.hasDash)
-        {
-            return;
-        }
+        if (!currentStateData.hasDash) return;
 
-        // Check air dash permission
-        if (!isGrounded && !currentStateData.hasAirDash)
-        {
-            return;
-        }
+        if (!isGrounded && !currentStateData.hasAirDash) return;
 
-        // FIXED: Prevent dash spam via rapid state switching
-        if (dashCooldownTimer > 0)
-        {
-            return;
-        }
+        if (IsActionBlockedByLandingLag()) return;
 
-        // Check if dash is available (cooldown)
-        if (!canDash || isDashing)
-        {
-            return;
-        }
+        // Check charges
+        if (currentDashCharges <= 0) return;
 
-        // Determine dash direction from movement input
-        Vector3 dashDir = Vector3.zero;
+        if (dashCooldownTimer > 0) return;
 
-        if (moveInput.magnitude > 0.1f)
-        {
-            // Use rotation-relative direction if enabled
-            if (useWorldRotation && useRotationRelativeMovement && worldRotationController != null)
-            {
-                Vector3 right = worldRotationController.GetCurrentRight();
-                dashDir = (right * moveInput.x + Vector3.up * moveInput.y).normalized;
-            }
-            else
-            {
-                dashDir = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-            }
-        }
-        else
-        {
-            // Use rotation-relative facing direction if enabled
-            if (useWorldRotation && useRotationRelativeMovement && worldRotationController != null)
-            {
-                Vector3 right = worldRotationController.GetCurrentRight();
-                dashDir = isFacingRight ? right : -right;
-            }
-            else
-            {
-                dashDir = isFacingRight ? Vector3.right : Vector3.left;
-            }
-        }
+        if (isDashing) return;
+
+        // Determine dash direction based on mode
+        Vector3 dashDir = CalculateDashDirection();
 
         StartCoroutine(PerformDash(dashDir));
+    }
+
+    /// <summary>
+    /// Calculates dash direction based on current dash direction mode.
+    /// </summary>
+    private Vector3 CalculateDashDirection()
+    {
+        Vector3 dashDir = Vector3.zero;
+        Vector3 movementRight = GetMovementRight();
+
+        switch (currentStateData.dashDirectionMode)
+        {
+            case DashDirectionMode.FacingDirection:
+                dashDir = isFacingRight ? movementRight : -movementRight;
+                break;
+
+            case DashDirectionMode.InputDirection:
+                if (Mathf.Abs(moveInput.x) > 0.1f)
+                {
+                    dashDir = movementRight * Mathf.Sign(moveInput.x);
+                }
+                else
+                {
+                    dashDir = isFacingRight ? movementRight : -movementRight;
+                }
+                break;
+
+            case DashDirectionMode.InputWithVertical:
+                if (moveInput.magnitude > 0.1f)
+                {
+                    dashDir = movementRight * moveInput.x;
+                    if (currentStateData.dashCanBeVertical)
+                    {
+                        dashDir += Vector3.up * moveInput.y;
+                    }
+                    dashDir = dashDir.normalized;
+                }
+                else
+                {
+                    dashDir = isFacingRight ? movementRight : -movementRight;
+                }
+                break;
+
+            case DashDirectionMode.EightDirectional:
+                if (moveInput.magnitude > 0.1f)
+                {
+                    dashDir = movementRight * moveInput.x;
+                    if (currentStateData.dashCanBeVertical)
+                    {
+                        dashDir += Vector3.up * moveInput.y;
+                    }
+
+                    // Snap to 8 directions if cardinal only
+                    if (currentStateData.dashCardinalOnly)
+                    {
+                        // Find dominant direction
+                        if (Mathf.Abs(dashDir.x) > Mathf.Abs(dashDir.y) + Mathf.Abs(dashDir.z))
+                        {
+                            dashDir = new Vector3(Mathf.Sign(dashDir.x), 0, 0);
+                        }
+                        else if (Mathf.Abs(dashDir.y) > Mathf.Abs(dashDir.x) + Mathf.Abs(dashDir.z))
+                        {
+                            dashDir = new Vector3(0, Mathf.Sign(dashDir.y), 0);
+                        }
+                        else if (Mathf.Abs(dashDir.z) > Mathf.Abs(dashDir.x) + Mathf.Abs(dashDir.y))
+                        {
+                            dashDir = new Vector3(0, 0, Mathf.Sign(dashDir.z));
+                        }
+                        else
+                        {
+                            dashDir = dashDir.normalized;
+                        }
+                    }
+                    else
+                    {
+                        dashDir = dashDir.normalized;
+                    }
+                }
+                else
+                {
+                    dashDir = isFacingRight ? movementRight : -movementRight;
+                }
+                break;
+        }
+
+        // Ensure we have a valid direction
+        if (dashDir.magnitude < 0.1f)
+        {
+            dashDir = isFacingRight ? movementRight : -movementRight;
+        }
+
+        return dashDir.normalized;
     }
 
     #endregion
@@ -1353,18 +2150,13 @@ public class _FezPlayerController : MonoBehaviour
     // ==================== DASH COROUTINES ====================
     #region DASH
 
-    /// <summary>
-    /// Executes the dash movement in the specified direction.
-    /// Uses ScriptableObject values unless overrideDashSettings is TRUE.
-    /// Implements cooldown system if dashCooldown > 0.
-    /// </summary>
     private IEnumerator PerformDash(Vector3 direction)
     {
         isDashing = true;
-        canDash = false;
+        currentDashCharges--;
         dashDirection = direction;
 
-        // Determine which settings to use
+        // Get settings
         bool useInvincibility = overrideDashSettings ? dashHasInvincibility : currentStateData.dashHasInvincibility;
         float invincDuration = overrideDashSettings ? dashInvincibilityDuration : currentStateData.dashInvincibilityDuration;
         bool isFixedDistance = overrideDashSettings ? dashIsFixedDistance : currentStateData.dashIsFixedDistance;
@@ -1372,225 +2164,145 @@ public class _FezPlayerController : MonoBehaviour
         float duration = overrideDashSettings ? dashDuration : currentStateData.dashDuration;
         float speed = overrideDashSettings ? dashSpeed : currentStateData.dashSpeed;
 
-        // Start invincibility effect if enabled
+        // Start invincibility
         if (useInvincibility)
         {
             StartCoroutine(InvincibilityFrames(invincDuration));
         }
 
         float elapsed = 0f;
+        Vector3 startPos = transform.position;
 
         if (isFixedDistance)
         {
-            // MODE 1: Fixed Distance Dash
-            Vector3 startPos = transform.position;
+            // Fixed Distance Dash
             Vector3 targetPos = startPos + dashDirection * distance;
 
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / duration;
-                transform.position = Vector3.Lerp(startPos, targetPos, t);
+
+                // Check wall collision
+                if (currentStateData.dashCancelOnWall && isWallAhead)
+                {
+                    break;
+                }
+
+                // Apply gravity during dash if enabled
+                if (currentStateData.dashHasGravity)
+                {
+                    Vector3 currentTarget = Vector3.Lerp(startPos, targetPos, t);
+                    currentTarget.y -= currentStateData.gravity * currentStateData.dashGravityMultiplier * elapsed * elapsed * 0.5f;
+                    transform.position = currentTarget;
+                }
+                else
+                {
+                    transform.position = Vector3.Lerp(startPos, targetPos, t);
+                }
+
                 yield return null;
             }
         }
         else
         {
-            // MODE 2: Fixed Duration Dash
+            // Fixed Duration Dash
             while (elapsed < duration)
             {
-                rb.linearVelocity = dashDirection * speed;
                 elapsed += Time.deltaTime;
+
+                // Check wall collision
+                if (currentStateData.dashCancelOnWall && isWallAhead)
+                {
+                    break;
+                }
+
+                Vector3 dashVelocity = dashDirection * speed;
+
+                // Apply gravity during dash if enabled
+                if (currentStateData.dashHasGravity)
+                {
+                    dashVelocity.y -= currentStateData.gravity * currentStateData.dashGravityMultiplier;
+                }
+
+                rb.linearVelocity = dashVelocity;
                 yield return null;
             }
         }
 
+        // End dash
         isDashing = false;
 
-        // Start cooldown if enabled
+        // Apply end velocity
+        if (currentStateData.dashEndVelocityMultiplier > 0f)
+        {
+            rb.linearVelocity = dashDirection * speed * currentStateData.dashEndVelocityMultiplier;
+        }
+        else
+        {
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+        }
+
+        // Start cooldown
         if (currentStateData.dashCooldown > 0)
         {
             dashCooldownTimer = currentStateData.dashCooldown;
+            canDash = false;
         }
-        else if (isGrounded)
-        {
-            // If no cooldown, reset on landing
-            canDash = true;
-        }
+
+        // Start recharge delay
+        dashRechargeDelayTimer = currentStateData.dashRechargeDelay;
+        dashRechargeTimer = 0f;
     }
 
-    /// <summary>
-    /// Provides invincibility frames with visual feedback.
-    /// Flickers the sprite on/off to indicate invulnerability state.
-    /// </summary>
     private IEnumerator InvincibilityFrames(float duration)
     {
         isInvincible = true;
-
         float elapsed = 0f;
+
+        Color originalColor = spriteRenderer.color;
+
         while (elapsed < duration)
         {
-            spriteRenderer.enabled = !spriteRenderer.enabled;
-            yield return new WaitForSeconds(0.1f);
-            elapsed += 0.1f;
-        }
-
-        spriteRenderer.enabled = true;
-        isInvincible = false;
-    }
-
-    #endregion
-
-    // ==================== SPRITE FLIPPING ====================
-    #region FLIPPING
-
-    /// <summary>
-    /// Initiates sprite flip if not already flipping.
-    /// Prevents overlapping flip animations.
-    /// </summary>
-    private void StartFlip(bool flipToRight)
-    {
-        if (!isFlipping)
-        {
-            StartCoroutine(FlipSprite(flipToRight));
-        }
-    }
-
-    /// <summary>
-    /// Smoothly rotates the VISUAL CHILD on Y-axis to create a flip effect.
-    /// Uses a separate Transform so the main player GameObject stays axis-aligned.
-    /// 
-    /// How it works:
-    /// - Only rotates visualTransform (the Visual child GameObject)
-    /// - Player GameObject and all physics components remain unrotated
-    /// - Camera (if child of Player) is NOT affected
-    /// - Colliders and detection boxes remain axis-aligned
-    /// 
-    /// Rotation values:
-    /// - 0° = Facing right (default Unity forward)
-    /// - 180° = Facing left (rotated around Y-axis)
-    /// 
-    /// Duration: 0.15 seconds (quick and snappy for fast gameplay)
-    /// </summary>
-    /// <param name="flipToRight">True = face right (0°), False = face left (180°)</param>
-    private IEnumerator FlipSprite(bool flipToRight)
-    {
-        isFlipping = true;
-
-        if (visualTransform == null)
-        {
-            isFlipping = false;
-            yield break;
-        }
-
-        // We animate the variable 'facingAngle' instead of the Transform directly
-        float startAngle = facingAngle;
-        float targetAngle = flipToRight ? 0f : 180f;
-
-        float elapsed = 0f;
-        float flipDuration = 0.15f;
-
-        while (elapsed < flipDuration)
-        {
             elapsed += Time.deltaTime;
-            float t = elapsed / flipDuration;
 
-            // Lerp the angle value
-            // LateUpdate will automatically apply (CameraAngle + facingAngle) this frame
-            facingAngle = Mathf.Lerp(startAngle, targetAngle, t);
+            // Visual feedback based on mode
+            switch (currentStateData.dashInvincibilityVisual)
+            {
+                case DashInvincibilityVisual.Flicker:
+                    bool visible = Mathf.Sin(elapsed * currentStateData.dashFlickerSpeed) > 0;
+                    spriteRenderer.enabled = visible;
+                    break;
+
+                case DashInvincibilityVisual.Transparent:
+                    Color transColor = originalColor;
+                    transColor.a = currentStateData.dashTransparencyAlpha;
+                    spriteRenderer.color = transColor;
+                    break;
+
+                case DashInvincibilityVisual.ColorShift:
+                    spriteRenderer.color = currentStateData.dashInvincibilityColor;
+                    break;
+
+                case DashInvincibilityVisual.Trail:
+                    // Trail would need a separate trail renderer component
+                    // For now, use flicker as fallback
+                    bool trailVisible = Mathf.Sin(elapsed * currentStateData.dashFlickerSpeed * 0.5f) > 0;
+                    spriteRenderer.enabled = trailVisible;
+                    break;
+
+                case DashInvincibilityVisual.None:
+                default:
+                    break;
+            }
 
             yield return null;
         }
 
-        // Ensure we land exactly on the target
-        facingAngle = targetAngle;
-        isFacingRight = flipToRight;
-        isFlipping = false;
-    }
-
-    #endregion
-
-    // ==================== GROUND DETECTION ====================
-    #region GROUND DETECTION
-
-    /// <summary>
-    /// Hybrid ground detection system combining OverlapBox and Raycast.
-    /// Resets bunny hop timer when landing detected.
-    /// </summary>
-    private void CheckGroundStatus()
-    {
-        Vector3 boxCenter = transform.position - new Vector3(0, GetComponent<Collider>().bounds.extents.y, 0);
-
-        bool wasGrounded = isGrounded;
-
-        // OverlapBox: Check for solid ground contact
-        isGrounded = Physics.CheckBox(boxCenter, groundCheckSize / 2, Quaternion.identity, groundLayer);
-
-        // Raycast: Predict ground within distance
-        RaycastHit hit;
-        Vector3 rayStart = boxCenter + Vector3.up * 0.1f;
-        isAboutToLand = Physics.Raycast(rayStart, Vector3.down, out hit, groundRaycastDistance, groundLayer);
-
-        // Reset bunny hop timer on landing
-        if (!wasGrounded && isGrounded)
-        {
-            timeSinceLanding = 0f;
-        }
-    }
-
-    #endregion
-
-    // ==================== WALL DETECTION ====================
-    #region WALL DETECTION
-
-    /// <summary>
-    /// Detects walls on both sides of the character using OverlapBox.
-    /// Also uses Raycast to detect walls ahead in facing direction.
-    /// </summary>
-    private void CheckWallStatus()
-    {
-        Vector3 boxCenter = transform.position;
-
-        // 1. Get the correct "Right" direction based on Camera Rotation
-        Vector3 checkDirection = Vector3.right; // Default
-        if (useWorldRotation && worldRotationController != null)
-        {
-            // Use the ABSOLUTE value to just get the axis (X or Z)
-            // We handle Left/Right checking manually below
-            Vector3 worldRight = worldRotationController.GetCurrentRight();
-
-            // Snap to nearest axis to be safe (1,0,0) or (0,0,1)
-            if (Mathf.Abs(worldRight.z) > Mathf.Abs(worldRight.x))
-                checkDirection = new Vector3(0, 0, 1);
-            else
-                checkDirection = Vector3.right;
-        }
-
-        // 2. Check Right Side (Relative to Camera)
-        bool rightWall = Physics.CheckBox(
-            boxCenter + checkDirection * 0.5f,
-            wallCheckSize / 2,
-            Quaternion.identity,
-            wallLayer
-        );
-
-        // 3. Check Left Side (Relative to Camera)
-        bool leftWall = Physics.CheckBox(
-            boxCenter - checkDirection * 0.5f,
-            wallCheckSize / 2,
-            Quaternion.identity,
-            wallLayer
-        );
-
-        isTouchingWall = rightWall || leftWall;
-
-        // 4. Determine Wall Direction (1 = Right, -1 = Left relative to Camera)
-        wallDirection = rightWall ? 1 : (leftWall ? -1 : 0);
-
-        // 5. Raycast for "Wall Ahead"
-        // We calculate this based on where the player is actually facing visually
-        Vector3 facingDir = isFacingRight ? checkDirection : -checkDirection;
-        isWallAhead = Physics.Raycast(boxCenter, facingDir, wallRaycastDistance, wallLayer);
+        // Reset visuals
+        spriteRenderer.enabled = true;
+        spriteRenderer.color = currentStateData.stateColor;
+        isInvincible = false;
     }
 
     #endregion
@@ -1598,89 +2310,177 @@ public class _FezPlayerController : MonoBehaviour
     // ==================== PUBLIC GETTERS ====================
     #region PUBLIC GETTERS
 
-    /// <summary>
-    /// Returns TRUE if player is currently grounded.
-    /// </summary>
-    public bool IsGrounded()
-    {
-        return isGrounded;
-    }
+    public bool IsGrounded() => isGrounded;
+    public bool IsDashing() => isDashing;
+    public bool IsInvincible() => isInvincible;
+    public bool IsWallSliding() => isWallSliding;
+    public bool IsWallClinging() => isWallClinging;
+    public bool IsOnSlope() => isOnSlope;
+    public bool IsOnSteepSlope() => isOnSteepSlope;
+    public float GetCurrentSlopeAngle() => currentSlopeAngle;
+    public bool IsAtApex() => isAtApex;
+    public bool IsInLandingLag() => isInLandingLag;
+    public int GetCurrentDashCharges() => currentDashCharges;
+    public int GetMaxDashCharges() => currentStateData?.maxDashCharges ?? 1;
+    public float GetWallClingStamina() => wallClingStamina;
+    public _PlayerStateData GetCurrentStateData() => currentStateData;
 
     /// <summary>
-    /// Returns TRUE if player is currently dashing.
+    /// Gets the 4-direction wall states if enabled.
+    /// Index: 0=+X, 1=-X, 2=+Z, 3=-Z
     /// </summary>
-    public bool IsDashing()
-    {
-        return isDashing;
-    }
-
-    /// <summary>
-    /// Returns TRUE if player is currently invincible.
-    /// </summary>
-    public bool IsInvincible()
-    {
-        return isInvincible;
-    }
-
-    /// <summary>
-    /// Returns TRUE if player is wall sliding.
-    /// </summary>
-    public bool IsWallSliding()
-    {
-        return isWallSliding;
-    }
-
-    /// <summary>
-    /// Returns the current state data.
-    /// </summary>
-    public _PlayerStateData GetCurrentStateData()
-    {
-        return currentStateData;
-    }
+    public bool[] GetWallStates() => wallStates;
 
     #endregion
 
     // ==================== DEBUG GIZMOS ====================
     #region GIZMOS
 
-    /// <summary>
-    /// Draws visual debugging information in the Scene view.
-    /// Color coding helps identify detection states at a glance.
-    /// </summary>
     private void OnDrawGizmosSelected()
     {
-        Collider col = GetComponent<Collider>();
-        if (col == null) return;
+        if (playerCollider == null)
+        {
+            playerCollider = GetComponent<Collider>();
+        }
+        if (playerCollider == null) return;
 
-        Vector3 groundCheckCenter = transform.position - new Vector3(0, col.bounds.extents.y, 0);
+        Vector3 groundCheckCenter = transform.position - new Vector3(0, playerCollider.bounds.extents.y, 0);
 
-        // Ground OverlapBox
+        // Ground detection
         Gizmos.color = isGrounded ? Color.green : Color.red;
         Gizmos.DrawWireCube(groundCheckCenter, groundCheckSize);
 
-        // Ground Raycast
+        // Ground raycast
         Gizmos.color = isAboutToLand ? Color.yellow : Color.gray;
         Vector3 rayStart = groundCheckCenter + Vector3.up * 0.1f;
         Gizmos.DrawLine(rayStart, rayStart + Vector3.down * groundRaycastDistance);
 
-        // Wall detection boxes
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position + Vector3.right * 0.5f, wallCheckSize);
-        Gizmos.DrawWireCube(transform.position + Vector3.left * 0.5f, wallCheckSize);
+        // Slope visualization
+        if (showSlopeGizmos && isOnSlope)
+        {
+            Gizmos.color = isOnSteepSlope ? Color.red : Color.cyan;
+            Gizmos.DrawRay(groundCheckCenter, slopeNormal * 2f);
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(groundCheckCenter + Vector3.up, $"Slope: {currentSlopeAngle:F1}Â°");
+#endif
+        }
+
+        // World-space wall gizmos
+        if (showWorldSpaceGizmos)
+        {
+            Gizmos.color = new Color(0f, 0f, 1f, 0.3f);
+            Gizmos.DrawWireCube(transform.position + Vector3.right * 0.5f, wallCheckSize);
+            Gizmos.DrawWireCube(transform.position + Vector3.left * 0.5f, wallCheckSize);
+            Gizmos.DrawWireCube(transform.position + Vector3.forward * 0.5f, new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x));
+            Gizmos.DrawWireCube(transform.position + Vector3.back * 0.5f, new Vector3(wallCheckSize.z, wallCheckSize.y, wallCheckSize.x));
+        }
+
+        // Camera-relative wall gizmos
+        if (showCameraRelativeGizmos)
+        {
+            Vector3 checkDir = GetWallCheckDirection();
+            Vector3 checkSize = GetWallCheckSize();
+
+            Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
+            Gizmos.DrawWireCube(transform.position + checkDir * 0.5f, checkSize);
+
+            Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
+            Gizmos.DrawWireCube(transform.position - checkDir * 0.5f, checkSize);
+        }
+
+        // Detection results
+        if (showDetectionResults)
+        {
+            if (isTouchingWall)
+            {
+                Vector3 checkDir = GetWallCheckDirection();
+                Vector3 wallPos = transform.position + checkDir * wallDirection * 0.5f;
+
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(wallPos, 0.3f);
+            }
+
+            // 4-direction results
+            if (use4DirectionalWallCheck)
+            {
+                Color activeColor = new Color(1f, 0.5f, 0f, 0.8f);
+                if (wallStates[0]) // +X
+                {
+                    Gizmos.color = activeColor;
+                    Gizmos.DrawSphere(transform.position + Vector3.right * 0.7f, 0.15f);
+                }
+                if (wallStates[1]) // -X
+                {
+                    Gizmos.color = activeColor;
+                    Gizmos.DrawSphere(transform.position + Vector3.left * 0.7f, 0.15f);
+                }
+                if (wallStates[2]) // +Z
+                {
+                    Gizmos.color = activeColor;
+                    Gizmos.DrawSphere(transform.position + Vector3.forward * 0.7f, 0.15f);
+                }
+                if (wallStates[3]) // -Z
+                {
+                    Gizmos.color = activeColor;
+                    Gizmos.DrawSphere(transform.position + Vector3.back * 0.7f, 0.15f);
+                }
+            }
+        }
 
         // Wall ahead raycast
         Gizmos.color = isWallAhead ? Color.cyan : Color.gray;
-        Vector3 wallRayDirection = isFacingRight ? Vector3.right : Vector3.left;
-        Gizmos.DrawLine(transform.position, transform.position + wallRayDirection * wallRaycastDistance);
+        Vector3 facingDir = isFacingRight ? GetWallCheckDirection() : -GetWallCheckDirection();
+        Gizmos.DrawLine(transform.position, transform.position + facingDir * wallRaycastDistance);
 
         // World rotation direction indicators
-        if (useWorldRotation && worldRotationController != null)
+        if (useWorldRotation)
         {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentRight() * 2f);
-            Gizmos.color = new Color(1f, 0.5f, 0f); // Orange
-            Gizmos.DrawRay(transform.position + Vector3.up, worldRotationController.GetCurrentForward() * 2f);
+            Vector3 currentRight, currentForward;
+            bool hasRotation = false;
+            
+            if (useRotationBridge && FezRotationBridge.Instance.IsAvailable)
+            {
+                currentRight = FezRotationBridge.Instance.GetCurrentRight();
+                currentForward = FezRotationBridge.Instance.GetCurrentForward();
+                hasRotation = true;
+            }
+            else if (worldRotationController != null)
+            {
+                currentRight = worldRotationController.GetCurrentRight();
+                currentForward = worldRotationController.GetCurrentForward();
+                hasRotation = true;
+            }
+            else
+            {
+                currentRight = Vector3.right;
+                currentForward = Vector3.forward;
+            }
+            
+            if (hasRotation)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawRay(transform.position + Vector3.up, currentRight * 2f);
+                Gizmos.color = new Color(1f, 0.5f, 0f);
+                Gizmos.DrawRay(transform.position + Vector3.up, currentForward * 2f);
+            }
         }
+
+        // State indicators
+#if UNITY_EDITOR
+        string stateText = "";
+        if (isWallSliding) stateText += "SLIDE ";
+        if (isWallClinging) stateText += "CLING ";
+        if (isAtApex) stateText += "APEX ";
+        if (isInLandingLag) stateText += "LAG ";
+        if (isFastFalling) stateText += "FAST ";
+        if (isInWallJumpLock) stateText += "LOCK ";
+
+        if (!string.IsNullOrEmpty(stateText))
+        {
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 2f, stateText);
+        }
+#endif
     }
 
     #endregion
