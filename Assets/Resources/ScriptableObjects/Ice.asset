@@ -20,9 +20,9 @@ MonoBehaviour:
   canMoveOnGround: 1
   moveSpeed: 15
   acceleration: 10
-  startingSpeedBoost: 2
+  startingSpeedBoost: 5
   deceleration: 10
-  minimumMoveSpeed: 0.1
+  minimumMoveSpeed: 1
   decelerateOnTurn: 1
   turnDecelerationMultiplier: 1.5
   canWalkOnSlopes: 1
@@ -30,7 +30,7 @@ MonoBehaviour:
   steepSlopeBehavior: 2
   steepSlopeSlideSpeed: 10
   steepSlopeControlMultiplier: 0.3
-  canJumpOnSteepSlope: 1
+  canJumpOnSteepSlope: 0
   hasAirControl: 1
   airControlMultiplier: 0.8
   airControlDelay: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   fastFallRequiresPress: 0
   landingLagMode: 3
   hardLandingThreshold: 20
-  landingLagDuration: 0.1
+  landingLagDuration: 0.15
   reduceLandingLagOnJumpBuffer: 1
   landingLagReductionMultiplier: 0.5
   landingLagMovementMultiplier: 0.3
@@ -66,10 +66,10 @@ MonoBehaviour:
   apexAirControlMultiplier: 1.3
   apexControlStacks: 1
   hasCoyoteTime: 1
-  coyoteTimeDuration: 0.15
+  coyoteTimeDuration: 0.3
   hasJumpBuffer: 1
-  jumpBufferTime: 0.2
-  hasDoubleJump: 1
+  jumpBufferTime: 0.3
+  hasDoubleJump: 0
   maxAirJumps: 1
   airJumpForceMultiplier: 2
   resetAirJumpsOnWallJump: 0
@@ -79,33 +79,33 @@ MonoBehaviour:
   wallSlideDelay: 0
   canWallSlideWhileRising: 0
   wallClingMode: 1
-  maxWallClingDuration: 0.8
+  maxWallClingDuration: 0.15
   wallClingStaminaCost: 0
   canJumpFromWallCling: 1
   wallClingGravity: 0
   hasWallJump: 1
   wallJumpForce: 0
   wallJumpHorizontalMultiplier: 0.7
-  wallJumpPushMode: 0
+  wallJumpPushMode: 1
   hasWallJumpControlLock: 0
   wallJumpControlLockDuration: 0.2
   wallJumpControlLockMultiplier: 0.3
   wallJumpLockOnlyOnReturn: 0
   hasDash: 1
   hasAirDash: 1
-  dashCooldown: 0
-  dashDirectionMode: 3
+  dashCooldown: 0.1
+  dashDirectionMode: 2
   dashCanBeVertical: 1
   dashCardinalOnly: 0
   dashIsFixedDistance: 0
   dashDistance: 5
-  dashDuration: 0.3
-  dashSpeed: 20
+  dashDuration: 0.4
+  dashSpeed: 50
   dashEndVelocityMultiplier: 0
   dashCancelOnWall: 1
   dashCancelOnDamage: 0
   dashHasGravity: 0
-  dashGravityMultiplier: 0.5
+  dashGravityMultiplier: 1
   dashHasInvincibility: 0
   dashInvincibilityDuration: 0.3
   dashInvincibilityVisual: 1
@@ -115,7 +115,7 @@ MonoBehaviour:
   maxDashCharges: 1
   dashRechargeTime: 0
   dashRechargeMode: 2
-  dashRechargeOnlyGrounded: 1
+  dashRechargeOnlyGrounded: 0
   dashRechargeDelay: 0
   hasBunnyHop: 1
   bunnyHopSpeedBonus: 0.15
