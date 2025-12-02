@@ -9,7 +9,8 @@ public class IceVFXManager : MonoBehaviour
     {
         if (fx == null)
             return;
-        Instantiate(fx, position, Quaternion.identity);
+        ParticleSystem explosion = Instantiate(fx, position, Quaternion.identity);
+        Destroy(explosion.gameObject, 1f);
     }
 
     public void PlaySulfurExplosion(Vector3 position)

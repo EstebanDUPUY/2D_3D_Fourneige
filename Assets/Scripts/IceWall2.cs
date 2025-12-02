@@ -25,30 +25,13 @@ public class IceWall2 : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        //PlayerIceSystem player = other.gameObject.GetComponent<PlayerIceSystem>();
-        //if (player != null)
-        //{
-        //    rbPlayer = player.rb;
-        //    movePlayer = true;
-        //    iceWallData.PlayerEnter(this);
-        //    if (!isMoving)
-        //    {
-        //        StartCoroutine(MoveWall());
-        //    }
-        //}
-        StartCoroutine(MoveWall());
+        // StartCoroutine(MoveWall());
+        if (!isMoving)
+        {
+            StartCoroutine("MoveWall");
+        }
     }
 
-    //void OnCollisionExit(Collision other)
-    //{
-    //    PlayerIceSystem player = other.gameObject.GetComponent<PlayerIceSystem>();
-    //    if (player != null)
-    //    {
-    //        iceWallData.PlayerExit();
-    //        movePlayer = false;
-    //    }
-    //}
-  
     IEnumerator MoveWall()
     {
         isMoving = true;
@@ -58,12 +41,6 @@ public class IceWall2 : MonoBehaviour
         {
             velocity = Vector3.up * speed * Time.deltaTime;
             transform.Translate(velocity);
-
-            //if (movePlayer)
-            //{
-            //    rbPlayer.transform.Translate(velocity);
-            //}
-
             yield return null; // attendre la prochaine frame
         }
 
@@ -71,7 +48,6 @@ public class IceWall2 : MonoBehaviour
         {
             velocity = -Vector3.up * speed * Time.deltaTime;
             transform.Translate(velocity);
-            // rbPlayer.transform.Translate(velocity);
             yield return null;
         }
         isMoving = false;

@@ -9,8 +9,6 @@ public class LevelManager : MonoBehaviour
 
     InputAction togglePlayAction;
 
-    public IceManager iceManager;
-
     // Action
     public static Action<bool> OnPlayPauseTime;
     public static Action OnLevelReset;
