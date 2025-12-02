@@ -3,7 +3,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
@@ -13,24 +12,14 @@ public class MenuController : MonoBehaviour
     public static MenuController Instance => instance;
 
     [Header("UI")]
-    public Button start;
-    public Button settings;
-    public Button quit;
-    public Button continueButton;
-
     public Toggle fullscreenToggle;
     public Image toggleImage;
     public Sprite spriteOn;
     public Sprite spriteOff;
-
-    public AudioMixer audioMixer;
+    Resolution[] resolutions;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
 
-    Resolution[] resolutions;
-
-    [Header("UI Panels")]
-    public GameObject settingsScreen;
-    public GameObject pauseMenu;
+    public AudioMixer audioMixer;
 
     void Awake()
     {
@@ -122,15 +111,5 @@ public void SetFullScreen(bool isFullScreen)
     public void SetVolume(float volume)
     {
         audioMixer.SetFloat("volume", volume);
-    }
-
-    public void OnContinue()
-    {
-        SceneManager.LoadScene("");
-    }
-
-    public void Quit()
-    {
-        Application.Quit();
     }
 }
