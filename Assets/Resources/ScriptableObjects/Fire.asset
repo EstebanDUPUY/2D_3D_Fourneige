@@ -9,116 +9,187 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 154b2200a1e93814280cc6600645bb47, type: 3}
+  m_Script: {fileID: 11500000, guid: a18ab5bc3d7e0ab4eb8249d1fe84b274, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: 
   stateName: Fire
-  stateColor: {r: 1, g: 0, b: 0, a: 1}
+  stateColor: {r: 0.9245283, g: 0.12385191, b: 0.5351468, a: 1}
+  description: 
   canMove: 1
-  canSwitchFromThisState: 1
-  stateSwitchCooldown: 0.01
-  canMoveOnGround: 1
-  moveSpeed: 30
-  acceleration: 15
-  startingSpeedBoost: 5
-  deceleration: 15
-  minimumMoveSpeed: 5
+  canSwitchState: 1
+  stateSwitchCooldown: 0
+  maxMoveSpeed: 35
+  minimumSpeedThreshold: 0.1
+  accelerationMode: 3
+  accelerationRate: 200
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  accelerationTime: 0.1
+  startingSpeedBoost: 2
+  decelerationMode: 1
+  decelerationRate: 300
+  decelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  decelerationTime: 0.05
+  instantTurning: 1
+  turnSpeedMultiplier: 0.5
   decelerateOnTurn: 1
   turnDecelerationMultiplier: 1.5
   canWalkOnSlopes: 1
   maxSlopeAngle: 45
-  steepSlopeBehavior: 2
+  steepSlopeBehavior: 1
   steepSlopeSlideSpeed: 10
   steepSlopeControlMultiplier: 0.3
   canJumpOnSteepSlope: 1
-  hasAirControl: 1
-  airControlMultiplier: 0.99
+  airControlEnabled: 1
+  airControlMultiplier: 1
   airControlDelay: 0
-  airControlRampUpTime: 0.02
+  airControlRampUpTime: 0
   airInstantTurn: 1
-  airDeceleration: 1
-  gravity: 30
-  weight: 1
-  groundFriction: 0
-  maxFallSpeed: 20
-  hasFastFall: 1
-  fastFallMultiplier: 1.5
+  airDeceleration: 0
+  canJump: 1
+  jumpForce: 20
+  jumpAsImpulse: 0
+  variableJumpHeight: 0
+  minJumpMultiplier: 0.4
+  maxJumpHoldTime: 0.2
+  jumpMomentumBoost: 1
+  jumpMomentumMultiplier: 1.1
+  movingJumpBonus: 1
+  movingJumpSpeedThreshold: 10
+  coyoteTimeEnabled: 1
+  coyoteTimeDuration: 0.1
+  jumpBufferEnabled: 1
+  jumpBufferDuration: 0.1
+  airJumpEnabled: 1
+  maxAirJumps: 1
+  airJumpForceMultiplier: 0.85
+  restoreAirJumpsOnWall: 0
+  resetAirJumpsOnWallJump: 1
+  gravityMode: 1
+  baseGravity: 40
+  risingGravityMultiplier: 0.5
+  jumpCutGravityMultiplier: 2.5
+  fallingGravityMultiplier: 1.5
+  apexHangEnabled: 1
+  apexVelocityThreshold: 2
+  apexGravityMultiplier: 0.4
+  apexAirControlBonus: 1.3
+  maxFallSpeed: 50
+  fastFallEnabled: 1
+  fastFallMultiplier: 2
   fastFallRequiresPress: 0
-  landingLagMode: 0
+  landingLagMode: 3
   hardLandingThreshold: 20
   landingLagDuration: 0.1
   reduceLandingLagOnJumpBuffer: 1
   landingLagReductionMultiplier: 0.5
   landingLagMovementMultiplier: 0.3
-  canJump: 1
-  jumpForce: 25
-  jumpMomentumBoost: 1
-  jumpMomentumMultiplier: 1.1
-  movingJumpBonus: 1.15
-  movingJumpSpeedThreshold: 2
-  hasVariableJump: 1
-  jumpHoldGravityMultiplier: 0.5
-  jumpReleaseGravityMultiplier: 2
-  maxJumpHoldTime: 0.3
-  hasApexHang: 1
-  apexVelocityThreshold: 2
-  apexGravityMultiplier: 0.15
-  apexAirControlMultiplier: 2
-  apexControlStacks: 0
-  hasCoyoteTime: 1
-  coyoteTimeDuration: 0.15
-  hasJumpBuffer: 1
-  jumpBufferTime: 0.2
-  hasDoubleJump: 1
-  maxAirJumps: 1
-  airJumpForceMultiplier: 1.11
-  resetAirJumpsOnWallJump: 1
-  hasWallSlide: 1
-  wallSlideRequiresInput: 1
-  wallSlideFriction: -100
-  wallSlideDelay: 0
+  wallSlideMode: 2
+  wallSlideSpeed: -10
+  wallSlideStartDelay: 0
   canWallSlideWhileRising: 0
+  wallClimbEnabled: 0
+  wallClimbSpeed: 0.005
   wallClingMode: 0
-  maxWallClingDuration: 0.1
-  wallClingStaminaCost: 0
-  canJumpFromWallCling: 1
+  maxWallClingDuration: 2
   wallClingGravity: 0
-  hasWallJump: 1
-  wallJumpForce: 45
-  wallJumpHorizontalMultiplier: 0
-  wallJumpPushMode: 1
-  hasWallJumpControlLock: 0
-  wallJumpControlLockDuration: 0.2
-  wallJumpControlLockMultiplier: 0.3
+  canJumpFromWallCling: 1
+  staminaMode: 1
+  maxStamina: 100
+  staminaDrainRate: 20
+  climbExtraDrain: 10
+  staminaRefillRate: 50
+  staminaRefillDelay: 0.5
+  wallJumpEnabled: 1
+  wallJumpMode: 0
+  wallJumpVerticalForce: 0
+  wallJumpHorizontalForce: 8
+  wallJumpControlLockEnabled: 0
+  wallJumpControlLockDuration: 0.15
+  wallJumpLockControlMultiplier: 0.3
   wallJumpLockOnlyOnReturn: 0
-  hasDash: 1
-  hasAirDash: 1
-  dashCooldown: 0
-  dashDirectionMode: 3
-  dashCanBeVertical: 1
-  dashCardinalOnly: 0
+  dashEnabled: 1
+  airDashEnabled: 1
+  dashDirectionMode: 2
+  maxDashCharges: 1
+  dashRefillMode: 0
+  dashRefillDelay: 0
+  dashRefillTime: 0.5
+  dashSpeed: 100
+  dashDuration: 0.05
   dashIsFixedDistance: 0
   dashDistance: 5
-  dashDuration: 0.5
-  dashSpeed: 60
-  dashEndVelocityMultiplier: 2
+  dashFreezesGravity: 1
+  dashEndVelocityMultiplier: 0.4
   dashCancelOnWall: 0
-  dashCancelOnDamage: 0
-  dashHasGravity: 1
-  dashGravityMultiplier: 0.5
-  dashHasInvincibility: 1
-  dashInvincibilityDuration: 0.05
-  dashInvincibilityVisual: 3
-  dashFlickerSpeed: 30
-  dashTransparencyAlpha: 0.5
-  dashInvincibilityColor: {r: 0, g: 1, b: 0, a: 1}
-  maxDashCharges: 2
-  dashRechargeTime: 0.99
-  dashRechargeMode: 2
-  dashRechargeOnlyGrounded: 1
-  dashRechargeDelay: 0
-  hasBunnyHop: 1
-  bunnyHopSpeedBonus: 0.3
-  bunnyHopDecayRate: 0.5
-  bunnyHopMaxSpeed: 2
-  bunnyHopTimingWindow: 0.2
+  upwardDashBoost: 1
+  upwardDashBoostMultiplier: 1.2
+  dashCooldown: 0.1
+  dashInvincibility: 0
+  dashInvincibilityDuration: 0.15
+  invincibilityVisual: 1
+  flickerSpeed: 30
+  transparencyAlpha: 0.5
+  invincibilityColor: {r: 1, g: 1, b: 1, a: 0.8}
+  superDashEnabled: 0
+  superDashSpeedMultiplier: 1.4
+  superDashWindow: 0.1
+  bunnyHopEnabled: 1
+  bunnyHopSpeedBonus: 0.15
+  bunnyHopDecayRate: 1
+  bunnyHopMaxSpeed: 1.5
+  bunnyHopTimingWindow: 0.1
+  mass: 1
+  groundFriction: 0
+  airDrag: 0
+  freezeDuringRotation: 1
+  clearDepthVelocityAfterRotation: 1
+  preserveMomentumThroughRotation: 1
+  wallDetectionDelayAfterRotation: 0.1
+  refillDashOnRotation: 0
+  refillStaminaOnRotation: 0

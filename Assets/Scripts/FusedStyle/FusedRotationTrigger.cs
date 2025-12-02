@@ -23,7 +23,7 @@ using UnityEngine;                    // Core Unity functionality
 /// - TargetFace: Rotates to a specific face (0-3)
 /// </summary>
 [RequireComponent(typeof(Collider))]  // Ensures a Collider exists on this GameObject
-public class FezRotationTrigger : MonoBehaviour
+public class FusedRotationTrigger : MonoBehaviour
 {
     // ========================================================================
     // ENUMS
@@ -222,11 +222,11 @@ public class FezRotationTrigger : MonoBehaviour
             }
             return;                               // Exit - wait for cooldown
         }
-        
+
         // --- CHECK ROTATION CONTROLLER ---
-        
+
         // Get reference to the rotation controller
-        FezWorldRotation controller = FezWorldRotation.Instance;
+        FusedWorldRotation controller = FusedWorldRotation.Instance;
         
         // Make sure controller exists
         if (controller == null)
