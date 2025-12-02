@@ -77,7 +77,7 @@ public class LevelUISystem : MonoBehaviour
         {
             Debug.LogWarning(
                 "GameManager.instance is NULL at start. "
-                    + "The LevelManager create it for Dev Mode with GameManager.InstantiateIfNeededInDevMode()"
+                + "The LevelManager create it for Dev Mode with GameManager.InstantiateIfNeededInDevMode()"
             );
             GameManager.InstantiateIfNeededInDevMode();
         }

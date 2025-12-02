@@ -44,7 +44,7 @@ public class LevelManager : MonoBehaviour
     {
         if (!context.performed)
             return;
-            Debug.Log("Test 1 2");
+        ;
         PlayPauseTime();
     }
 
