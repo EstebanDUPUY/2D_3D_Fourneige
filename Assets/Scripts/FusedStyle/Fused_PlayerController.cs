@@ -54,7 +54,7 @@ public class FusedPlayerController : MonoBehaviour
     [Tooltip("Child transform containing the sprite.")]
     [SerializeField]
     private Transform visualTransform;
-    
+
     [Tooltip("Primary player state data asset.")]
     [SerializeField]
     private FusedPlayerStateData primaryStateData;
@@ -63,16 +63,18 @@ public class FusedPlayerController : MonoBehaviour
     [SerializeField]
     private FusedPlayerStateData secondaryStateData;
     
-    public FusedPlayerStateData currentState;
-    
+    private FusedPlayerStateData currentState;
+
+    public enum theState { primaryStateData, secondaryStateData};
+
     #endregion
-    
+
     // ========================================================================
     // SECTION: LAYER MASKS
     // ========================================================================
-    
+
     #region LAYER MASKS
-    
+
     [Header("═══════════════════════════════════════")]
     [Header("        DETECTION LAYERS")]
     [Header("═══════════════════════════════════════")]
