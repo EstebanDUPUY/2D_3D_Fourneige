@@ -134,7 +134,7 @@ MonoBehaviour:
   wallSlideStartDelay: 0
   canWallSlideWhileRising: 0
   wallClimbEnabled: 0
-  wallClimbSpeed: 0.005
+  wallClimbSpeed: 2
   wallClingMode: 0
   maxWallClingDuration: 2
   wallClingGravity: 0
@@ -148,7 +148,7 @@ MonoBehaviour:
   wallJumpEnabled: 1
   wallJumpMode: 0
   wallJumpVerticalForce: 0
-  wallJumpHorizontalForce: 8
+  wallJumpHorizontalForce: 0
   wallJumpControlLockEnabled: 0
   wallJumpControlLockDuration: 0.15
   wallJumpLockControlMultiplier: 0.3
@@ -160,23 +160,23 @@ MonoBehaviour:
   dashRefillMode: 0
   dashRefillDelay: 0
   dashRefillTime: 0.5
-  dashSpeed: 100
-  dashDuration: 0.05
+  dashSpeed: 50
+  dashDuration: 0.1
   dashIsFixedDistance: 0
   dashDistance: 5
   dashFreezesGravity: 1
   dashEndVelocityMultiplier: 0.4
   dashCancelOnWall: 0
-  upwardDashBoost: 1
-  upwardDashBoostMultiplier: 1.2
+  upwardDashBoost: 0
+  upwardDashBoostMultiplier: 1.005
   dashCooldown: 0.1
-  dashInvincibility: 0
-  dashInvincibilityDuration: 0.15
-  invincibilityVisual: 1
+  dashInvincibility: 1
+  dashInvincibilityDuration: 0.1
+  invincibilityVisual: 3
   flickerSpeed: 30
   transparencyAlpha: 0.5
-  invincibilityColor: {r: 1, g: 1, b: 1, a: 0.8}
-  superDashEnabled: 0
+  invincibilityColor: {r: 0.3036402, g: 0.93207544, b: 0.2866571, a: 0.6666667}
+  superDashEnabled: 1
   superDashSpeedMultiplier: 1.4
   superDashWindow: 0.1
   bunnyHopEnabled: 1
@@ -193,3 +193,54 @@ MonoBehaviour:
   wallDetectionDelayAfterRotation: 0.1
   refillDashOnRotation: 0
   refillStaminaOnRotation: 0
+  useCustomDeadzone: 1
+  deadzoneType: 1
+  innerDeadzone: 0.15
+  outerDeadzone: 0.95
+  normalizeDiagonalInput: 1
+  clampInputMagnitude: 1
+  movementInputMode: 1
+  digitalThreshold: 0.8
+  analogSensitivityExponent: 1
+  analogResponseCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  useCustomAnalogCurve: 0
+  enableDirectionSnapping: 1
+  directionSnapCount: 16
+  directionZoneMode: 0
+  cardinalBiasAngle: 15
+  directionSnapMinMagnitude: 0.3
+  wallSlideInputThreshold: 0.3
+  wallJumpInputThreshold: 0.2
+  enableDirectionalWallJump: 1
+  enableNeutralWallJump: 0
+  neutralWallJumpVerticalMultiplier: 1.2
+  neutralWallJumpHorizontalMultiplier: 0.3
+  directionalWallJumpMaxAngle: 45
+  inputProcessingTime: 1
+  enableInputSmoothing: 0
+  inputSmoothingFactor: 0.15
+  inputSmoothingMode: 1
+  movingAverageFrames: 5

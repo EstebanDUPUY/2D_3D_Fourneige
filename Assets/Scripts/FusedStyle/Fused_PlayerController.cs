@@ -167,7 +167,33 @@ public class FusedPlayerController : MonoBehaviour
     
     #region INPUT STATE
     
+    // --- RAW INPUT (directly from Input System) ---
+    // These store the unprocessed input values from the controller/keyboard.
+    // They are set in the OnMove callback and may be processed before use.
+    private Vector2 rawMoveInput;
+    
+    // --- PROCESSED INPUT (after deadzone, normalization, etc) ---
+    // This is the input actually used for movement calculations.
+    // It has been processed according to the current state's input settings.
     private Vector2 moveInput;
+    
+    // --- SMOOTHED INPUT (for optional input smoothing) ---
+    // Used when input smoothing is enabled to reduce jitter.
+    private Vector2 smoothedMoveInput;
+    
+    // --- DIRECTION SNAP CACHE ---
+    // Stores the last snapped direction for dash/wall jump.
+    // This ensures consistent direction during multi-frame actions.
+    private Vector2 lastSnappedDirection;
+    
+    // --- INPUT HISTORY (for moving average smoothing) ---
+    // Circular buffer storing recent input values for averaging.
+    private Vector2[] inputHistory;
+    private int inputHistoryIndex;
+    private bool inputHistoryFilled;
+    
+    // --- BUTTON STATES ---
+    // These track the state of action buttons (jump, dash, etc).
     private bool jumpHeld;
     private bool jumpPressedThisFrame;
     private bool dashPressedThisFrame;
@@ -378,10 +404,14 @@ public class FusedPlayerController : MonoBehaviour
     
     private void Start()
     {
+        // Initialize the current state to the primary state data asset.
+        // This determines all movement parameters, abilities, and input settings.
         currentState = primaryStateData;
         currentStateIndex = 0;
         ApplyStateData();
         
+        // Initialize resource values (dash charges, stamina, air jumps) from state data.
+        // These may be modified during gameplay and reset on various conditions.
         if (currentState != null)
         {
             currentDashCharges = currentState.maxDashCharges;
@@ -389,15 +419,53 @@ public class FusedPlayerController : MonoBehaviour
             airJumpsRemaining = currentState.maxAirJumps;
         }
         
+        // Initialize facing direction to right (0 degrees).
+        // The visual sprite will be rotated based on this value.
         isFacingRight = true;
         facingAngle = 0f;
         
+        // Initialize the world rotation system if enabled.
+        // This handles Fez-style 90-degree world rotation.
         InitializeWorldRotation();
+        
+        // Configure the Rigidbody with appropriate constraints and settings.
+        // Freezes rotation and sets collision detection mode.
         ConfigureRigidbody();
         
+        // Initialize input processing systems.
+        // This sets up the input history buffer for smoothing and resets input state.
+        InitializeInputProcessing();
+        
+        // Log the initialization if debug logging is enabled.
         if (logStateChanges)
         {
             Debug.Log($"[Fused_PlayerController] Initialized with state: {currentState?.stateName ?? "NULL"}");
+        }
+    }
+    
+    /// <summary>
+    /// Initializes the input processing system.
+    /// Sets up the input history buffer for moving average smoothing
+    /// and resets all input-related state variables to their defaults.
+    /// </summary>
+    private void InitializeInputProcessing()
+    {
+        // Initialize input history buffer for moving average smoothing.
+        // Default size of 30 frames covers the maximum configurable window.
+        inputHistory = new Vector2[30];
+        inputHistoryIndex = 0;
+        inputHistoryFilled = false;
+        
+        // Reset all input vectors to zero.
+        rawMoveInput = Vector2.zero;
+        moveInput = Vector2.zero;
+        smoothedMoveInput = Vector2.zero;
+        lastSnappedDirection = Vector2.zero;
+        
+        // Log initialization if debug logging is enabled.
+        if (logStateChanges)
+        {
+            Debug.Log("[Fused_PlayerController] Input processing initialized.");
         }
     }
     
@@ -582,15 +650,40 @@ public class FusedPlayerController : MonoBehaviour
     
     private void Update()
     {
+        // Skip all updates if player is frozen for world rotation.
+        // The player remains completely still during rotation transitions.
         if (isFrozenForRotation) return;
+        
+        // Skip updates if no state data or movement is disabled.
+        // This allows complete player freezing via the state data.
         if (currentState == null || !currentState.canMove) return;
         
-        // Update detection states
+        // =====================================================================
+        // INPUT PROCESSING (must happen before any input-dependent logic)
+        // =====================================================================
+        // Process raw input through deadzone, normalization, and smoothing.
+        // This converts raw stick input into clean, usable movement input.
+        // Only processes per-frame if the setting is PerFrame or Both.
+        if (currentState.inputProcessingTime == Fused_InputProcessingTime.PerFrame ||
+            currentState.inputProcessingTime == Fused_InputProcessingTime.Both)
+        {
+            ProcessInputPerFrame();
+        }
+        
+        // =====================================================================
+        // DETECTION UPDATES
+        // =====================================================================
+        // Update all detection states (ground, slopes, walls).
+        // These determine what actions the player can take.
         UpdateGroundDetection();
         UpdateSlopeDetection();
         UpdateWallDetection();
         
-        // Update timers
+        // =====================================================================
+        // TIMER UPDATES
+        // =====================================================================
+        // Update all gameplay timers (coyote time, buffers, cooldowns, etc).
+        // These enable the generous assist systems like jump buffering.
         UpdateJumpTimers();
         UpdateDashTimers();
         UpdateWallTimers();
@@ -600,14 +693,25 @@ public class FusedPlayerController : MonoBehaviour
         UpdateBunnyHop();
         UpdateAirControlTiming();
         
-        // Process input
+        // =====================================================================
+        // INPUT PROCESSING (actions)
+        // =====================================================================
+        // Process action inputs like jump and dash.
+        // These check buffers and conditions to execute abilities.
         ProcessJumpInput();
         ProcessDashInput();
         
-        // Update wall mechanics
+        // =====================================================================
+        // WALL MECHANICS UPDATE
+        // =====================================================================
+        // Update wall slide, climb, and cling states based on current conditions.
         UpdateWallMechanics();
         
-        // Reset frame flags
+        // =====================================================================
+        // RESET FRAME FLAGS
+        // =====================================================================
+        // Reset single-frame input flags at the end of Update.
+        // These flags are set in input callbacks and consumed once per frame.
         jumpPressedThisFrame = false;
         dashPressedThisFrame = false;
         fastFallPressedThisFrame = false;
@@ -1655,29 +1759,44 @@ public class FusedPlayerController : MonoBehaviour
     
     private void ExecuteWallJump()
     {
+        // Safety check for state data.
         if (currentState == null) return;
         
+        // Clear wall interaction states - we're leaving the wall.
         isWallSliding = false;
         isWallClimbing = false;
         isWallClinging = false;
         
-        Vector3 vel = rb.linearVelocity;
-        vel.y = 0f;
+        // Get the wall jump direction from the input processing system.
+        // This handles neutral vs directional wall jumps based on settings.
+        Vector2 wallJumpDir2D = GetWallJumpDirection(wallDirection);
         
-        // Vertical force
-        float verticalForce = currentState.wallJumpVerticalForce > 0 
+        // Calculate vertical force - use dedicated wall jump force if set, otherwise use normal jump force.
+        float baseVerticalForce = currentState.wallJumpVerticalForce > 0 
             ? currentState.wallJumpVerticalForce 
             : currentState.jumpForce;
         
-        vel.y = verticalForce;
+        // Calculate horizontal force.
+        float horizontalForce = currentState.wallJumpHorizontalForce;
         
-        // Horizontal push
-        Vector3 pushDir = GetMovementRight() * (-wallDirection);
-        vel += pushDir * currentState.wallJumpHorizontalForce;
+        // Get the movement right direction (accounts for world rotation).
+        Vector3 movementRight = GetMovementRight();
         
+        // Build the velocity vector based on wall jump direction.
+        Vector3 vel = Vector3.zero;
+        
+        // Apply vertical component - direction's Y affects vertical force.
+        // For neutral jumps, this will be higher due to the multiplier.
+        vel.y = baseVerticalForce * Mathf.Max(wallJumpDir2D.y, 0.5f);
+        
+        // Apply horizontal component - direction's X affects push direction and strength.
+        // The X component is already signed correctly (-1 for left wall jump, +1 for right).
+        vel += movementRight * wallJumpDir2D.x * horizontalForce;
+        
+        // Set the final velocity.
         rb.linearVelocity = vel;
         
-        // Set wall jump lock
+        // Set wall jump lock to prevent immediately returning to wall.
         if (currentState.wallJumpControlLockEnabled)
         {
             isInWallJumpLock = true;
@@ -1826,33 +1945,38 @@ public class FusedPlayerController : MonoBehaviour
             return;
         }
         
-        // Check stamina
+        // Check stamina - if depleted, cannot use wall mechanics.
         if (currentState.staminaMode != Fused_StaminaMode.Disabled && currentStamina <= 0)
         {
             return;
         }
         
-        // Wall slide conditions
+        // Wall slide conditions - uses input threshold for better controller support.
+        // The threshold prevents accidental wall slides from slight stick drift.
         bool shouldWallSlide = false;
         
         switch (currentState.wallSlideMode)
         {
             case Fused_WallSlideMode.Automatic:
+                // Automatic: Wall slide whenever touching wall and falling (or rising if enabled).
                 shouldWallSlide = rb.linearVelocity.y <= 0 || currentState.canWallSlideWhileRising;
                 break;
                 
             case Fused_WallSlideMode.HoldToward:
-                shouldWallSlide = (moveInput.x * wallDirection > 0) && 
+                // HoldToward: Must press toward wall to slide.
+                // Uses configurable threshold for controller support.
+                shouldWallSlide = IsPressingTowardWall(wallDirection) && 
                     (rb.linearVelocity.y <= 0 || currentState.canWallSlideWhileRising);
                 break;
                 
             case Fused_WallSlideMode.GrabButton:
+                // GrabButton: Must hold grab button to slide.
                 shouldWallSlide = grabHeld && 
                     (rb.linearVelocity.y <= 0 || currentState.canWallSlideWhileRising);
                 break;
         }
         
-        // Wall cling mode (Fez feature)
+        // Wall cling mode (Fez feature) - allows sticking to walls before sliding.
         if (currentState.wallClingMode != Fused_WallClingMode.Disabled)
         {
             switch (currentState.wallClingMode)
@@ -1870,7 +1994,8 @@ public class FusedPlayerController : MonoBehaviour
                     break;
                     
                 case Fused_WallClingMode.HoldToStick:
-                    isWallClinging = moveInput.x * wallDirection > 0;
+                    // HoldToStick: Cling while pressing toward wall (uses threshold).
+                    isWallClinging = IsPressingTowardWall(wallDirection);
                     if (!isWallClinging)
                     {
                         shouldWallSlide = true;
@@ -2015,46 +2140,79 @@ public class FusedPlayerController : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Calculates the dash direction based on input and settings.
+    /// Uses the input processing system's direction snapping for precise control.
+    /// </summary>
+    /// <returns>The normalized dash direction in world space.</returns>
     private Vector3 CalculateDashDirection()
     {
-        Vector3 dir = Vector3.zero;
+        // Get the movement right direction (accounts for world rotation).
         Vector3 right = GetMovementRight();
+        Vector3 dir = Vector3.zero;
         
+        // Get the 2D dash direction from the input processing system.
+        // This uses direction snapping for precise 4-way/8-way dashing.
+        Vector2 dashDir2D = GetDashDirection();
+        
+        // Handle different dash direction modes.
         switch (currentState.dashDirectionMode)
         {
             case Fused_DashDirectionMode.FacingDirection:
+                // Always dash in the direction the player is facing.
                 dir = isFacingRight ? right : -right;
                 break;
                 
             case Fused_DashDirectionMode.InputCardinal:
-                if (Mathf.Abs(moveInput.x) > 0.1f)
+                // 4-way dash: Use snapped direction (cardinals only).
+                // The GetDashDirection method handles snapping based on settings.
+                if (dashDir2D.magnitude > 0.1f)
                 {
-                    dir = moveInput.x > 0 ? right : -right;
-                }
-                else if (Mathf.Abs(moveInput.y) > 0.1f)
-                {
-                    dir = moveInput.y > 0 ? Vector3.up : Vector3.down;
+                    // Snap to cardinal direction (no diagonals).
+                    if (Mathf.Abs(dashDir2D.x) > Mathf.Abs(dashDir2D.y))
+                    {
+                        // Horizontal dash.
+                        dir = dashDir2D.x > 0 ? right : -right;
+                    }
+                    else
+                    {
+                        // Vertical dash.
+                        dir = dashDir2D.y > 0 ? Vector3.up : Vector3.down;
+                    }
                 }
                 else
                 {
+                    // No input: dash in facing direction.
                     dir = isFacingRight ? right : -right;
                 }
                 break;
                 
             case Fused_DashDirectionMode.InputEightWay:
-                if (Mathf.Abs(moveInput.x) > 0.1f || Mathf.Abs(moveInput.y) > 0.1f)
+                // 8-way dash: Use snapped direction (cardinals + diagonals).
+                if (dashDir2D.magnitude > 0.1f)
                 {
-                    dir = right * moveInput.x + Vector3.up * moveInput.y;
+                    // Convert 2D snapped direction to 3D world direction.
+                    // X maps to the movement right axis, Y maps to world up.
+                    dir = right * dashDir2D.x + Vector3.up * dashDir2D.y;
                     dir.Normalize();
                 }
                 else
                 {
+                    // No input: dash in facing direction.
                     dir = isFacingRight ? right : -right;
                 }
                 break;
                 
             case Fused_DashDirectionMode.HorizontalOnly:
-                dir = isFacingRight ? right : -right;
+                // Horizontal only: Dash left or right based on input, no vertical.
+                if (Mathf.Abs(dashDir2D.x) > 0.1f)
+                {
+                    dir = dashDir2D.x > 0 ? right : -right;
+                }
+                else
+                {
+                    dir = isFacingRight ? right : -right;
+                }
                 break;
         }
         
@@ -2173,44 +2331,106 @@ public class FusedPlayerController : MonoBehaviour
     // ========================================================================
     // SECTION: INPUT CALLBACKS (New Input System)
     // ========================================================================
+    // These methods are called by the Unity Input System when input events occur.
+    // They are linked to the PlayerInput component via the Inspector.
+    // Raw input is stored and optionally processed immediately based on settings.
+    // ========================================================================
     
     #region INPUT CALLBACKS
     
+    /// <summary>
+    /// Called by the Input System when movement input changes.
+    /// Stores the raw input value and optionally processes it immediately.
+    /// The actual processing depends on the inputProcessingTime setting.
+    /// </summary>
+    /// <param name="context">The input callback context containing the input value.</param>
     public void OnMove(InputAction.CallbackContext context)
     {
-        moveInput = context.ReadValue<Vector2>();
+        // Store the raw, unprocessed input value from the controller/keyboard.
+        // This value ranges from -1 to 1 on each axis, with potential magnitude > 1 on diagonals.
+        rawMoveInput = context.ReadValue<Vector2>();
+        
+        // Check if we should process input immediately on the input event.
+        // OnInputEvent mode has lower latency but doesn't allow runtime setting changes.
+        if (currentState != null)
+        {
+            if (currentState.inputProcessingTime == Fused_InputProcessingTime.OnInputEvent ||
+                currentState.inputProcessingTime == Fused_InputProcessingTime.Both)
+            {
+                // Process the input immediately through deadzone, normalization, etc.
+                moveInput = ProcessRawInput(rawMoveInput);
+            }
+            else
+            {
+                // For PerFrame mode, just copy raw input; it will be processed in Update.
+                moveInput = rawMoveInput;
+            }
+        }
+        else
+        {
+            // No state data available, use raw input directly.
+            moveInput = rawMoveInput;
+        }
     }
     
+    /// <summary>
+    /// Called by the Input System when the jump button is pressed or released.
+    /// Sets the jump held state and triggers jump buffering if enabled.
+    /// </summary>
+    /// <param name="context">The input callback context.</param>
     public void OnJumpInput(InputAction.CallbackContext context)
     {
+        // Check if the button was just pressed this frame.
         if (context.started)
         {
+            // Mark that jump was pressed this frame for immediate actions.
             jumpPressedThisFrame = true;
+            
+            // Mark jump as held for variable jump height (hold = higher jump).
             jumpHeld = true;
             
+            // If jump buffering is enabled, store the jump request.
+            // This allows jumping even if pressed slightly before landing.
             if (currentState != null && currentState.jumpBufferEnabled)
             {
                 jumpBuffered = true;
                 jumpBufferTimer = currentState.jumpBufferDuration;
             }
         }
+        // Check if the button was just released this frame.
         else if (context.canceled)
         {
+            // Mark jump as no longer held.
             jumpHeld = false;
+            
+            // Disable jump extension (variable height) since button was released.
             canExtendJump = false;
         }
     }
     
+    /// <summary>
+    /// Called by the Input System when the dash button is pressed.
+    /// Only triggers on press, not release.
+    /// </summary>
+    /// <param name="context">The input callback context.</param>
     public void OnDashInput(InputAction.CallbackContext context)
     {
+        // Only respond to button press, not release.
         if (context.started)
         {
+            // Mark that dash was pressed this frame for the dash system to consume.
             dashPressedThisFrame = true;
         }
     }
     
+    /// <summary>
+    /// Called by the Input System when the grab button state changes.
+    /// Used for wall grab/climb mechanics.
+    /// </summary>
+    /// <param name="context">The input callback context.</param>
     public void OnGrabInput(InputAction.CallbackContext context)
     {
+        // Read the button state as a boolean (pressed = true, released = false).
         grabHeld = context.ReadValueAsButton();
     }
     
@@ -2276,6 +2496,691 @@ public class FusedPlayerController : MonoBehaviour
         {
             Debug.Log($"[Fused_PlayerController] Switched to: {currentState.stateName}");
         }
+    }
+    
+    #endregion
+    
+    // ========================================================================
+    // SECTION: INPUT PROCESSING SYSTEM
+    // ========================================================================
+    // This section contains all the logic for processing raw controller input
+    // into clean, usable movement data. It handles:
+    // - Deadzone processing (square, circular, scaled radial)
+    // - Input normalization (prevents diagonal movement being faster)
+    // - Analog/Digital/Hybrid input modes
+    // - Direction snapping for precise dash and wall jump directions
+    // - Input smoothing (optional, for reducing jitter)
+    // ========================================================================
+    
+    #region INPUT PROCESSING
+    
+    /// <summary>
+    /// Processes input every frame when using PerFrame or Both processing modes.
+    /// This method applies all input processing steps and updates the moveInput variable.
+    /// Called from Update() before any movement logic.
+    /// </summary>
+    private void ProcessInputPerFrame()
+    {
+        // Skip processing if no state data is available.
+        if (currentState == null)
+        {
+            moveInput = rawMoveInput;
+            return;
+        }
+        
+        // Process the raw input through all enabled processing steps.
+        Vector2 processedInput = ProcessRawInput(rawMoveInput);
+        
+        // Apply smoothing if enabled.
+        // Smoothing reduces jitter but adds latency - not recommended for precision platformers.
+        if (currentState.enableInputSmoothing)
+        {
+            processedInput = ApplyInputSmoothing(processedInput);
+        }
+        
+        // Store the final processed input for use by movement systems.
+        moveInput = processedInput;
+    }
+    
+    /// <summary>
+    /// Processes raw input through deadzone, normalization, and mode conversion.
+    /// This is the main input processing pipeline.
+    /// </summary>
+    /// <param name="raw">The raw input vector from the Input System.</param>
+    /// <returns>The processed input vector ready for use.</returns>
+    private Vector2 ProcessRawInput(Vector2 raw)
+    {
+        // If no state or custom deadzone disabled, return raw input.
+        if (currentState == null || !currentState.useCustomDeadzone)
+        {
+            return raw;
+        }
+        
+        // Step 1: Apply deadzone processing.
+        // This removes small stick movements (drift) and shapes the response.
+        Vector2 processed = ApplyDeadzone(raw);
+        
+        // Step 2: Normalize diagonal input if enabled.
+        // This prevents diagonal movement from being faster than cardinal.
+        if (currentState.normalizeDiagonalInput)
+        {
+            processed = NormalizeDiagonalInput(processed);
+        }
+        
+        // Step 3: Apply input mode (Digital/Analog/Hybrid).
+        // This determines how stick magnitude affects movement speed.
+        processed = ApplyInputMode(processed);
+        
+        // Step 4: Final magnitude clamping if enabled.
+        // Safety net to ensure input never exceeds expected range.
+        if (currentState.clampInputMagnitude && processed.magnitude > 1f)
+        {
+            processed = processed.normalized;
+        }
+        
+        return processed;
+    }
+    
+    /// <summary>
+    /// Applies deadzone processing to raw input based on the configured deadzone type.
+    /// Different deadzone shapes affect how easily different directions can be input.
+    /// </summary>
+    /// <param name="raw">The raw input vector.</param>
+    /// <returns>The input with deadzone applied.</returns>
+    private Vector2 ApplyDeadzone(Vector2 raw)
+    {
+        // Get deadzone values from current state.
+        float innerDead = currentState.innerDeadzone;
+        float outerDead = currentState.outerDeadzone;
+        
+        // Apply the appropriate deadzone algorithm based on settings.
+        switch (currentState.deadzoneType)
+        {
+            case Fused_DeadzoneType.Square:
+                // Square deadzone: Apply deadzone independently to each axis.
+                // Simple but makes diagonals harder to reach (must exit corner of square).
+                return ApplySquareDeadzone(raw, innerDead, outerDead);
+                
+            case Fused_DeadzoneType.Circular:
+                // Circular deadzone: Apply deadzone based on magnitude.
+                // Equal difficulty for all directions, but can feel jumpy at edge.
+                return ApplyCircularDeadzone(raw, innerDead, outerDead);
+                
+            case Fused_DeadzoneType.ScaledRadial:
+                // Scaled radial: Circular deadzone with rescaled output.
+                // Best feel - equal difficulty AND smooth transition from deadzone.
+                return ApplyScaledRadialDeadzone(raw, innerDead, outerDead);
+                
+            default:
+                return raw;
+        }
+    }
+    
+    /// <summary>
+    /// Applies a square deadzone by processing each axis independently.
+    /// This is the traditional approach but makes diagonals harder to input.
+    /// </summary>
+    /// <param name="raw">The raw input vector.</param>
+    /// <param name="inner">The inner deadzone threshold.</param>
+    /// <param name="outer">The outer deadzone threshold.</param>
+    /// <returns>The processed input vector.</returns>
+    private Vector2 ApplySquareDeadzone(Vector2 raw, float inner, float outer)
+    {
+        // Process X axis independently.
+        float x = ProcessAxisDeadzone(raw.x, inner, outer);
+        
+        // Process Y axis independently.
+        float y = ProcessAxisDeadzone(raw.y, inner, outer);
+        
+        return new Vector2(x, y);
+    }
+    
+    /// <summary>
+    /// Processes a single axis value through deadzone.
+    /// Used by square deadzone processing.
+    /// </summary>
+    /// <param name="value">The axis value (-1 to 1).</param>
+    /// <param name="inner">The inner deadzone threshold.</param>
+    /// <param name="outer">The outer deadzone threshold.</param>
+    /// <returns>The processed axis value.</returns>
+    private float ProcessAxisDeadzone(float value, float inner, float outer)
+    {
+        // Get the sign and absolute value for processing.
+        float sign = Mathf.Sign(value);
+        float abs = Mathf.Abs(value);
+        
+        // If below inner deadzone, return zero.
+        if (abs < inner)
+        {
+            return 0f;
+        }
+        
+        // If above outer deadzone, return full value.
+        if (abs > outer)
+        {
+            return sign;
+        }
+        
+        // Rescale the value to 0-1 range between inner and outer deadzones.
+        float rescaled = (abs - inner) / (outer - inner);
+        
+        return sign * rescaled;
+    }
+    
+    /// <summary>
+    /// Applies a circular deadzone based on input magnitude.
+    /// Equal difficulty for all directions but no rescaling.
+    /// </summary>
+    /// <param name="raw">The raw input vector.</param>
+    /// <param name="inner">The inner deadzone radius.</param>
+    /// <param name="outer">The outer deadzone radius.</param>
+    /// <returns>The processed input vector.</returns>
+    private Vector2 ApplyCircularDeadzone(Vector2 raw, float inner, float outer)
+    {
+        // Calculate the magnitude of the input.
+        float magnitude = raw.magnitude;
+        
+        // If below inner deadzone, return zero.
+        if (magnitude < inner)
+        {
+            return Vector2.zero;
+        }
+        
+        // If above outer deadzone, clamp to unit circle.
+        if (magnitude > outer)
+        {
+            return raw.normalized;
+        }
+        
+        // Return original direction, magnitude unchanged.
+        // Note: This doesn't rescale, so there's a "jump" at deadzone edge.
+        return raw;
+    }
+    
+    /// <summary>
+    /// Applies a scaled radial deadzone - the recommended approach.
+    /// Circular deadzone with smooth rescaling from 0 at inner edge.
+    /// Provides equal difficulty for all directions AND smooth response.
+    /// </summary>
+    /// <param name="raw">The raw input vector.</param>
+    /// <param name="inner">The inner deadzone radius.</param>
+    /// <param name="outer">The outer deadzone radius.</param>
+    /// <returns>The processed input vector.</returns>
+    private Vector2 ApplyScaledRadialDeadzone(Vector2 raw, float inner, float outer)
+    {
+        // Calculate the magnitude of the input.
+        float magnitude = raw.magnitude;
+        
+        // If below inner deadzone, return zero.
+        if (magnitude < inner)
+        {
+            return Vector2.zero;
+        }
+        
+        // Calculate the direction (normalized input).
+        Vector2 direction = raw / magnitude;
+        
+        // Clamp magnitude to outer deadzone.
+        float clampedMagnitude = Mathf.Min(magnitude, outer);
+        
+        // Rescale magnitude: 0 at inner edge, 1 at outer edge.
+        // This provides smooth transition from deadzone instead of sudden jump.
+        float rescaledMagnitude = (clampedMagnitude - inner) / (outer - inner);
+        
+        // Return direction scaled by rescaled magnitude.
+        return direction * rescaledMagnitude;
+    }
+    
+    /// <summary>
+    /// Normalizes diagonal input to prevent faster diagonal movement.
+    /// Raw diagonal input can have magnitude ~1.41 (sqrt of 2).
+    /// This clamps it to 1.0 while preserving direction.
+    /// </summary>
+    /// <param name="input">The input vector to normalize.</param>
+    /// <returns>The normalized input vector with magnitude <= 1.</returns>
+    private Vector2 NormalizeDiagonalInput(Vector2 input)
+    {
+        // If magnitude exceeds 1, normalize it.
+        // This ensures diagonal movement isn't faster than cardinal.
+        if (input.magnitude > 1f)
+        {
+            return input.normalized;
+        }
+        
+        return input;
+    }
+    
+    /// <summary>
+    /// Applies the configured input mode (Digital/Analog/Hybrid).
+    /// This determines how stick magnitude affects movement speed.
+    /// </summary>
+    /// <param name="input">The input vector after deadzone processing.</param>
+    /// <returns>The input with mode applied.</returns>
+    private Vector2 ApplyInputMode(Vector2 input)
+    {
+        // Skip if no input.
+        if (input.sqrMagnitude < 0.001f)
+        {
+            return Vector2.zero;
+        }
+        
+        // Get magnitude and direction.
+        float magnitude = input.magnitude;
+        Vector2 direction = input / magnitude;
+        
+        // Apply the appropriate mode.
+        switch (currentState.movementInputMode)
+        {
+            case Fused_InputMode.Digital:
+                // Digital mode: Any input = full magnitude.
+                // This is Celeste-style - most responsive, binary movement.
+                return direction;
+                
+            case Fused_InputMode.Analog:
+                // Analog mode: Magnitude affects speed.
+                // Apply sensitivity curve for fine control.
+                float curvedMagnitude = ApplyAnalogCurve(magnitude);
+                return direction * curvedMagnitude;
+                
+            case Fused_InputMode.Hybrid:
+                // Hybrid mode: Analog up to threshold, then snaps to full.
+                // Best of both worlds - analog precision with full speed option.
+                if (magnitude >= currentState.digitalThreshold)
+                {
+                    return direction;
+                }
+                else
+                {
+                    // Scale analog portion to fill 0 to threshold range.
+                    float analogPortion = magnitude / currentState.digitalThreshold;
+                    float curvedAnalog = ApplyAnalogCurve(analogPortion);
+                    return direction * curvedAnalog;
+                }
+                
+            default:
+                return input;
+        }
+    }
+    
+    /// <summary>
+    /// Applies the analog sensitivity curve to a magnitude value.
+    /// Uses either an exponent or a custom AnimationCurve.
+    /// </summary>
+    /// <param name="magnitude">The input magnitude (0-1).</param>
+    /// <returns>The curved magnitude (0-1).</returns>
+    private float ApplyAnalogCurve(float magnitude)
+    {
+        // Use custom curve if enabled.
+        if (currentState.useCustomAnalogCurve && currentState.analogResponseCurve != null)
+        {
+            return currentState.analogResponseCurve.Evaluate(magnitude);
+        }
+        
+        // Otherwise use the exponent.
+        // Exponent < 1 = more sensitive at low values (aggressive).
+        // Exponent > 1 = less sensitive at low values (smooth).
+        // Exponent = 1 = linear (no change).
+        return Mathf.Pow(magnitude, currentState.analogSensitivityExponent);
+    }
+    
+    /// <summary>
+    /// Applies input smoothing to reduce jitter.
+    /// NOT recommended for precision platformers as it adds latency.
+    /// </summary>
+    /// <param name="input">The input to smooth.</param>
+    /// <returns>The smoothed input.</returns>
+    private Vector2 ApplyInputSmoothing(Vector2 input)
+    {
+        switch (currentState.inputSmoothingMode)
+        {
+            case Fused_InputSmoothingMode.Lerp:
+                // Linear interpolation: Move toward target by fixed factor.
+                smoothedMoveInput = Vector2.Lerp(smoothedMoveInput, input, 
+                    1f - currentState.inputSmoothingFactor);
+                return smoothedMoveInput;
+                
+            case Fused_InputSmoothingMode.Exponential:
+                // Exponential smoothing: More responsive to large changes.
+                float factor = 1f - Mathf.Pow(currentState.inputSmoothingFactor, Time.deltaTime * 60f);
+                smoothedMoveInput = Vector2.Lerp(smoothedMoveInput, input, factor);
+                return smoothedMoveInput;
+                
+            case Fused_InputSmoothingMode.MovingAverage:
+                // Moving average: Average of last N frames.
+                return ApplyMovingAverageSmoothing(input);
+                
+            default:
+                return input;
+        }
+    }
+    
+    /// <summary>
+    /// Applies moving average smoothing using a circular buffer.
+    /// Averages the last N frames of input for stable but delayed response.
+    /// </summary>
+    /// <param name="input">The current frame's input.</param>
+    /// <returns>The averaged input.</returns>
+    private Vector2 ApplyMovingAverageSmoothing(Vector2 input)
+    {
+        // Store current input in the circular buffer.
+        inputHistory[inputHistoryIndex] = input;
+        inputHistoryIndex = (inputHistoryIndex + 1) % currentState.movingAverageFrames;
+        
+        // Check if buffer is filled (for first N frames).
+        if (inputHistoryIndex == 0)
+        {
+            inputHistoryFilled = true;
+        }
+        
+        // Calculate the average of stored inputs.
+        Vector2 sum = Vector2.zero;
+        int count = inputHistoryFilled ? currentState.movingAverageFrames : inputHistoryIndex;
+        
+        for (int i = 0; i < count; i++)
+        {
+            sum += inputHistory[i];
+        }
+        
+        return count > 0 ? sum / count : input;
+    }
+    
+    /// <summary>
+    /// Gets a snapped direction for precision actions like dash and wall jump.
+    /// Quantizes analog input into discrete directions based on settings.
+    /// </summary>
+    /// <param name="input">The input direction to snap.</param>
+    /// <returns>The snapped direction vector.</returns>
+    public Vector2 GetSnappedDirection(Vector2 input)
+    {
+        // If snapping disabled or no state, return normalized input.
+        if (currentState == null || !currentState.enableDirectionSnapping)
+        {
+            return input.magnitude > 0.001f ? input.normalized : Vector2.zero;
+        }
+        
+        // Check minimum magnitude for direction registration.
+        if (input.magnitude < currentState.directionSnapMinMagnitude)
+        {
+            return Vector2.zero;
+        }
+        
+        // Calculate the angle of the input (0-360 degrees, 0 = right).
+        float angle = Mathf.Atan2(input.y, input.x) * Mathf.Rad2Deg;
+        if (angle < 0) angle += 360f;
+        
+        // Snap to the nearest direction based on snap count and zone mode.
+        float snappedAngle = SnapAngleToDirection(angle);
+        
+        // Convert back to vector.
+        float rad = snappedAngle * Mathf.Deg2Rad;
+        Vector2 snapped = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+        
+        // Cache for multi-frame actions.
+        lastSnappedDirection = snapped;
+        
+        return snapped;
+    }
+    
+    /// <summary>
+    /// Snaps an angle to the nearest discrete direction.
+    /// Takes into account direction count and bias settings.
+    /// </summary>
+    /// <param name="angle">The input angle in degrees (0-360).</param>
+    /// <returns>The snapped angle in degrees.</returns>
+    private float SnapAngleToDirection(float angle)
+    {
+        // Get the number of directions and calculate zone size.
+        int dirCount = (int)currentState.directionSnapCount;
+        float baseZoneSize = 360f / dirCount;
+        
+        // Calculate which zone the angle falls into.
+        // For 8-way: zones are centered at 0, 45, 90, 135, 180, 225, 270, 315.
+        
+        if (currentState.directionZoneMode == Fused_DirectionZoneMode.Equal)
+        {
+            // Equal zones: Simple quantization.
+            // Offset by half zone to center zones on cardinal/diagonal directions.
+            float offsetAngle = angle + (baseZoneSize / 2f);
+            int zoneIndex = Mathf.FloorToInt(offsetAngle / baseZoneSize) % dirCount;
+            return zoneIndex * baseZoneSize;
+        }
+        else
+        {
+            // Biased zones: Cardinals and diagonals have different sizes.
+            return SnapAngleWithBias(angle, dirCount);
+        }
+    }
+    
+    /// <summary>
+    /// Snaps an angle to direction with cardinal/diagonal bias.
+    /// Cardinals are at 0, 90, 180, 270. Diagonals at 45, 135, 225, 315.
+    /// </summary>
+    /// <param name="angle">The input angle in degrees.</param>
+    /// <param name="dirCount">The number of directions (4, 8, or 16).</param>
+    /// <returns>The snapped angle in degrees.</returns>
+    private float SnapAngleWithBias(float angle, int dirCount)
+    {
+        // Only apply bias for 8-way (4-way has no diagonals, 16-way is too fine).
+        if (dirCount != 8)
+        {
+            float baseZoneSize = 360f / dirCount;
+            float offsetAngle = angle + (baseZoneSize / 2f);
+            int zoneIndex = Mathf.FloorToInt(offsetAngle / baseZoneSize) % dirCount;
+            return zoneIndex * baseZoneSize;
+        }
+        
+        // Calculate biased zone sizes.
+        float bias = currentState.cardinalBiasAngle;
+        bool isCardinalBiased = currentState.directionZoneMode == Fused_DirectionZoneMode.CardinalBiased;
+        
+        // Cardinal zone size and diagonal zone size.
+        float cardinalZone = isCardinalBiased ? 45f + bias : 45f - bias;
+        float diagonalZone = isCardinalBiased ? 45f - bias : 45f + bias;
+        
+        // Clamp zones to valid range.
+        cardinalZone = Mathf.Clamp(cardinalZone, 5f, 85f);
+        diagonalZone = Mathf.Clamp(diagonalZone, 5f, 85f);
+        
+        // Define the 8 directions and their zones.
+        // Zones are centered on each direction.
+        float[] directions = { 0f, 45f, 90f, 135f, 180f, 225f, 270f, 315f };
+        float[] zoneSizes = { cardinalZone, diagonalZone, cardinalZone, diagonalZone,
+                              cardinalZone, diagonalZone, cardinalZone, diagonalZone };
+        
+        // Find which zone the angle falls into.
+        float currentBoundary = 0f;
+        for (int i = 0; i < 8; i++)
+        {
+            float halfZone = zoneSizes[i] / 2f;
+            float zoneStart = directions[i] - halfZone;
+            float zoneEnd = directions[i] + halfZone;
+            
+            // Handle wraparound at 0/360.
+            if (zoneStart < 0)
+            {
+                if (angle >= (360f + zoneStart) || angle < zoneEnd)
+                {
+                    return directions[i];
+                }
+            }
+            else if (zoneEnd > 360f)
+            {
+                if (angle >= zoneStart || angle < (zoneEnd - 360f))
+                {
+                    return directions[i];
+                }
+            }
+            else
+            {
+                if (angle >= zoneStart && angle < zoneEnd)
+                {
+                    return directions[i];
+                }
+            }
+        }
+        
+        // Fallback: snap to nearest direction.
+        float nearestAngle = 0f;
+        float nearestDist = 360f;
+        foreach (float dir in directions)
+        {
+            float dist = Mathf.Abs(Mathf.DeltaAngle(angle, dir));
+            if (dist < nearestDist)
+            {
+                nearestDist = dist;
+                nearestAngle = dir;
+            }
+        }
+        
+        return nearestAngle;
+    }
+    
+    /// <summary>
+    /// Checks if the current input is pressing toward a wall.
+    /// Uses the configured wall slide input threshold for controller support.
+    /// </summary>
+    /// <param name="wallDir">The direction of the wall (-1 = left, 1 = right).</param>
+    /// <returns>True if pressing toward the wall past the threshold.</returns>
+    public bool IsPressingTowardWall(int wallDir)
+    {
+        // Get the threshold from state, or use default if not available.
+        float threshold = currentState != null ? currentState.wallSlideInputThreshold : 0.1f;
+        
+        // Check if horizontal input is toward the wall and past threshold.
+        return moveInput.x * wallDir > threshold;
+    }
+    
+    /// <summary>
+    /// Gets the wall jump direction based on input and settings.
+    /// Handles neutral wall jumps and directional wall jumps.
+    /// </summary>
+    /// <param name="wallDir">The direction of the wall (-1 = left, 1 = right).</param>
+    /// <returns>The wall jump direction as a normalized vector.</returns>
+    public Vector2 GetWallJumpDirection(int wallDir)
+    {
+        if (currentState == null)
+        {
+            // Default: jump away from wall at 45 degrees up.
+            return new Vector2(-wallDir, 1f).normalized;
+        }
+        
+        // Get input magnitude for determining neutral vs directional.
+        float inputMagnitude = moveInput.magnitude;
+        
+        // Check for neutral wall jump (no directional input).
+        if (currentState.enableNeutralWallJump && inputMagnitude < currentState.wallJumpInputThreshold)
+        {
+            // Neutral wall jump: Mostly vertical with slight push away.
+            return new Vector2(
+                -wallDir * currentState.neutralWallJumpHorizontalMultiplier,
+                currentState.neutralWallJumpVerticalMultiplier
+            ).normalized;
+        }
+        
+        // Check for directional wall jump.
+        if (currentState.enableDirectionalWallJump && inputMagnitude >= currentState.wallJumpInputThreshold)
+        {
+            // Get the snapped direction for precision.
+            Vector2 inputDir = GetSnappedDirection(moveInput);
+            
+            // Calculate the base away direction (horizontal, away from wall).
+            Vector2 awayDir = new Vector2(-wallDir, 0f);
+            
+            // Calculate the angle between input and away direction.
+            float inputAngle = Mathf.Atan2(inputDir.y, inputDir.x) * Mathf.Rad2Deg;
+            float awayAngle = Mathf.Atan2(awayDir.y, awayDir.x) * Mathf.Rad2Deg;
+            float angleDiff = Mathf.DeltaAngle(awayAngle, inputAngle);
+            
+            // Clamp the angle difference to the maximum allowed.
+            float maxAngle = currentState.directionalWallJumpMaxAngle;
+            angleDiff = Mathf.Clamp(angleDiff, -maxAngle, maxAngle);
+            
+            // Calculate final angle and convert to direction.
+            float finalAngle = (awayAngle + angleDiff) * Mathf.Deg2Rad;
+            return new Vector2(Mathf.Cos(finalAngle), Mathf.Sin(finalAngle));
+        }
+        
+        // Default: Jump away from wall at standard angle.
+        return new Vector2(-wallDir, 1f).normalized;
+    }
+    
+    /// <summary>
+    /// Gets the dash direction based on current input and settings.
+    /// Uses direction snapping for precise 8-way or 4-way dashing.
+    /// </summary>
+    /// <returns>The dash direction as a normalized vector, or zero if no valid direction.</returns>
+    public Vector2 GetDashDirection()
+    {
+        if (currentState == null)
+        {
+            // Default: dash in input direction or facing direction.
+            if (moveInput.magnitude > 0.1f)
+            {
+                return moveInput.normalized;
+            }
+            return new Vector2(isFacingRight ? 1f : -1f, 0f);
+        }
+        
+        // Handle different dash direction modes.
+        switch (currentState.dashDirectionMode)
+        {
+            case Fused_DashDirectionMode.FacingDirection:
+                // Always dash in facing direction regardless of input.
+                return new Vector2(isFacingRight ? 1f : -1f, 0f);
+                
+            case Fused_DashDirectionMode.HorizontalOnly:
+                // Dash horizontally based on input or facing.
+                if (Mathf.Abs(moveInput.x) > currentState.directionSnapMinMagnitude)
+                {
+                    return new Vector2(Mathf.Sign(moveInput.x), 0f);
+                }
+                return new Vector2(isFacingRight ? 1f : -1f, 0f);
+                
+            case Fused_DashDirectionMode.InputCardinal:
+            case Fused_DashDirectionMode.InputEightWay:
+                // Use snapped direction for precise dashing.
+                Vector2 snapped = GetSnappedDirection(moveInput);
+                if (snapped.magnitude < 0.1f)
+                {
+                    // No input: dash in facing direction.
+                    return new Vector2(isFacingRight ? 1f : -1f, 0f);
+                }
+                return snapped;
+                
+            default:
+                return moveInput.magnitude > 0.1f ? moveInput.normalized : 
+                    new Vector2(isFacingRight ? 1f : -1f, 0f);
+        }
+    }
+    
+    /// <summary>
+    /// Gets the raw, unprocessed input value.
+    /// Useful for debugging or systems that need the original input.
+    /// </summary>
+    /// <returns>The raw input vector from the Input System.</returns>
+    public Vector2 GetRawInput()
+    {
+        return rawMoveInput;
+    }
+    
+    /// <summary>
+    /// Gets the processed movement input.
+    /// This is the input used for actual movement calculations.
+    /// </summary>
+    /// <returns>The processed input vector.</returns>
+    public Vector2 GetProcessedInput()
+    {
+        return moveInput;
+    }
+    
+    /// <summary>
+    /// Gets the last snapped direction that was calculated.
+    /// Useful for consistent direction during multi-frame actions.
+    /// </summary>
+    /// <returns>The last snapped direction vector.</returns>
+    public Vector2 GetLastSnappedDirection()
+    {
+        return lastSnappedDirection;
     }
     
     #endregion

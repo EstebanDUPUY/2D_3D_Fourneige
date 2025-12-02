@@ -933,4 +933,309 @@ public class FusedPlayerStateData : ScriptableObject
     public bool refillStaminaOnRotation = false;
     
     #endregion
+    
+    // ========================================================================
+    // SECTION: CONTROLLER INPUT SETTINGS
+    // ========================================================================
+    // This section contains all settings related to joystick/gamepad input
+    // processing. These settings fix common issues with analog stick input
+    // such as diagonal movement being harder than cardinal movement,
+    // imprecise dash directions, and drift from stick deadzones.
+    // ========================================================================
+    
+    #region CONTROLLER INPUT SETTINGS
+    
+    [Header("═══════════════════════════════════════")]
+    [Header("        CONTROLLER INPUT SETTINGS")]
+    [Header("═══════════════════════════════════════")]
+    
+    // -------------------------------------------------------------------------
+    // DEADZONE SETTINGS
+    // -------------------------------------------------------------------------
+    // Deadzones prevent tiny stick movements (drift) from registering as input.
+    // There are two main deadzone shapes: Square and Circular.
+    // Square deadzones make diagonals harder because the stick must travel
+    // further to exit the deadzone corner. Circular deadzones fix this.
+    // -------------------------------------------------------------------------
+    
+    [Tooltip("Enable custom deadzone processing. If FALSE, uses raw input from Input System.")]
+    public bool useCustomDeadzone = true;
+    
+    [Tooltip("Deadzone shape. CIRCULAR fixes diagonal input being harder than cardinal.\n" +
+             "SQUARE is the traditional approach but diagonals require more stick travel.\n" +
+             "SCALED_RADIAL removes deadzone then rescales so small movements still register.")]
+    public Fused_DeadzoneType deadzoneType = Fused_DeadzoneType.ScaledRadial;
+    
+    [Tooltip("Inner deadzone radius. Input magnitude below this is treated as zero.\n" +
+             "Typical values: 0.1 to 0.25. Higher = less drift but less precision.")]
+    [Range(-999999f, 999999f)]
+    public float innerDeadzone = 0.15f;
+    
+    [Tooltip("Outer deadzone. Input magnitude above this is treated as maximum (1.0).\n" +
+             "Helps ensure full speed is reachable even if stick doesn't hit edge.")]
+    [Range(-999999f, 999999f)]
+    public float outerDeadzone = 0.95f;
+    
+    // -------------------------------------------------------------------------
+    // INPUT NORMALIZATION
+    // -------------------------------------------------------------------------
+    // When moving diagonally, raw input can have magnitude ~1.41 (sqrt of 2).
+    // This makes diagonal movement faster unless normalized.
+    // -------------------------------------------------------------------------
+    
+    [Tooltip("Normalize diagonal input so magnitude never exceeds 1.0.\n" +
+             "Prevents diagonal movement from being faster than cardinal.")]
+    public bool normalizeDiagonalInput = true;
+    
+    [Tooltip("Clamp final input magnitude to 1.0 after all processing.\n" +
+             "Safety net to ensure input never exceeds expected range.")]
+    public bool clampInputMagnitude = true;
+    
+    // -------------------------------------------------------------------------
+    // ANALOG VS DIGITAL MOVEMENT
+    // -------------------------------------------------------------------------
+    // Celeste uses digital (binary) input - any input = full speed.
+    // Traditional games use analog - partial stick = partial speed.
+    // These settings let you choose or blend between both approaches.
+    // -------------------------------------------------------------------------
+    
+    [Tooltip("Movement input mode.\n" +
+             "DIGITAL: Any input past deadzone = full speed (Celeste-style).\n" +
+             "ANALOG: Partial stick = partial speed (traditional).\n" +
+             "HYBRID: Analog up to threshold, then snaps to full.")]
+    public Fused_InputMode movementInputMode = Fused_InputMode.Digital;
+    
+    [Tooltip("For HYBRID mode: input magnitude above this becomes full speed.\n" +
+             "Example: 0.8 means 80%+ stick tilt = full speed.")]
+    [Range(-999999f, 999999f)]
+    public float digitalThreshold = 0.8f;
+    
+    [Tooltip("For ANALOG mode: curve to apply to input magnitude.\n" +
+             "1.0 = linear, <1.0 = more sensitive at low values, >1.0 = less sensitive at low values.")]
+    [Range(-999999f, 999999f)]
+    public float analogSensitivityExponent = 1.0f;
+    
+    [Tooltip("Custom analog response curve. X = raw input, Y = processed output.\n" +
+             "Only used when analogSensitivityExponent is not 1.0 or when using custom curve mode.")]
+    public AnimationCurve analogResponseCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+    
+    [Tooltip("Use the custom AnimationCurve instead of the exponent for analog response.")]
+    public bool useCustomAnalogCurve = false;
+    
+    // -------------------------------------------------------------------------
+    // DIRECTION SNAPPING (FOR DASH AND WALL JUMP)
+    // -------------------------------------------------------------------------
+    // Analog sticks make it hard to hit exact directions (up, diagonal, etc).
+    // Direction snapping quantizes input into discrete directions.
+    // This is crucial for 8-way dashing and precise wall jumps.
+    // -------------------------------------------------------------------------
+    
+    [Tooltip("Enable direction snapping for actions like dash.\n" +
+             "Quantizes analog input into discrete directions.")]
+    public bool enableDirectionSnapping = true;
+    
+    [Tooltip("Number of directions to snap to.\n" +
+             "4 = cardinal only, 8 = cardinal + diagonal, 16 = finer control.")]
+    public Fused_DirectionSnapCount directionSnapCount = Fused_DirectionSnapCount.EightWay;
+    
+    [Tooltip("Direction snap zone mode.\n" +
+             "EQUAL: All directions get equal-sized zones.\n" +
+             "CARDINAL_BIASED: Cardinals get larger zones (easier to hit).\n" +
+             "DIAGONAL_BIASED: Diagonals get larger zones.")]
+    public Fused_DirectionZoneMode directionZoneMode = Fused_DirectionZoneMode.Equal;
+    
+    [Tooltip("For CARDINAL_BIASED mode: extra degrees added to cardinal zones.\n" +
+             "Example: 15 means cardinals get 45+15=60°, diagonals get 45-15=30°.")]
+    [Range(-999999f, 999999f)]
+    public float cardinalBiasAngle = 15f;
+    
+    [Tooltip("Minimum input magnitude required to register a direction for snapping.\n" +
+             "Below this, direction is considered neutral/none.")]
+    [Range(-999999f, 999999f)]
+    public float directionSnapMinMagnitude = 0.3f;
+    
+    // -------------------------------------------------------------------------
+    // WALL INTERACTION INPUT THRESHOLDS
+    // -------------------------------------------------------------------------
+    // How much stick deflection is needed to trigger wall-related actions.
+    // Lower values = more sensitive, higher values = more deliberate.
+    // -------------------------------------------------------------------------
+    
+    [Tooltip("Minimum horizontal input magnitude to trigger wall slide (when using HoldToward mode).\n" +
+             "Higher values require more deliberate stick movement toward the wall.")]
+    [Range(-999999f, 999999f)]
+    public float wallSlideInputThreshold = 0.3f;
+    
+    [Tooltip("Minimum input magnitude to influence wall jump direction.\n" +
+             "Below this, wall jump uses default away-from-wall direction.")]
+    [Range(-999999f, 999999f)]
+    public float wallJumpInputThreshold = 0.2f;
+    
+    [Tooltip("Enable directional wall jumps. If TRUE, input direction affects jump angle.\n" +
+             "If FALSE, wall jumps always push directly away from wall.")]
+    public bool enableDirectionalWallJump = true;
+    
+    [Tooltip("Enable neutral wall jump. If TRUE, jumping with no directional input\n" +
+             "performs a straight-up wall jump instead of pushing away.")]
+    public bool enableNeutralWallJump = false;
+    
+    [Tooltip("Vertical force multiplier for neutral wall jumps (relative to normal wall jump).")]
+    [Range(-999999f, 999999f)]
+    public float neutralWallJumpVerticalMultiplier = 1.2f;
+    
+    [Tooltip("Horizontal force multiplier for neutral wall jumps (usually lower than normal).")]
+    [Range(-999999f, 999999f)]
+    public float neutralWallJumpHorizontalMultiplier = 0.3f;
+    
+    [Tooltip("Maximum angle offset from straight-away for directional wall jumps.\n" +
+             "45 = can wall jump at 45° upward, 0 = always straight away.")]
+    [Range(-999999f, 999999f)]
+    public float directionalWallJumpMaxAngle = 45f;
+    
+    // -------------------------------------------------------------------------
+    // INPUT PROCESSING TIMING
+    // -------------------------------------------------------------------------
+    // Choose when input processing occurs - immediately on input event,
+    // or each frame. Frame-based allows runtime setting changes.
+    // -------------------------------------------------------------------------
+    
+    [Tooltip("When to apply input processing (deadzone, normalization, etc).\n" +
+             "ON_INPUT_EVENT: Process immediately when input is received (lower latency).\n" +
+             "PER_FRAME: Process each frame (allows runtime setting changes).\n" +
+             "BOTH: Process on input AND validate each frame.")]
+    public Fused_InputProcessingTime inputProcessingTime = Fused_InputProcessingTime.PerFrame;
+    
+    // -------------------------------------------------------------------------
+    // INPUT SMOOTHING (OPTIONAL)
+    // -------------------------------------------------------------------------
+    // Smoothing can reduce jittery input but adds latency.
+    // Generally not recommended for precise platformers.
+    // -------------------------------------------------------------------------
+    
+    [Tooltip("Enable input smoothing. Reduces jitter but adds latency.\n" +
+             "NOT recommended for Celeste-style precision platformers.")]
+    public bool enableInputSmoothing = false;
+    
+    [Tooltip("Smoothing factor. 0 = no smoothing, 1 = infinite smoothing (stuck).\n" +
+             "Typical values: 0.1 to 0.3 for subtle smoothing.")]
+    [Range(-999999f, 999999f)]
+    public float inputSmoothingFactor = 0.15f;
+    
+    [Tooltip("Smoothing mode.\n" +
+             "LERP: Linear interpolation toward target.\n" +
+             "EXPONENTIAL: Exponential smoothing (more responsive to large changes).\n" +
+             "MOVING_AVERAGE: Average of last N frames.")]
+    public Fused_InputSmoothingMode inputSmoothingMode = Fused_InputSmoothingMode.Exponential;
+    
+    [Tooltip("Number of frames to average for MOVING_AVERAGE mode.")]
+    [Range(1, 30)]
+    public int movingAverageFrames = 5;
+    
+    #endregion
 }
+
+// ============================================================================
+// CONTROLLER INPUT ENUMERATIONS
+// ============================================================================
+// These enums define the various modes and options for controller input
+// processing. They are placed at the end of the file with other enums.
+// ============================================================================
+
+#region CONTROLLER INPUT ENUMERATIONS
+
+/// <summary>
+/// Deadzone shape type for analog stick processing.
+/// Affects how easily diagonal vs cardinal directions can be input.
+/// </summary>
+public enum Fused_DeadzoneType
+{
+    /// <summary>Square deadzone. Simple but diagonals are harder to reach.</summary>
+    Square,
+    
+    /// <summary>Circular deadzone. Equal difficulty for all directions.</summary>
+    Circular,
+    
+    /// <summary>
+    /// Scaled radial deadzone. Circular deadzone that rescales output
+    /// so the usable range starts at 0 instead of jumping from deadzone to partial.
+    /// RECOMMENDED for best feel.
+    /// </summary>
+    ScaledRadial
+}
+
+/// <summary>
+/// Input mode determining how analog stick magnitude affects movement.
+/// </summary>
+public enum Fused_InputMode
+{
+    /// <summary>Any input past deadzone = full speed. Celeste-style, most responsive.</summary>
+    Digital,
+    
+    /// <summary>Partial stick = partial speed. Traditional analog control.</summary>
+    Analog,
+    
+    /// <summary>Analog up to threshold, then snaps to full. Best of both worlds.</summary>
+    Hybrid
+}
+
+/// <summary>
+/// Number of directions for direction snapping.
+/// </summary>
+public enum Fused_DirectionSnapCount
+{
+    /// <summary>4 directions: Up, Down, Left, Right only.</summary>
+    FourWay = 4,
+    
+    /// <summary>8 directions: Cardinals + Diagonals. RECOMMENDED for Celeste-style.</summary>
+    EightWay = 8,
+    
+    /// <summary>16 directions: Finer control, less snapping.</summary>
+    SixteenWay = 16
+}
+
+/// <summary>
+/// How direction snap zones are sized.
+/// </summary>
+public enum Fused_DirectionZoneMode
+{
+    /// <summary>All directions get equal-sized zones (45° each for 8-way).</summary>
+    Equal,
+    
+    /// <summary>Cardinal directions (Up/Down/Left/Right) get larger zones.</summary>
+    CardinalBiased,
+    
+    /// <summary>Diagonal directions get larger zones.</summary>
+    DiagonalBiased
+}
+
+/// <summary>
+/// When input processing is applied.
+/// </summary>
+public enum Fused_InputProcessingTime
+{
+    /// <summary>Process immediately when input callback fires. Lowest latency.</summary>
+    OnInputEvent,
+    
+    /// <summary>Process each frame in Update. Allows runtime setting changes.</summary>
+    PerFrame,
+    
+    /// <summary>Process on both input event AND each frame. Most flexible but redundant.</summary>
+    Both
+}
+
+/// <summary>
+/// Input smoothing algorithm.
+/// </summary>
+public enum Fused_InputSmoothingMode
+{
+    /// <summary>Linear interpolation. Simple, consistent smoothing.</summary>
+    Lerp,
+    
+    /// <summary>Exponential smoothing. More responsive to sudden changes.</summary>
+    Exponential,
+    
+    /// <summary>Moving average of last N frames. Stable but adds latency.</summary>
+    MovingAverage
+}
+
+#endregion
