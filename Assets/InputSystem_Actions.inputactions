@@ -88,18 +88,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwitchState",
+                    "name": "Dash",
                     "type": "Button",
-                    "id": "8e87d1a2-efda-4c52-bb87-281d4ff7e39e",
+                    "id": "6dbd0b58-bc5c-4071-a1f2-2651421deafe",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dash",
+                    "name": "FastFall",
                     "type": "Button",
-                    "id": "6dbd0b58-bc5c-4071-a1f2-2651421deafe",
+                    "id": "6066435c-d735-4e3a-aa7e-0808e6c8b82c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Grab",
+                    "type": "Button",
+                    "id": "3ec28f25-52f7-418b-bd6f-a19be2019ff4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchState",
+                    "type": "Button",
+                    "id": "8e87d1a2-efda-4c52-bb87-281d4ff7e39e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -595,6 +613,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "FezRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8a7e78e-8284-450a-8e01-48301fb62739",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1c3317f6-b297-44c5-bede-de2232ac52c7",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2b8f569b-f1b0-4c85-8439-d5e838eb2bf4",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastFall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c0d9e20-eae3-4db1-bb97-5eaf6acce03a",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastFall",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

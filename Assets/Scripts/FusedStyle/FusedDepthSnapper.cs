@@ -25,7 +25,7 @@ using System.Collections.Generic;     // Required for List<T>
 /// 3. Assign the player reference (or let it auto-find)
 /// 4. Configure the platform layer mask
 /// </summary>
-public class FezDepthSnapper : MonoBehaviour
+public class FusedDepthSnapper : MonoBehaviour
 {
     // ========================================================================
     // INSPECTOR REFERENCES
@@ -200,7 +200,7 @@ public class FezDepthSnapper : MonoBehaviour
         if (playerTransform == null)
         {
             // Look for the player controller
-            FezPlayerController playerController = FindObjectOfType<FezPlayerController>();
+            FusedPlayerController playerController = FindObjectOfType<FusedPlayerController>();
             
             if (playerController != null)
             {
@@ -232,7 +232,7 @@ public class FezDepthSnapper : MonoBehaviour
     private void SubscribeToRotationEvents()
     {
         // Get the rotation controller
-        FezWorldRotation controller = FezWorldRotation.Instance;
+        FusedWorldRotation controller = FusedWorldRotation.Instance;
         
         // Check if controller exists
         if (controller != null)
@@ -258,7 +258,7 @@ public class FezDepthSnapper : MonoBehaviour
     private void UnsubscribeFromRotationEvents()
     {
         // Get the rotation controller
-        FezWorldRotation controller = FezWorldRotation.Instance;
+        FusedWorldRotation controller = FusedWorldRotation.Instance;
         
         // If controller exists, unsubscribe
         if (controller != null)
@@ -359,11 +359,11 @@ public class FezDepthSnapper : MonoBehaviour
             Debug.LogError("[FezDepthSnapper] Cannot snap: playerTransform is null!");
             return;
         }
-        
+
         // --- GET DEPTH DIRECTION ---
-        
+
         // Get rotation controller
-        FezWorldRotation controller = FezWorldRotation.Instance;
+        FusedWorldRotation controller = FusedWorldRotation.Instance;
         
         if (controller == null)
         {
@@ -747,11 +747,11 @@ public class FezDepthSnapper : MonoBehaviour
         // Semi-transparent cyan sphere showing search range
         Gizmos.color = new Color(0f, 1f, 1f, 0.2f);
         Gizmos.DrawWireSphere(playerTransform.position, maxSnapDistance);
-        
+
         // --- DRAW DEPTH DIRECTIONS ---
-        
+
         // Get rotation controller
-        FezWorldRotation controller = FezWorldRotation.Instance;
+        FusedWorldRotation controller = FusedWorldRotation.Instance;
         
         if (controller != null || Application.isPlaying)
         {
