@@ -11,7 +11,8 @@ public class FireObstacleController : MonoBehaviour
     private bool inGeyser;
     private bool inBodyGeyser;
 
-    private FezPlayerController state;
+    private Fused_Player state;
+
     private Vector3 posPlayerOnScreen;
 
     [SerializeField] public VolumeProfile profil;
