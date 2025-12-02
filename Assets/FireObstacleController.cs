@@ -11,7 +11,7 @@ public class FireObstacleController : MonoBehaviour
     private bool inGeyser;
     private bool inBodyGeyser;
 
-    private Fused_Player state;
+    private FusedPlayerController state;
 
     private Vector3 posPlayerOnScreen;
 
@@ -21,7 +21,7 @@ public class FireObstacleController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        state = GetComponent<FezPlayerController>();
+        state = GetComponent<FusedPlayerController>();
     }
 
     void Update()
@@ -32,7 +32,7 @@ public class FireObstacleController : MonoBehaviour
         {
             vignette.center.value = new Vector2(posPlayerOnScreen.x, posPlayerOnScreen.y);
 
-            if (state.currentState == FezPlayerController.States.Fire)
+            if (state.currentState.stateName == FusedPlayerController.States.Fire)
                 vignette.intensity.value = 0.2f;
             else
                 vignette.intensity.value = 1f;

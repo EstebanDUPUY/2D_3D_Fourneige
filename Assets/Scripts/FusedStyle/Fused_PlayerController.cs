@@ -63,7 +63,7 @@ public class FusedPlayerController : MonoBehaviour
     [SerializeField]
     private FusedPlayerStateData secondaryStateData;
     
-    private FusedPlayerStateData currentState;
+    public FusedPlayerStateData currentState;
     
     #endregion
     
