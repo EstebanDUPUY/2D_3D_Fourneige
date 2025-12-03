@@ -35,7 +35,7 @@ using Cinemachine;                    // Cinemachine 2.x namespace for older Uni
 /// 4. Set Follow and LookAt to your player
 /// 5. Assign references in this component
 /// </summary>
-public class FezWorldRotation : MonoBehaviour
+public class FusedWorldRotation : MonoBehaviour
 {
     // ========================================================================
     // SINGLETON PATTERN
@@ -49,13 +49,13 @@ public class FezWorldRotation : MonoBehaviour
     /// <summary>
     /// Static instance accessible from anywhere via FezWorldRotation.Instance
     /// </summary>
-    private static FezWorldRotation _instance;    // Private backing field for the singleton
+    private static FusedWorldRotation _instance;    // Private backing field for the singleton
     
     /// <summary>
     /// Public property to access the singleton instance.
     /// Returns null if no instance exists in the scene.
     /// </summary>
-    public static FezWorldRotation Instance
+    public static FusedWorldRotation Instance
     {
         get { return _instance; }                 // Simply return the private instance
     }
