@@ -1780,7 +1780,7 @@ public class FezPlayerController : MonoBehaviour
     {
         currentStateData = data;
         rb.mass = data.weight;
-        spriteRenderer.color = data.stateColor;
+//        spriteRenderer.color = data.stateColor;
 
         if (isGrounded)
         {
