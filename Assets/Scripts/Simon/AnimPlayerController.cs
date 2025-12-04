@@ -14,7 +14,7 @@ public class AnimPlayerController : MonoBehaviour
 
     void Start() 
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -23,21 +23,23 @@ public class AnimPlayerController : MonoBehaviour
         float moveSpeed = Mathf.Abs(rb.linearVelocity.x);
         anim.SetFloat("Speed", moveSpeed);
 
-        anim.SetBool("IsJumping", rb.linearVelocity.y > 0);
-        anim.SetBool("IsFalling", rb.linearVelocity.y < 0);
-        anim.SetBool("IsDashing", isDashing);
-        anim.SetBool("IsWallJumping", isWallJumping);
-        anim.SetBool("IsDead", isDead);
+        anim.SetBool("isJumping", rb.linearVelocity.y > 0);
+        anim.SetBool("isFalling", rb.linearVelocity.y < 0);
+        anim.SetBool("isDashing", isDashing);
+        anim.SetBool("isWallJumping", isWallJumping);
+        anim.SetBool("isDead", isDead);
 
         if (dashTriggered)
-        {
-            anim.SetTrigger("DashTrigger");
+        {            
+            Debug.Log("→ DASH TRIGGER SENT");
+            anim.SetTrigger("dashTrigger");
             dashTriggered = false; // pour éviter de spam
         }
 
         if (deadTriggered)
         {
-            anim.SetTrigger("DieTrigger");
+            Debug.Log("→ DEAD TRIGGER SENT");
+            anim.SetTrigger("deadTrigger");
             deadTriggered = false;
         }
     }
