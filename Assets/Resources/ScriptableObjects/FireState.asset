@@ -16,27 +16,28 @@ MonoBehaviour:
   maxFallSpeed: 20
   enableMovement: 1
   moveSpeed: 20
-  acceleration: 50
+  acceleration: 100
   friction: 0
   enableJump: 1
-  jumpForce: 12
+  jumpForce: 20
   coyoteTime: 0.1
-  enableDoubleJump: 0
-  doubleJumpMultiplier: 0.85
+  enableDoubleJump: 1
+  doubleJumpMultiplier: 0.5
   enableWallSlide: 1
   wallSlideSpeed: 2
-  wallSlideFriction: 0.1
+  wallSlideFriction: -10
   enableWallJump: 1
-  wallJumpForce: 14
-  wallJumpPushForce: 10
+  wallJumpForce: 20
+  wallJumpPushForce: 20
+  wallCoyoteTime: 0.15
   enableDash: 1
   dashSpeed: 20
   dashDuration: 0.2
-  dashCooldown: 0.5
+  dashCooldown: 0
   enableAirDash: 1
-  airDashSpeed: 18
+  airDashSpeed: 20
   airDashDuration: 0.2
-  airDashDrag: 0.85
+  airDashDrag: 0
   enableFlip: 1
   useScaleFlip: 1
   flipSpeed: 15

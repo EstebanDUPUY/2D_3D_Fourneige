@@ -10,8 +10,8 @@ public class PlayerSettings : ScriptableObject
     [Header("Movement")]
     public bool enableMovement = true;
     public float moveSpeed = 8f;
-    public float acceleration = 50f;
-    public float friction = 0.9f;
+    public float acceleration = 80f;
+    public float friction = 60f;
 
     [Header("Jump")]
     public bool enableJump = true;
@@ -31,6 +31,7 @@ public class PlayerSettings : ScriptableObject
     public bool enableWallJump = true;
     public float wallJumpForce = 14f;
     public float wallJumpPushForce = 10f;
+    public float wallCoyoteTime = 0.15f;
 
     [Header("Dash")]
     public bool enableDash = true;

@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public PlayerSettings fireSettings;
     public bool startAsIce = true;
 
+    // Events (subscribe to these for visual feedback)
+    public System.Action<bool> OnFormSwitch; // true = ice, false = fire
+
     [Header("Debug")]
     public bool showGizmos = true;
 
@@ -39,6 +42,8 @@ public class PlayerController : MonoBehaviour
     private bool hasDoubleJump;
     private bool hasAirDash;
     private float lastGroundedTime;
+    private float lastWallTime;
+    private int lastWallDirection;
     private float dashTimer;
     private float dashCooldownTimer;
     private bool isAirDash;
@@ -121,6 +126,7 @@ public class PlayerController : MonoBehaviour
         if (!enableFormSwitch || iceSettings == null || fireSettings == null) return;
         IsIceForm = !IsIceForm;
         settings = IsIceForm ? iceSettings : fireSettings;
+        OnFormSwitch?.Invoke(IsIceForm);
     }
 
     public void SetIceForm()
@@ -128,6 +134,7 @@ public class PlayerController : MonoBehaviour
         if (iceSettings == null) return;
         IsIceForm = true;
         settings = iceSettings;
+        OnFormSwitch?.Invoke(true);
     }
 
     public void SetFireForm()
@@ -135,6 +142,7 @@ public class PlayerController : MonoBehaviour
         if (fireSettings == null) return;
         IsIceForm = false;
         settings = fireSettings;
+        OnFormSwitch?.Invoke(false);
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -164,6 +172,13 @@ public class PlayerController : MonoBehaviour
         bool left = Physics.Raycast(transform.position, Vector3.left, settings.wallCheckDistance, settings.wallLayer);
         IsTouchingWall = right || left;
         wallDirection = right ? 1 : (left ? -1 : 0);
+
+        // Track last wall touch for wall coyote time
+        if (IsTouchingWall)
+        {
+            lastWallTime = Time.time;
+            lastWallDirection = wallDirection;
+        }
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -175,13 +190,19 @@ public class PlayerController : MonoBehaviour
         if (!settings.enableMovement) return;
 
         float target = moveInput.x * settings.moveSpeed;
-        float diff = target - rb.linearVelocity.x;
-        float accel = settings.acceleration * Time.fixedDeltaTime;
-
-        if (Mathf.Abs(moveInput.x) < 0.01f)
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x * settings.friction, rb.linearVelocity.y, 0);
+        
+        if (Mathf.Abs(moveInput.x) > 0.1f)
+        {
+            // Accelerate toward target speed
+            float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, settings.acceleration * Time.fixedDeltaTime);
+            rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
+        }
         else
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x + diff * accel, rb.linearVelocity.y, 0);
+        {
+            // Apply friction when not pressing input
+            float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, 0, settings.friction * Time.fixedDeltaTime);
+            rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
+        }
     }
 
     void ApplyGravity()
@@ -200,13 +221,16 @@ public class PlayerController : MonoBehaviour
 
     void TryJump()
     {
-        // Wall jump
-        if (settings.enableWallJump && IsTouchingWall && !IsGrounded)
+        // Wall jump (with wall coyote time)
+        bool canWallJump = IsTouchingWall || (Time.time - lastWallTime <= settings.wallCoyoteTime);
+        if (settings.enableWallJump && canWallJump && !IsGrounded)
         {
-            rb.linearVelocity = new Vector3(-wallDirection * settings.wallJumpPushForce, settings.wallJumpForce, 0);
-            FacingDirection = -wallDirection;
+            int wallDir = IsTouchingWall ? wallDirection : lastWallDirection;
+            rb.linearVelocity = new Vector3(-wallDir * settings.wallJumpPushForce, settings.wallJumpForce, 0);
+            FacingDirection = -wallDir;
             hasDoubleJump = true;
             hasAirDash = true;
+            lastWallTime = 0; // Consume wall coyote
             return;
         }
 
@@ -244,13 +268,12 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        IsWallSliding = IsTouchingWall && !IsGrounded && rb.linearVelocity.y < 0 && Mathf.Sign(moveInput.x) == wallDirection;
+        IsWallSliding = IsTouchingWall && !IsGrounded && Mathf.Sign(moveInput.x) != -wallDirection;
 
         if (IsWallSliding)
         {
             float speed = -settings.wallSlideSpeed * (1f - settings.wallSlideFriction);
-            if (rb.linearVelocity.y < speed)
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x, speed, 0);
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, speed, 0);
         }
     }
 
