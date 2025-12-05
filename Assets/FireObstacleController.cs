@@ -11,7 +11,7 @@ public class FireObstacleController : MonoBehaviour
     private bool inGeyser;
     private bool inBodyGeyser;
 
-    private FezPlayerController state;
+    private PlayerController state;
     private Vector3 posPlayerOnScreen;
 
     [SerializeField] public VolumeProfile profil;
@@ -20,7 +20,7 @@ public class FireObstacleController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        state = GetComponent<FezPlayerController>();
+        state = GetComponent<PlayerController>();
     }
 
     void Update()
@@ -31,7 +31,7 @@ public class FireObstacleController : MonoBehaviour
         {
             vignette.center.value = new Vector2(posPlayerOnScreen.x, posPlayerOnScreen.y);
 
-            if (state.currentState == FezPlayerController.States.Fire)
+            if (state.currentState == PlayerController.States.fire)
                 vignette.intensity.value = 0.2f;
             else
                 vignette.intensity.value = 1f;
@@ -43,7 +43,7 @@ public class FireObstacleController : MonoBehaviour
     {
         if (profil.TryGet(out Vignette vignette))
         {
-            if (state.currentState == FezPlayerController.States.Fire)
+            if (state.currentState == PlayerController.States.fire)
                 vignette.intensity.value = 0.2f;
             else
                 vignette.intensity.value = 1f;
