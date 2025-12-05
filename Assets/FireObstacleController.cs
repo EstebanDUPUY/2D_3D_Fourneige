@@ -24,7 +24,7 @@ public class FireObstacleController : MonoBehaviour
         state = GetComponent<FusedPlayerController>();
     }
 
-    void Update()
+    /*void Update()
     {
         posPlayerOnScreen = Camera.main.WorldToViewportPoint(transform.position);
 
@@ -49,5 +49,5 @@ public class FireObstacleController : MonoBehaviour
             else
                 vignette.intensity.value = 1f;
         }
-    }
+    }*/
 }
