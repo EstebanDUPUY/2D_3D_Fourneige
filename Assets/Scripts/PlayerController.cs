@@ -307,9 +307,13 @@ public class PlayerController : MonoBehaviour
     void HandleDash()
     {
         float speed = isAirDash ? settings.airDashSpeed : settings.dashSpeed;
-        int dir = Mathf.Abs(moveInput.x) > 0.1f ? (int)Mathf.Sign(moveInput.x) : FacingDirection;
+        Vector2 dir;
+        if (moveInput.magnitude > 0.1f)
+            dir = moveInput.normalized;
+        else
+            dir = new Vector2(FacingDirection, 0);
 
-        rb.linearVelocity = new Vector3(dir * speed, isAirDash ? 0 : rb.linearVelocity.y, 0);
+        rb.linearVelocity = new Vector3(dir.x * speed, dir.y * speed, 0);
 
         dashTimer -= Time.fixedDeltaTime;
         if (dashTimer <= 0)
