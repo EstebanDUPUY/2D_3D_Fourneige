@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public bool enableFormSwitch = true;
     public PlayerSettings iceSettings;
     public PlayerSettings fireSettings;
-    public bool startAsIce = true;
+    public bool startAsIce = false;
 
     // Events (subscribe to these for visual feedback)
     public System.Action<bool> OnFormSwitch; // true = ice, false = fire
