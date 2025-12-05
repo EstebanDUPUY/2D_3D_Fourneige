@@ -276,6 +276,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 537143512607401498, guid: 5da14578389aa3640b01a2a15c88ec7a, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1865875219}
+    - target: {fileID: 537143512607401498, guid: 5da14578389aa3640b01a2a15c88ec7a, type: 3}
       propertyPath: m_ActionEvents.Array.size
       value: 25
       objectReference: {fileID: 0}
@@ -34506,6 +34510,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &1865875219 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8667144473301334074, guid: 5da14578389aa3640b01a2a15c88ec7a, type: 3}
+  m_PrefabInstance: {fileID: 47064909}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1909865822
 GameObject:
   m_ObjectHideFlags: 0
