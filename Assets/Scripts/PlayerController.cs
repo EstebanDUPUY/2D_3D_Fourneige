@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
     public bool IsDashing { get; private set; }
     public int FacingDirection { get; private set; } = 1;
 
+    public float bonusSlopeSpeed = 1;
+
     // Internal
     private int wallDirection;
     private bool hasDoubleJump;
@@ -189,7 +191,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!settings.enableMovement) return;
 
-        float target = moveInput.x * settings.moveSpeed;
+        float target = moveInput.x * settings.moveSpeed * bonusSlopeSpeed;
         
         if (Mathf.Abs(moveInput.x) > 0.1f)
         {
