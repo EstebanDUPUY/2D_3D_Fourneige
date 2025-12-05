@@ -1565,6 +1565,72 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &206650872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 206650875}
+  - component: {fileID: 206650874}
+  - component: {fileID: 206650873}
+  m_Layer: 0
+  m_Name: AccelerateFire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &206650873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206650872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13cc9e9f49cd54f4ab9e84f21348d748, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &206650874
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206650872}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.31633, y: 2.2332115, z: 2.541053}
+  m_Center: {x: 7.658165, y: 0.6166059, z: -0.7705265}
+--- !u!4 &206650875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206650872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 140.14, y: -3.24, z: 1.16}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &305266607
 Mesh:
   m_ObjectHideFlags: 0
@@ -10182,7 +10248,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &832575518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10199,7 +10265,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: a34c8e4feb058be45825c17ef3e0e1a5, type: 2}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -10223,6 +10289,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 117257121365789846, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2365864694817091002, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
       propertyPath: m_LocalPosition.x
       value: 137.8
@@ -10270,7 +10344,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4743989947788059150, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1194802123}
   m_SourcePrefab: {fileID: 100100000, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
 --- !u!43 &913096630
 Mesh:
@@ -11745,6 +11822,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1181783053}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1194802116 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4743989947788059150, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+  m_PrefabInstance: {fileID: 885917343}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1194802123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194802116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d630407199031764b95a42ad37a8c50c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profil: {fileID: 11400000, guid: a34c8e4feb058be45825c17ef3e0e1a5, type: 2}
+  isBrumeActivated: 1
+  volume: {fileID: 832575517}
 --- !u!1 &1228082591
 GameObject:
   m_ObjectHideFlags: 0
@@ -37148,3 +37245,4 @@ SceneRoots:
   - {fileID: 1909865824}
   - {fileID: 1410338014}
   - {fileID: 885917343}
+  - {fileID: 206650875}

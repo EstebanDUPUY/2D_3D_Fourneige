@@ -17,15 +17,24 @@ public class FireObstacleController : MonoBehaviour
     [SerializeField] public VolumeProfile profil;
     [SerializeField] private bool isBrumeActivated = false;
 
+    [SerializeField] private GameObject volume;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         state = GetComponent<PlayerController>();
+
+       
     }
 
     void Update()
     {
         posPlayerOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+
+        if (isBrumeActivated)
+            volume.SetActive(true);
+        else
+            volume.SetActive(false);
 
         if (isBrumeActivated && profil.TryGet(out Vignette vignette))
         {
