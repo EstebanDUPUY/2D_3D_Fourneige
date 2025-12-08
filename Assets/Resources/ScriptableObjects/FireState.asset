@@ -25,7 +25,7 @@ MonoBehaviour:
   doubleJumpMultiplier: 1.5
   enableWallSlide: 1
   wallSlideSpeed: 2
-  wallSlideFriction: -10
+  wallSlideFriction: -2
   enableWallJump: 1
   wallJumpForce: 20
   wallJumpPushForce: 15
@@ -40,7 +40,7 @@ MonoBehaviour:
   airDashDrag: 0
   enableFlip: 1
   useScaleFlip: 0
-  flipSpeed: 15
+  flipSpeed: 10
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
