@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class IceWall : MonoBehaviour
+public class IceWall2 : MonoBehaviour
 {
     //public IceWallData iceWallData;
 

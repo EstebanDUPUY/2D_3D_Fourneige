@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "GameInputAction",
+    "maps": [
+        {
+            "name": "LevelPlay",
+            "id": "7241f49d-60b7-4bec-a777-06dc64eba636",
+            "actions": [
+                {
+                    "name": "TogglePlay",
+                    "type": "Button",
+                    "id": "70199227-6a3a-4d56-ad08-7603f42db52a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "39d1880d-272d-4d91-b48c-7ad415747d5b",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TogglePlay",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

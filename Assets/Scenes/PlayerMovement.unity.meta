@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/FinalMovements.unity.meta
+guid: 9003635a0749ef0439795b93ab182bec
+========
 guid: e7157086fc86698409e2fa343432a14e
+>>>>>>>> origin/Meta:Assets/Scenes/PlayerMovement.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
