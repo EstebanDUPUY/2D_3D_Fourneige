@@ -17,7 +17,8 @@ MonoBehaviour:
   enableMovement: 1
   moveSpeed: 8
   acceleration: 50
-  friction: 0.9
+  deceleration: 60
+  friction: 1.5
   enableJump: 1
   jumpForce: 12
   coyoteTime: 0.1
@@ -29,6 +30,7 @@ MonoBehaviour:
   enableWallJump: 1
   wallJumpForce: 14
   wallJumpPushForce: 10
+  wallCoyoteTime: 0.15
   enableDash: 1
   dashSpeed: 20
   dashDuration: 0.2

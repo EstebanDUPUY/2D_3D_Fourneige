@@ -15,9 +15,9 @@ MonoBehaviour:
   gravityScale: 3
   maxFallSpeed: 20
   enableMovement: 1
-  moveSpeed: 20
+  moveSpeed: 30
   acceleration: 100
-  friction: 0
+  deceleration: 60
   enableJump: 1
   jumpForce: 20
   coyoteTime: 0.1

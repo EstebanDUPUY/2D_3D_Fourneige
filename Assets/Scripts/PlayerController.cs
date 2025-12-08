@@ -191,20 +191,16 @@ public class PlayerController : MonoBehaviour
     {
         if (!settings.enableMovement) return;
 
-        float target = moveInput.x * settings.moveSpeed * bonusSlopeSpeed;
-        
+        float target = moveInput.x * settings.moveSpeed;
+        float accel;
+
         if (Mathf.Abs(moveInput.x) > 0.1f)
-        {
-            // Accelerate toward target speed
-            float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, settings.acceleration * Time.fixedDeltaTime);
-            rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
-        }
+            accel = Mathf.Abs(target) > Mathf.Abs(rb.linearVelocity.x) ? settings.acceleration : settings.deceleration;
         else
-        {
-            // Apply friction when not pressing input
-            float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, 0, settings.friction * Time.fixedDeltaTime);
-            rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
-        }
+            accel = settings.deceleration;
+
+        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, accel * Time.fixedDeltaTime);
+        rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
     }
 
     void ApplyGravity()
