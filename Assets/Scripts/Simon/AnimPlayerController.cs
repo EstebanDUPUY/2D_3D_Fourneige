@@ -5,12 +5,11 @@ public class AnimPlayerController : MonoBehaviour
     Animator anim;
     Rigidbody rb;
 
-    public bool isDashing;
-    public bool isWallJumping;
-    public bool isDead;
+    public bool IsDashing;
+    public bool IsWallJumping;
+    public bool IsDead;
+    public bool IsWallSliding;
 
-    public bool dashTriggered;
-    public bool deadTriggered;
 
     void Start() 
     {
@@ -23,24 +22,11 @@ public class AnimPlayerController : MonoBehaviour
         float moveSpeed = Mathf.Abs(rb.linearVelocity.x);
         anim.SetFloat("Speed", moveSpeed);
 
-        anim.SetBool("isJumping", rb.linearVelocity.y > 0);
-        anim.SetBool("isFalling", rb.linearVelocity.y < 0);
-        anim.SetBool("isDashing", isDashing);
-        anim.SetBool("isWallJumping", isWallJumping);
-        anim.SetBool("isDead", isDead);
-
-        if (dashTriggered)
-        {            
-            Debug.Log("→ DASH TRIGGER SENT");
-            anim.SetTrigger("dashTrigger");
-            dashTriggered = false; // pour éviter de spam
-        }
-
-        if (deadTriggered)
-        {
-            Debug.Log("→ DEAD TRIGGER SENT");
-            anim.SetTrigger("deadTrigger");
-            deadTriggered = false;
-        }
+        anim.SetBool("IsJumping", rb.linearVelocity.y > 0);
+        anim.SetBool("IsFalling", rb.linearVelocity.y < 0);
+        anim.SetBool("IsDashing", IsDashing);
+        anim.SetBool("IsWallJumping", IsWallJumping);
+        anim.SetBool("IsDead", IsDead);
+        anim.SetBool("IsWallSliding", IsWallSliding);
     }
 }
