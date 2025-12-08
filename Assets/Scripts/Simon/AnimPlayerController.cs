@@ -8,9 +8,8 @@ public class AnimPlayerController : MonoBehaviour
     public bool IsDashing;
     public bool IsWallJumping;
     public bool IsDead;
+    public bool IsWallSliding;
 
-    public bool dashTriggered;
-    public bool deadTriggered;
 
     void Start() 
     {
@@ -28,19 +27,6 @@ public class AnimPlayerController : MonoBehaviour
         anim.SetBool("IsDashing", IsDashing);
         anim.SetBool("IsWallJumping", IsWallJumping);
         anim.SetBool("IsDead", IsDead);
-
-        if (dashTriggered)
-        {            
-            Debug.Log("→ DASH TRIGGER SENT");
-            anim.SetTrigger("dashTrigger");
-            dashTriggered = false; // pour éviter de spam
-        }
-
-        if (deadTriggered)
-        {
-            Debug.Log("→ DEAD TRIGGER SENT");
-            anim.SetTrigger("deadTrigger");
-            deadTriggered = false;
-        }
+        anim.SetBool("IsWallSliding", IsWallSliding);
     }
 }
