@@ -40,7 +40,7 @@ public class FireObstacleController : MonoBehaviour
         {
             vignette.center.value = new Vector2(posPlayerOnScreen.x, posPlayerOnScreen.y);
 
-            if (state.IsIceForm)
+            if (!state.IsIceForm)
                 vignette.intensity.value = 0.2f;
             else
                 vignette.intensity.value = 1f;
@@ -52,7 +52,7 @@ public class FireObstacleController : MonoBehaviour
     {
         if (profil.TryGet(out Vignette vignette))
         {
-            if (state.IsIceForm)
+            if (!state.IsIceForm)
                 vignette.intensity.value = 0.2f;
             else
                 vignette.intensity.value = 1f;
