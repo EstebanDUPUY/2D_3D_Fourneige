@@ -40,7 +40,7 @@ MonoBehaviour:
   airDashDrag: 0
   enableFlip: 1
   useScaleFlip: 0
-  flipSpeed: 10
+  flipSpeed: 15
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

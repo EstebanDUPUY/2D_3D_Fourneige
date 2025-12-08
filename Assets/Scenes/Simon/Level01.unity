@@ -9768,6 +9768,10 @@ PrefabInstance:
       propertyPath: near clip plane
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 2218932298145285500, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: startAsIce
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
       propertyPath: m_LocalPosition.x
       value: 137.8
