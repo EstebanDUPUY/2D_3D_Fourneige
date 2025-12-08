@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (130)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -240,6 +244,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (215)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -415,6 +423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (205)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -480,6 +492,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (51)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -547,6 +563,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (152)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -612,6 +632,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (194)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -679,6 +703,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -744,6 +772,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (155)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -811,6 +843,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (129)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -876,6 +912,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (158)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -943,6 +983,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (169)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1008,6 +1052,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (96)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1075,6 +1123,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (223)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1141,6 +1193,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (98)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1206,6 +1262,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (83)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1308,6 +1368,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (185)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1373,6 +1437,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (147)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1440,6 +1508,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (157)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1505,6 +1577,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (218)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1572,6 +1648,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (201)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1637,6 +1717,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (81)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1704,6 +1788,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1723,7 +1811,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 159488566}
-  m_Layer: 0
+  - component: {fileID: 159488567}
+  m_Layer: 6
   m_Name: Plaftorm3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1738,7 +1827,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 159488565}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1791,8 +1880,29 @@ Transform:
   - {fileID: 395555875}
   - {fileID: 862891918}
   - {fileID: 82831200}
-  m_Father: {fileID: 326838655}
+  m_Father: {fileID: 1244523903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &159488567
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159488565}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 40.820137, y: 3.7161674, z: 6.4242496}
+  m_Center: {x: -25.550358, y: -20.063414, z: -0.053272247}
 --- !u!1001 &162967219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1848,6 +1958,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (195)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3218,6 +3332,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (210)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3283,6 +3401,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (80)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3350,6 +3472,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (35)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3415,6 +3541,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (160)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3482,6 +3612,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (137)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3547,6 +3681,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3614,6 +3752,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (217)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3679,6 +3821,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (162)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3746,6 +3892,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (104)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3811,6 +3961,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (26)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3878,6 +4032,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (68)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3944,6 +4102,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (43)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3954,135 +4116,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
   m_PrefabInstance: {fileID: 254221157}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &277129437
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 191.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.0257459
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 85765484813296725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3051667477948135621, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: CameraDistance
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 4111531794878899725, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: showDebugLogs
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5593439629627990384, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_Name
-      value: '_Player_ '
-      objectReference: {fileID: 0}
-    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.446262
-      objectReference: {fileID: 0}
-    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -12.216004
-      objectReference: {fileID: 0}
-    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9848078
-      objectReference: {fileID: 0}
-    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.17364816
-      objectReference: {fileID: 0}
-    - target: {fileID: 7180367789130400634, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.446262
-      objectReference: {fileID: 0}
-    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -12.216004
-      objectReference: {fileID: 0}
-    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9848078
-      objectReference: {fileID: 0}
-    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.17364816
-      objectReference: {fileID: 0}
-    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7806556365627686414, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7908830213155072861, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: showDebugLogs
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7908830213155072861, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: inputModeEnabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8945429667551413984, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: far clip plane
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8945429667551413984, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: near clip plane
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8945429667551413984, guid: 177680a1fa706ac469b76914524c83db, type: 3}
-      propertyPath: orthographic size
-      value: 5
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 177680a1fa706ac469b76914524c83db, type: 3}
 --- !u!1001 &291952222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4139,10 +4172,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (32)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1009391431}
   m_SourcePrefab: {fileID: 100100000, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
 --- !u!4 &291952223 stripped
 Transform:
@@ -4204,6 +4244,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (103)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4271,6 +4315,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (127)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4336,6 +4384,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4403,6 +4455,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (197)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4468,6 +4524,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (74)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4720,6 +4780,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (28)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4785,6 +4849,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (124)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4852,6 +4920,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (106)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4918,6 +4990,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (93)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4937,7 +5013,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 326838655}
-  m_Layer: 0
+  - component: {fileID: 326838656}
+  m_Layer: 6
   m_Name: Platform2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5037,10 +5114,29 @@ Transform:
   - {fileID: 1054550330}
   - {fileID: 1275799099}
   - {fileID: 1837403155}
-  - {fileID: 159488566}
-  - {fileID: 1299129556}
   m_Father: {fileID: 1244523903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &326838656
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326838654}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 67.53815, y: 3.4239693, z: 6.1254377}
+  m_Center: {x: 45.796753, y: -19.896418, z: -0.010577679}
 --- !u!1001 &335142095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5096,6 +5192,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (40)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5163,6 +5263,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (117)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5228,6 +5332,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (207)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5295,6 +5403,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (60)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5360,6 +5472,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (177)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5427,6 +5543,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (221)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5493,6 +5613,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (67)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5558,6 +5682,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (126)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5746,6 +5874,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (143)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5770,7 +5902,7 @@ GameObject:
   - component: {fileID: 429497501}
   - component: {fileID: 429497500}
   - component: {fileID: 429497499}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6163,6 +6295,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (31)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6228,6 +6364,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (89)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6295,6 +6435,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6360,6 +6504,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (48)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6427,6 +6575,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6492,6 +6644,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (183)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6559,6 +6715,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (204)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6624,6 +6784,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (151)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6691,6 +6855,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (123)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6756,6 +6924,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (195)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6823,6 +6995,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6888,6 +7064,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (118)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6955,6 +7135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7020,6 +7204,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (185)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7087,6 +7275,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (180)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7152,6 +7344,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (181)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7219,6 +7415,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (58)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7284,6 +7484,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (206)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7351,6 +7555,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (189)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7417,6 +7625,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7482,6 +7694,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (167)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7899,6 +8115,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (39)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15081,6 +15301,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (114)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15146,6 +15370,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (122)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15213,6 +15441,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (140)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15278,6 +15510,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (108)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15345,6 +15581,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (120)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15410,6 +15650,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (216)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15477,6 +15721,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (198)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15542,6 +15790,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (78)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15609,6 +15861,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (168)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15674,6 +15930,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (188)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15741,6 +16001,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (146)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15806,6 +16070,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (111)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15873,6 +16141,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (153)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15938,6 +16210,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (145)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16005,6 +16281,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (101)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16070,6 +16350,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (205)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16137,6 +16421,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (121)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16202,6 +16490,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (94)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16269,6 +16561,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16334,6 +16630,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16401,6 +16701,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (212)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16466,6 +16770,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (57)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16533,6 +16841,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (42)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16598,6 +16910,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (112)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16665,6 +16981,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16730,6 +17050,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (52)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16797,6 +17121,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16863,6 +17191,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (206)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16928,6 +17260,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17180,6 +17516,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (149)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17245,6 +17585,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (53)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17420,6 +17764,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (191)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17486,6 +17834,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (92)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17551,6 +17903,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (180)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17667,6 +18023,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (55)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17732,6 +18092,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (200)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17799,6 +18163,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (178)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17864,6 +18232,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (222)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17931,6 +18303,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (178)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17996,6 +18372,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (182)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18063,6 +18443,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18128,6 +18512,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (209)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18195,6 +18583,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18260,6 +18652,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (200)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18327,6 +18723,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18392,6 +18792,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (36)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18459,6 +18863,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (186)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18524,6 +18932,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (113)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18591,6 +19003,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (50)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18657,6 +19073,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (97)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18722,6 +19142,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (220)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19082,6 +19506,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (150)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19147,6 +19575,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (44)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19214,6 +19646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (196)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19279,6 +19715,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (45)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19346,6 +19786,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (202)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19412,6 +19856,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (85)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19422,6 +19870,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
   m_PrefabInstance: {fileID: 1007634779}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1009391428 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+  m_PrefabInstance: {fileID: 291952222}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1009391431
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009391428}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.81046814, y: 0.02578631, z: 0}
+  m_Center: {x: -0.39096725, y: -0.0028363164, z: -0.01005677}
 --- !u!1001 &1026219662
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19477,6 +19951,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (201)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19544,6 +20022,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (100)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19609,6 +20091,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (142)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19676,6 +20162,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (79)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19741,6 +20231,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (90)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19808,6 +20302,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (173)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19832,7 +20330,7 @@ GameObject:
   - component: {fileID: 1058914481}
   - component: {fileID: 1058914480}
   - component: {fileID: 1058914479}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wall2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20225,6 +20723,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (172)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20290,6 +20792,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (182)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20357,6 +20863,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (179)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20422,6 +20932,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (181)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20489,6 +21003,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (46)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20554,6 +21072,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (148)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20621,6 +21143,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (219)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20686,6 +21212,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (69)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20753,6 +21283,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20818,6 +21352,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (166)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20885,6 +21423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (192)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20950,6 +21492,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (208)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21017,6 +21563,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (134)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21082,6 +21632,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (102)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21149,6 +21703,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (203)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21215,6 +21773,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (183)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21280,6 +21842,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (186)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21455,6 +22021,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (214)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21520,6 +22090,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (41)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21587,6 +22161,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21652,6 +22230,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (161)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24995,7 +25577,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1244523903}
   - component: {fileID: 1244523902}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LavaGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25039,6 +25621,8 @@ Transform:
   m_Children:
   - {fileID: 1326770024}
   - {fileID: 326838655}
+  - {fileID: 159488566}
+  - {fileID: 1299129556}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1247482128
@@ -25282,6 +25866,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (54)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25347,6 +25935,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (174)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -25414,6 +26006,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (199)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25438,7 +26034,7 @@ GameObject:
   - component: {fileID: 1285432197}
   - component: {fileID: 1285432196}
   - component: {fileID: 1285432195}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: IceWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25831,6 +26427,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (197)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25850,7 +26450,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1299129556}
-  m_Layer: 0
+  - component: {fileID: 1299129557}
+  m_Layer: 6
   m_Name: Platform4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25865,7 +26466,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1299129555}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -25902,8 +26503,29 @@ Transform:
   - {fileID: 12348391}
   - {fileID: 765560072}
   - {fileID: 369526739}
-  m_Father: {fileID: 326838655}
+  m_Father: {fileID: 1244523903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1299129557
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299129555}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 28.418884, y: 3.755947, z: 6.3013377}
+  m_Center: {x: 65.303024, y: -43.154686, z: -0.5666449}
 --- !u!1001 &1301957437
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25959,6 +26581,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (107)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26026,6 +26652,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (47)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26091,6 +26721,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (159)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26158,6 +26792,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (82)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26223,6 +26861,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (184)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26290,6 +26932,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (213)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26355,6 +27001,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (75)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26422,6 +27072,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26441,7 +27095,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1326770024}
-  m_Layer: 0
+  - component: {fileID: 1326770025}
+  m_Layer: 6
   m_Name: Platform1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26559,6 +27214,27 @@ Transform:
   - {fileID: 1657880339}
   m_Father: {fileID: 1244523903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1326770025
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326770023}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 80.686844, y: 3.3753657, z: 6.3160887}
+  m_Center: {x: 12.870125, y: 0.41212964, z: 0.1030035}
 --- !u!1001 &1331179975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26614,6 +27290,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (125)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26681,6 +27361,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (156)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26746,6 +27430,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (133)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26813,6 +27501,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (64)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26878,6 +27570,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (154)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -43840,11 +44536,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!4 &1378721668 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-  m_PrefabInstance: {fileID: 489914725106331399}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1382769729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43900,6 +44591,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (192)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -43967,6 +44662,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44032,6 +44731,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (109)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44099,6 +44802,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (190)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44165,6 +44872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (59)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44185,23 +44896,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalScale.x
-      value: 5568.027
+      value: 5500.2275
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1002.9119
+      value: 990.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalScale.z
-      value: 744.55225
+      value: 735.48627
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 113.51
+      value: 113.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -58.14
+      value: -54.13
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalPosition.z
@@ -44209,7 +44920,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9971852
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalRotation.x
@@ -44221,7 +44932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.074978724
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -44233,7 +44944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 8.6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cff58c29e7787e24aaac5e14ceffe898, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -44327,6 +45038,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (196)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44392,6 +45107,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (179)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44459,6 +45178,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (30)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44524,6 +45247,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (99)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44591,6 +45318,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (187)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44656,6 +45387,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (163)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44723,6 +45458,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (198)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44788,6 +45527,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (88)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44855,6 +45598,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (105)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44865,6 +45612,91 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
   m_PrefabInstance: {fileID: 1470566170}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1474956043
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 708666312418368977, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1055822567642904099, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1576550688374237134, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: field of view
+      value: 96.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1576550688374237134, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: near clip plane
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 122.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405239123196532608, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4743989947788059150, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4743989947788059150, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7145155119993498648, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: Lens.FieldOfView
+      value: 96.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7477680402243741528, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 03f19bc267797984d8c3eac1e887b453, type: 3}
 --- !u!1001 &1506978439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44920,6 +45752,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (34)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44987,6 +45823,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (91)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45052,6 +45892,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (135)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -45119,6 +45963,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45184,6 +46032,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (131)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -45251,6 +46103,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (193)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45316,6 +46172,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (65)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -45506,6 +46366,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (119)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45571,6 +46435,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (128)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -45638,6 +46506,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45703,6 +46575,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (63)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -45770,6 +46646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (144)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45835,6 +46715,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (136)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -45902,6 +46786,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (33)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45911,11 +46799,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
   m_PrefabInstance: {fileID: 1627402620}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1634299121 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-  m_PrefabInstance: {fileID: 7933447645739705987}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1640598615
 GameObject:
@@ -46096,6 +46979,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (84)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -46161,6 +47048,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (138)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46228,6 +47119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (72)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -46293,6 +47188,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (176)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46360,6 +47259,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (187)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -46425,6 +47328,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (95)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46492,6 +47399,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (170)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -46558,6 +47469,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (184)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -46568,39 +47483,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
   m_PrefabInstance: {fileID: 1673293523}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1677581256
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1677581257}
-  m_Layer: 0
-  m_Name: RotationTriggers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1677581257
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1677581256}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.4459248, y: 2.0257456, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1378721668}
-  - {fileID: 1634299121}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1681234906
 GameObject:
   m_ObjectHideFlags: 0
@@ -46808,6 +47690,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (202)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -46873,6 +47759,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46940,6 +47830,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (203)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47005,6 +47899,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (87)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47072,6 +47970,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (37)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47137,6 +48039,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (77)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47204,6 +48110,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (176)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47269,6 +48179,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (38)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47336,6 +48250,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (66)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47401,6 +48319,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (204)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47468,6 +48390,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (194)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47533,6 +48459,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47708,6 +48638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (86)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47799,7 +48733,7 @@ Transform:
   m_GameObject: {fileID: 1803397866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 146.06, y: 4.31, z: -106.7}
+  m_LocalPosition: {x: 146.06, y: 4.31, z: -56.4}
   m_LocalScale: {x: 81.36942, y: 41.400913, z: 22.067026}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47860,6 +48794,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (73)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -47927,6 +48865,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (132)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47992,6 +48934,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (175)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -48059,6 +49005,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (191)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48125,6 +49075,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (190)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48190,6 +49144,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (165)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -48284,6 +49242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (193)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48349,6 +49311,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (211)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -48819,6 +49785,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (76)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48884,6 +49854,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (139)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -48951,6 +49925,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (49)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -49016,6 +49994,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -49083,6 +50065,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (199)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -49148,6 +50134,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (207)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -50656,6 +51646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (188)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -50721,6 +51715,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (171)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -50973,6 +51971,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (62)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51064,7 +52066,7 @@ Transform:
   m_GameObject: {fileID: 2011478506}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 146.06, y: -100.9, z: -106.7}
+  m_LocalPosition: {x: 146.06, y: -100.9, z: -56.4}
   m_LocalScale: {x: 81.36942, y: 41.400913, z: 22.067026}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51125,6 +52127,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51192,6 +52198,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (177)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51257,6 +52267,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (56)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51324,6 +52338,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51389,6 +52407,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (189)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51456,6 +52478,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (116)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51521,6 +52547,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (115)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51773,6 +52803,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (164)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51838,6 +52872,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (61)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51905,6 +52943,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (141)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51971,6 +53013,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (70)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -52036,6 +53082,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (71)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -52454,6 +53504,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: lava (110)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -52464,129 +53518,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
   m_PrefabInstance: {fileID: 2146705200}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &489914725106331399
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1677581257}
-    m_Modifications:
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119399199558929778, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7794306843845779631, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
-      propertyPath: m_Name
-      value: Trigger_Right
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1a8d6c43a6f157444bc25f5049afc9ea, type: 3}
---- !u!1001 &7933447645739705987
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1677581257}
-    m_Modifications:
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1947343693459520088, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5245330885500202019, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
-      propertyPath: m_Name
-      value: Trigger_Left
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 75650f1b1a900ee4794746ce96f57004, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 277129437}
   - {fileID: 94456426}
-  - {fileID: 1677581257}
   - {fileID: 575021250}
   - {fileID: 1889994888}
   - {fileID: 1803397868}
@@ -52599,3 +53537,4 @@ SceneRoots:
   - {fileID: 1909865824}
   - {fileID: 1410338014}
   - {fileID: 1244523903}
+  - {fileID: 1474956043}
