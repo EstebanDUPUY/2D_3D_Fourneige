@@ -15,32 +15,32 @@ MonoBehaviour:
   gravityScale: 3
   maxFallSpeed: 20
   enableMovement: 1
-  moveSpeed: 20
+  moveSpeed: 40
   acceleration: 100
-  friction: 0
+  deceleration: 15
   enableJump: 1
-  jumpForce: 20
-  coyoteTime: 0.1
+  jumpForce: 25
+  coyoteTime: 0.15
   enableDoubleJump: 1
-  doubleJumpMultiplier: 0.5
+  doubleJumpMultiplier: 1.5
   enableWallSlide: 1
   wallSlideSpeed: 2
-  wallSlideFriction: -10
+  wallSlideFriction: -2
   enableWallJump: 1
   wallJumpForce: 20
-  wallJumpPushForce: 20
-  wallCoyoteTime: 0.15
+  wallJumpPushForce: 15
+  wallCoyoteTime: 0
   enableDash: 1
-  dashSpeed: 20
+  dashSpeed: 25
   dashDuration: 0.2
   dashCooldown: 0
   enableAirDash: 1
-  airDashSpeed: 20
+  airDashSpeed: 50
   airDashDuration: 0.2
   airDashDrag: 0
   enableFlip: 1
-  useScaleFlip: 1
-  flipSpeed: 15
+  useScaleFlip: 0
+  flipSpeed: 10
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
