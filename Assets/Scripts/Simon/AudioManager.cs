@@ -8,11 +8,31 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource SFXSource;
 
     [Header("-----------------Audio Source-----------------")]
-    public AudioClip musicIntro;
-    public AudioClip musicSimon;
-    public AudioClip musicMaeva;
-    public AudioClip doorOpen;
-    public AudioClip clickButton;
+    public AudioClip musicMenu;
+    public AudioClip musicSelectLevel;
+    public AudioClip musicLevel1;
+    public AudioClip musicLevel2;
+    public AudioClip musicLevel3;
+    public AudioClip musicLevel4;
+    public AudioClip musicLevel5;
+
+
+    public AudioClip click;
+    public AudioClip dash;
+    public AudioClip entranceLevel;
+    public AudioClip footstepFire;
+    public AudioClip footstepIce;
+    public AudioClip IceFX;
+    public AudioClip fireFX;
+    public AudioClip toggleFX;   
+    public AudioClip happy;
+    public AudioClip jump;
+    public AudioClip swoosh1;
+    public AudioClip swoosh2;
+    public AudioClip swoosh3;
+    public AudioClip text;   
+    public AudioClip levelComplete;   
+
     private static AudioManager instance = null;
     public static AudioManager Instance => instance;
 
@@ -52,24 +72,39 @@ public class AudioManager : MonoBehaviour
 
     void PlayMusicForScene(string sceneName)
     {
-        if (sceneName == "MainMenu" && musicSource.clip != musicIntro)
+        if (sceneName == "HomeScene" && musicSource.clip != musicMenu)
         {
-            musicSource.clip = musicIntro;
+            musicSource.clip = musicMenu;
             musicSource.Play();
         }
-        else if (sceneName == "Intro" && musicSource.clip != musicIntro)
+        else if (sceneName == "SelectLevel" && musicSource.clip != musicSelectLevel)
         {
-            musicSource.clip = musicIntro;
+            musicSource.clip = musicSelectLevel;
             musicSource.Play();
         }
-        else if (sceneName == "SimonModifs" && musicSource.clip != musicSimon)
+        else if (sceneName == "Level" && musicSource.clip != musicLevel1)
         {
-            musicSource.clip = musicSimon;
+            musicSource.clip = musicLevel1;
             musicSource.Play();
         }
-        else if (sceneName == "MaevaModifs" && musicSource.clip != musicMaeva)
+        else if (sceneName == "Level" && musicSource.clip != musicLevel2)
         {
-            musicSource.clip = musicMaeva;
+            musicSource.clip = musicLevel2;
+            musicSource.Play();
+        }
+        else if (sceneName == "Level" && musicSource.clip != musicLevel3)
+        {
+            musicSource.clip = musicLevel3;
+            musicSource.Play();
+        }
+        else if (sceneName == "Level" && musicSource.clip != musicLevel4)
+        {
+            musicSource.clip = musicLevel4;
+            musicSource.Play();
+        }
+        else if (sceneName == "Level" && musicSource.clip != musicLevel5)
+        {
+            musicSource.clip = musicLevel5;
             musicSource.Play();
         }
     }
