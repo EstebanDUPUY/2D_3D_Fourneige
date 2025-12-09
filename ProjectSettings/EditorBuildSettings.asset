@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Ivan/HomeScene.unity
     guid: f9434a5718ee4fb438c828c47cbdc681
   - enabled: 1
+    path: Assets/Scenes/TestSceneBuild.unity
+    guid: 64cbb8c404ed9384f8bc365b8e2a4d01
+  - enabled: 1
     path: Assets/Scenes/Ivan/FirstScene.unity
     guid: e322399d9c0bca54b80a39dcddcae403
   m_configObjects:

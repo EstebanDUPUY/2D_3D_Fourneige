@@ -16,6 +16,7 @@ public class MenuController : MonoBehaviour
     public Image toggleImage;
     public Sprite spriteOn;
     public Sprite spriteOff;
+    public Slider slider;
     Resolution[] resolutions;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
 
@@ -38,6 +39,11 @@ public class MenuController : MonoBehaviour
         // Associer toggle fullscreen
         if (fullscreenToggle != null)
             fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
+
+        // Charger la valeur sauvegardée
+        float savedVolume = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
+        slider.value = savedVolume;
+        SetVolume(savedVolume);
 
         // Afficher l'état actuel
         UpdateSprite(Screen.fullScreen);
@@ -108,8 +114,16 @@ public void SetFullScreen(bool isFullScreen)
             toggleImage.sprite = isFullScreen ? spriteOn : spriteOff;
     }
 
-    public void SetVolume(float volume)
+    public void SetVolume(float value)
     {
-        audioMixer.SetFloat("volume", volume);
+    // Protection contre 0 : on met un tout petit nombre
+    if (value <= 0.0001f)
+        value = 0.0001f;
+
+    float dB = Mathf.Log10(value) * 20;
+    audioMixer.SetFloat("MasterVolume", dB);
+
+        // Sauvegarde
+        PlayerPrefs.SetFloat("MasterVolume", value);
     }
 }
