@@ -179,6 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 1822512381}
   SFXSource: {fileID: 1315420702}
+  masterMixerGroup: {fileID: 24300002, guid: 0e5cc2ae262da8045b1213c58fb64abf, type: 2}
   musicMenu: {fileID: 8300000, guid: 85a7f938b61156545b2efb9c66608df1, type: 3}
   musicSelectLevel: {fileID: 8300000, guid: ba7dad30b409cf04ebe5c71c9d090402, type: 3}
   musicLevel1: {fileID: 8300000, guid: 974890cff79720147a87900052fdb75b, type: 3}
@@ -966,7 +967,7 @@ AudioSource:
   m_GameObject: {fileID: 1315420700}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: 0e5cc2ae262da8045b1213c58fb64abf, type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -1209,7 +1210,7 @@ AudioSource:
   m_GameObject: {fileID: 1822512379}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: 0e5cc2ae262da8045b1213c58fb64abf, type: 2}
+  OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1

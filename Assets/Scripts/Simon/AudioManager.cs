@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
@@ -6,6 +7,7 @@ public class AudioManager : MonoBehaviour
     [Header("-----------------Audio Source-----------------")]
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioSource SFXSource;
+    public AudioMixerGroup masterMixerGroup; // Assigné dans l'Inspector
 
     [Header("-----------------Audio Source-----------------")]
     public AudioClip musicMenu;
@@ -52,10 +54,12 @@ public class AudioManager : MonoBehaviour
         // Source pour la musique
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
+        musicSource.outputAudioMixerGroup = masterMixerGroup;
 
         // Source pour les bruitages
         SFXSource = gameObject.AddComponent<AudioSource>();
         SFXSource.loop = false;
+        SFXSource.outputAudioMixerGroup = masterMixerGroup; 
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -63,6 +67,11 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         PlayMusicForScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        SFXSource.PlayOneShot(clip);
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
