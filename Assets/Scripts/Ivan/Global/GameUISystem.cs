@@ -60,7 +60,7 @@ public class GameUISystem : MonoBehaviour
     void Awake()
     {
         // Action
-        playButton.onClick.AddListener(() => OnPlayClick());
+       // playButton.onClick.AddListener(() => OnPlayClick());
 
         quitButton.onClick.AddListener(() => confirmQuitPanel.SetActive(true));
 

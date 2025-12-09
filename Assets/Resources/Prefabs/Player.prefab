@@ -57,7 +57,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -175,7 +175,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 95
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -224,7 +224,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -291,6 +291,7 @@ GameObject:
   - component: {fileID: 4792622698840086629}
   - component: {fileID: 2218932298145285500}
   - component: {fileID: 5214166706211083466}
+  - component: {fileID: 143829159444038663}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -525,9 +526,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5063324
-  m_Height: 1.9374652
+  m_Height: 1.882884
   m_Direction: 1
-  m_Center: {x: -0.10700989, y: 0.031655073, z: 0}
+  m_Center: {x: -0.10700989, y: -7.858784, z: 0}
 --- !u!114 &2218932298145285500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +548,7 @@ MonoBehaviour:
   fireSettings: {fileID: 11400000, guid: f3702be6c161e4b4bb9ef1cc13360d76, type: 2}
   startAsIce: 0
   showGizmos: 1
+  bonusSlopeSpeed: 1
 --- !u!114 &5214166706211083466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,11 +561,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba4dec9631dcd8439c565be50fb5d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDashing: 0
-  isWallJumping: 0
-  isDead: 0
-  dashTriggered: 0
-  deadTriggered: 0
+  IsDashing: 0
+  IsWallJumping: 0
+  IsDead: 0
+  IsWallSliding: 0
+--- !u!114 &143829159444038663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4743989947788059150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d630407199031764b95a42ad37a8c50c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profil: {fileID: 11400000, guid: a34c8e4feb058be45825c17ef3e0e1a5, type: 2}
+  isBrumeActivated: 0
+  volume: {fileID: 0}
 --- !u!1 &7477680402243741528
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,7 +607,7 @@ Transform:
   m_GameObject: {fileID: 7477680402243741528}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -7.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -466,6 +466,7 @@ GameObject:
   - component: {fileID: 363652626}
   - component: {fileID: 363652625}
   - component: {fileID: 363652628}
+  - component: {fileID: 363652629}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -480,7 +481,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 363652624}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 142d54e551e3c764db68f52a7c523408, type: 3}
   m_Name: 
@@ -516,6 +517,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputPseudo: {fileID: 206094925}
   nameText: {fileID: 188626040}
+--- !u!114 &363652629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363652624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d360d7d90389d419dc456e2fe086f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneConfig: {fileID: 11400000, guid: 2e587b22cf77c9a4dae691bd17b26136, type: 2}
+  homeScene: HomeScene
+  firstScene: TestSceneBuild
+  playerName: 
+  currentIndexLevel: 0
+  test: 0
 --- !u!114 &431175097 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4757878710272351224, guid: c74c2e6696e225240a6706c8722c3b75, type: 3}
@@ -1444,7 +1463,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1934505996274028670, guid: c04dc1756b50c5b4e91d22d0330604f0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2766873129502494766, guid: c04dc1756b50c5b4e91d22d0330604f0, type: 3}
       propertyPath: m_Value
@@ -1568,11 +1587,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7857936506113130516, guid: c04dc1756b50c5b4e91d22d0330604f0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7857936506113130516, guid: c04dc1756b50c5b4e91d22d0330604f0, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.11520046
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

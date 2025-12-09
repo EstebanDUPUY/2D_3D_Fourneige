@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5.2, y: 90.8, z: 6.06}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -67,7 +67,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4459fff084dd84526ab8fd5082d2eacb, type: 2}
+  - {fileID: 2100000, guid: c62032694d244634c89ad3ebe4d0f561, type: 2}
+  - {fileID: 2100000, guid: cf976b858817d9a4ba37511b50c9b8aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -619,5 +620,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iceWallData: {fileID: 11400000, guid: 58e94a953104681448dc34b734f5e2cc, type: 2}
   dragOnIce: 0.2
-  speedMultiplier: 2
-  killFireForm: 1
+  speed: 4
+  range: 10
