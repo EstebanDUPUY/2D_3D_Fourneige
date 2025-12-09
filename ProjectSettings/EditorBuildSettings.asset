@@ -6,14 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Ivan/HomeScene.unity
+    path: Assets/Iv/Scenes/HomeScene.unity
     guid: f9434a5718ee4fb438c828c47cbdc681
   - enabled: 1
     path: Assets/Scenes/TestSceneBuild.unity
     guid: 64cbb8c404ed9384f8bc365b8e2a4d01
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Ivan/FirstScene.unity
     guid: e322399d9c0bca54b80a39dcddcae403
+  - enabled: 1
+    path: Assets/Iv/Scenes/Test.unity
+    guid: b335e32f68644714fb07926a6063e127
+  - enabled: 1
+    path: Assets/Iv/Scenes/Test 2.unity
+    guid: 4e467727fa093aa4ca16d2e668059c70
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
