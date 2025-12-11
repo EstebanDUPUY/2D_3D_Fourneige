@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead5d826856864547a85f15b13ced06c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  player: {fileID: 0}
+  player: {fileID: 1430131157}
   triggerCompleteLevel: {fileID: 2029633005}
 --- !u!114 &477280282
 MonoBehaviour:
@@ -803,14 +803,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2864356094334339939, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 20.11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2864356094334339939, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 9.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2864356094334339939, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 39.3
       objectReference: {fileID: 0}
@@ -854,8 +846,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: SulfurCave
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6083372270338892038, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1634,6 +1625,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &1430131157 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+  m_PrefabInstance: {fileID: 1044722007}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 776a19aa9f78e09489d2c6b655374ec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1519952130 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3239915333706315286, guid: 5c7d617ae7ae84841b94660f666dee0f, type: 3}
@@ -2149,6 +2151,22 @@ PrefabInstance:
     - target: {fileID: 5310998311437312119, guid: 9e2bfb0708ec7bf4e819a2ac7f3a19d6, type: 3}
       propertyPath: m_Name
       value: CanvasHUD
+      objectReference: {fileID: 0}
+    - target: {fileID: 5595681003099499381, guid: 9e2bfb0708ec7bf4e819a2ac7f3a19d6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5595681003099499381, guid: 9e2bfb0708ec7bf4e819a2ac7f3a19d6, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5595681003099499381, guid: 9e2bfb0708ec7bf4e819a2ac7f3a19d6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5595681003099499381, guid: 9e2bfb0708ec7bf4e819a2ac7f3a19d6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6869139750887399547, guid: 9e2bfb0708ec7bf4e819a2ac7f3a19d6, type: 3}
       propertyPath: m_Pivot.x

@@ -12,7 +12,7 @@ public class PlayerDamageSystem : MonoBehaviour
 
     void Awake()
     {
-        // player = GetComponent<PlayerController>();
+        //player = GetComponent<PlayerController>();
         rb = GetComponent<PlayerIceSystem>().GetRigidbody();
     }
 
