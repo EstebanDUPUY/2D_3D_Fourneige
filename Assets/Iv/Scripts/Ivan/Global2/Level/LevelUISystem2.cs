@@ -118,7 +118,7 @@ public class LevelUISystem2 : MonoBehaviour
         LevelManager2.OnPlayPauseTime -= TooglePlay;
     }
 
-    void TooglePlay(bool onPause)
+    public void TooglePlay(bool onPause)
     {
         pausePanel.SetActive(onPause);
     }

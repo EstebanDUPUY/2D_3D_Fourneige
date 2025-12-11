@@ -7,7 +7,7 @@ public class LevelManager2 : MonoBehaviour
 {
     // public string nextNameScene;
 
-    public PlayerController2 player;
+    public PlayerController player;
 
     PlayerInput playerInput;
 
