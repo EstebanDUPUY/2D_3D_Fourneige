@@ -1048,7 +1048,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceSurface
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3457822127713479993, guid: f81a6aef2a83c104ea907ef5e7a4b5df, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2580,7 +2581,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: IceWall (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8000558775199975559, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
