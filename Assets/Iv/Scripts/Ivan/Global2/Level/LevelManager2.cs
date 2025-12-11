@@ -76,7 +76,7 @@ public class LevelManager2 : MonoBehaviour
 
     public void PlayPauseTime()
     {
-        Debug.Log("Toogle Play");
+        Debug.Log("Toggle Play");
         onPause = !onPause;
         if (onPause)
         {

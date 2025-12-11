@@ -6,6 +6,7 @@ public class PlayerIceSystem : MonoBehaviour
     public Action<PlayerIceSystem> PlayerModeChange;
     public Rigidbody rb;
 
+
     public float linearDampingNormal = 0f;
     public float speedMultiplierInit = 1f;
     public float speedMultiplier = 1f;
