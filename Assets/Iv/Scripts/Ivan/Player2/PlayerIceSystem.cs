@@ -32,7 +32,7 @@ public class PlayerIceSystem : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        // playerMode = PlayerMode.Fire;
+        //playerMode = PlayerMode.Fire;
         playerOnEnvironment = PlayerOnEnvironment.None;
 
         // rb = GetComponent<Rigidbody>();
