@@ -21,7 +21,7 @@ MonoBehaviour:
   enableJump: 1
   jumpForce: 25
   coyoteTime: 0.15
-  enableDoubleJump: 0
+  enableDoubleJump: 1
   doubleJumpMultiplier: 1.5
   enableWallSlide: 1
   wallSlideSpeed: 2
