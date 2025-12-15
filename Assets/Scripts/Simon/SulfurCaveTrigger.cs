@@ -1,9 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class SulfurCaveTrigger : MonoBehaviour
 {
-    // Chemin dans le dossier Resources (ex: Assets/Resources/Particles/ExplosionParticle.prefab)
     private string particleResourcePath = "Particles/SulfurExplosion";
+    private float time = 3f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,35 +18,49 @@ public class SulfurCaveTrigger : MonoBehaviour
 
     void HandleExplode(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player"))
+            return;
+
+        PlayerController player = other.GetComponent<PlayerController>();
+        if (player.IsIceForm)
+            return;
+
+        // Charger le prefab depuis Resources
+        GameObject explosionPrefab = Resources.Load<GameObject>(particleResourcePath);
+        if (explosionPrefab == null)
         {
-            PlayerController player = other.GetComponent<PlayerController>();
-            if (!player.IsIceForm)
-            {
-                // Charger le prefab depuis Resources
-                GameObject explosionParticlesPrefab = Resources.Load<GameObject>(
-                    particleResourcePath
-                );
-
-                if (explosionParticlesPrefab != null)
-                {
-                    // Instancier le particle system à la position du joueur
-                    Instantiate(
-                        explosionParticlesPrefab,
-                        other.transform.position,
-                        Quaternion.identity
-                    );
-                }
-                else
-                {
-                    Debug.LogWarning(
-                        "Prefab de particules introuvable dans Resources/" + particleResourcePath
-                    );
-                }
-
-                // Déclencher l'explosion du joueur
-                other.GetComponent<PlayerDamageSystem>().Explode();
-            }
+            Debug.LogWarning(
+                "Prefab de particules introuvable dans Resources/" + particleResourcePath
+            );
+            return;
         }
+
+        // Instancier le particle system
+        GameObject psObj = Instantiate(
+            explosionPrefab,
+            other.transform.position + Vector3.up * 1f,
+            Quaternion.identity
+        );
+        ParticleSystem ps = psObj.GetComponentInChildren<ParticleSystem>();
+        if (ps != null)
+        {
+            // Burst de 100 particules instantané
+            // var emission = ps.emission;
+            // emission.rateOverTime = 0;
+            // emission.SetBursts(new ParticleSystem.Burst[] { new ParticleSystem.Burst(0f, 100) });
+
+            ps.Play();
+            StartCoroutine(StopExplode(time, ps));
+        }
+
+        // Déclencher l'explosion du joueur
+        other.GetComponent<PlayerDamageSystem>().Explode(time);
+    }
+
+    IEnumerator StopExplode(float time, ParticleSystem ps)
+    {
+        yield return new WaitForSeconds(time);
+        ps.Stop();
+        Destroy(ps.gameObject);
     }
 }

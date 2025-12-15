@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerDamageSystem : MonoBehaviour
 {
-    public static Action Die;
+    public static Action<float> Die;
 
     // PlayerController player;
     Rigidbody rb;
@@ -16,7 +16,7 @@ public class PlayerDamageSystem : MonoBehaviour
         rb = GetComponent<PlayerIceSystem>().GetRigidbody();
     }
 
-    public void Explode()
+    public void Explode(float time)
     {
         Debug.Log("PlayerDamageSystem Explode Call");
 
@@ -30,5 +30,7 @@ public class PlayerDamageSystem : MonoBehaviour
 
         rb.linearVelocity = -finalDir * speedExplode;
         rb.linearDamping = 1.8f;
+
+        Die?.Invoke(time);
     }
 }
