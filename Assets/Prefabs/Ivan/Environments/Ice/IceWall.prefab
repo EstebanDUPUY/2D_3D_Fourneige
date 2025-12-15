@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5816590379697109574}
   - component: {fileID: 5313982053575039736}
   - component: {fileID: -6877601366110404807}
-  - component: {fileID: -8000558775199975559}
+  - component: {fileID: 1494016216937475280}
   m_Layer: 7
   m_Name: IceWall
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5.2, y: 200, z: 6.06}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -67,7 +67,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4459fff084dd84526ab8fd5082d2eacb, type: 2}
+  - {fileID: 2100000, guid: c62032694d244634c89ad3ebe4d0f561, type: 2}
+  - {fileID: 2100000, guid: cf976b858817d9a4ba37511b50c9b8aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -605,7 +606,7 @@ ParticleSystemForceField:
         m_RotationOrder: 4
     m_MultiplyDragByParticleSize: 1
     m_MultiplyDragByParticleVelocity: 1
---- !u!114 &-8000558775199975559
+--- !u!114 &1494016216937475280
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -614,10 +615,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 9051012073289300858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7fbb6b70a83b1a4795864966b73d7b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 723be564e3f220443b9bcdb49847d244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iceWallData: {fileID: 11400000, guid: 58e94a953104681448dc34b734f5e2cc, type: 2}
-  dragOnIce: 0.2
-  speedMultiplier: 2
-  killFireForm: 1
+  dragOnIce: 45
+  range: 5
+  velocity: {x: 0, y: 0, z: 0}
