@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4143655061135499763}
   - component: {fileID: 5816590379697109574}
   - component: {fileID: 339807888505167301}
-  - component: {fileID: 6083372270338892038}
+  - component: {fileID: 5229217604823539450}
   m_Layer: 0
   m_Name: SulfurCave
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 30.3, y: 15.2, z: 6}
+  m_LocalScale: {x: 30.3, y: 20.11, z: 9.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -109,7 +109,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6083372270338892038
+--- !u!114 &5229217604823539450
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,7 +118,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 9051012073289300858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72e51a18a3e55994baef53be5554e454, type: 3}
+  m_Script: {fileID: 11500000, guid: 9addadd07a6ef5e4c9327c6d2fbbf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sulfurCaveData: {fileID: 11400000, guid: 739a871a238ee224396e0fbabddc00b0, type: 2}

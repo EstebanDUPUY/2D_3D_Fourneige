@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4323094425721068921}
   - component: {fileID: 7578830728595485271}
   - component: {fileID: 6932338926579448940}
-  - component: {fileID: 5736813993430056768}
   m_Layer: 6
   m_Name: IceSurface
   m_TagString: Untagged
@@ -32,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 115.0682, y: -3.88, z: -1.9}
-  m_LocalScale: {x: 8.975847, y: 1, z: 1}
+  m_LocalScale: {x: 18.91, y: 0.63, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -316,7 +315,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 725
+  m_VersionIndex: 737
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -351,19 +350,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!114 &5736813993430056768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6819396865822450267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2755b8df79e7f1b4892dfaf5a0dae7b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  iceSurfaceData: {fileID: 11400000, guid: 1058bb1602daea14cb915ef97f8339d4, type: 2}
-  dragOnIce: 0.2
-  speedMultiplier: 2
-  killFireForm: 1

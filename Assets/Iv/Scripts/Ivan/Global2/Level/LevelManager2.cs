@@ -69,14 +69,14 @@ public class LevelManager2 : MonoBehaviour
 
     private IEnumerator GameOverRoutine()
     {
-        yield return new WaitForSeconds(1.25f);
+        yield return new WaitForSeconds(0.5f);
         OnLevelReset?.Invoke();
         Debug.Log("LevelManager2 -> GameOverRoutine with reset level call");
     }
 
     public void PlayPauseTime()
     {
-        Debug.Log("Toogle Play");
+        Debug.Log("Toggle Play");
         onPause = !onPause;
         if (onPause)
         {
