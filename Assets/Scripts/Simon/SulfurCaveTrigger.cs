@@ -7,6 +7,16 @@ public class SulfurCaveTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        HandleExplode(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        HandleExplode(other);
+    }
+
+    void HandleExplode(Collider other)
+    {
         if (other.CompareTag("Player"))
         {
             PlayerController player = other.GetComponent<PlayerController>();
@@ -20,16 +30,11 @@ public class SulfurCaveTrigger : MonoBehaviour
                 if (explosionParticlesPrefab != null)
                 {
                     // Instancier le particle system à la position du joueur
-                    var ps = Instantiate(
+                    Instantiate(
                         explosionParticlesPrefab,
                         other.transform.position,
                         Quaternion.identity
                     );
-                    // var particle = ps.GetComponent<ParticleSystem>();
-                    // if (particle != null)
-                    // {
-                    //     particle.Play();
-                    // }
                 }
                 else
                 {
