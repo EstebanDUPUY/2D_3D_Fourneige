@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public bool IsTouchingWall { get; private set; }
     public bool IsWallSliding { get; private set; }
     public bool IsDashing { get; private set; }
+    public bool StopMoving { get; set; }
     public int FacingDirection { get; private set; } = 1;
 
     public float bonusSlopeSpeed = 1;
@@ -125,7 +126,8 @@ public class PlayerController : MonoBehaviour
 
     public void SwitchForm()
     {
-        if (!enableFormSwitch || iceSettings == null || fireSettings == null) return;
+        if (!enableFormSwitch || iceSettings == null || fireSettings == null)
+            return;
         IsIceForm = !IsIceForm;
         settings = IsIceForm ? iceSettings : fireSettings;
         OnFormSwitch?.Invoke(IsIceForm);
@@ -133,7 +135,8 @@ public class PlayerController : MonoBehaviour
 
     public void SetIceForm()
     {
-        if (iceSettings == null) return;
+        if (iceSettings == null)
+            return;
         IsIceForm = true;
         settings = iceSettings;
         OnFormSwitch?.Invoke(true);
@@ -141,7 +144,8 @@ public class PlayerController : MonoBehaviour
 
     public void SetFireForm()
     {
-        if (fireSettings == null) return;
+        if (fireSettings == null)
+            return;
         IsIceForm = false;
         settings = fireSettings;
         OnFormSwitch?.Invoke(false);
@@ -155,7 +159,12 @@ public class PlayerController : MonoBehaviour
     {
         bool wasGrounded = IsGrounded;
         Vector3 pos = transform.position + (Vector3)settings.groundCheckOffset;
-        IsGrounded = Physics.CheckBox(pos, new Vector3(settings.groundCheckSize.x / 2f, settings.groundCheckSize.y / 2f, 0.1f), Quaternion.identity, settings.groundLayer);
+        IsGrounded = Physics.CheckBox(
+            pos,
+            new Vector3(settings.groundCheckSize.x / 2f, settings.groundCheckSize.y / 2f, 0.1f),
+            Quaternion.identity,
+            settings.groundLayer
+        );
 
         if (IsGrounded)
         {
@@ -170,8 +179,18 @@ public class PlayerController : MonoBehaviour
 
     void CheckWalls()
     {
-        bool right = Physics.Raycast(transform.position, Vector3.right, settings.wallCheckDistance, settings.wallLayer);
-        bool left = Physics.Raycast(transform.position, Vector3.left, settings.wallCheckDistance, settings.wallLayer);
+        bool right = Physics.Raycast(
+            transform.position,
+            Vector3.right,
+            settings.wallCheckDistance,
+            settings.wallLayer
+        );
+        bool left = Physics.Raycast(
+            transform.position,
+            Vector3.left,
+            settings.wallCheckDistance,
+            settings.wallLayer
+        );
         IsTouchingWall = right || left;
         wallDirection = right ? 1 : (left ? -1 : 0);
 
@@ -189,13 +208,19 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-        if (!settings.enableMovement) return;
+        if (!settings.enableMovement)
+            return;
+        if (StopMoving)
+            return;
 
         float target = moveInput.x * settings.moveSpeed;
         float accel;
 
         if (Mathf.Abs(moveInput.x) > 0.1f)
-            accel = Mathf.Abs(target) > Mathf.Abs(rb.linearVelocity.x) ? settings.acceleration : settings.deceleration;
+            accel =
+                Mathf.Abs(target) > Mathf.Abs(rb.linearVelocity.x)
+                    ? settings.acceleration
+                    : settings.deceleration;
         else
             accel = settings.deceleration;
 
@@ -205,9 +230,14 @@ public class PlayerController : MonoBehaviour
 
     void ApplyGravity()
     {
-        if (IsGrounded && rb.linearVelocity.y <= 0) return;
+        if (IsGrounded && rb.linearVelocity.y <= 0)
+            return;
 
-        rb.linearVelocity += new Vector3(0, Physics.gravity.y * settings.gravityScale * Time.fixedDeltaTime, 0);
+        rb.linearVelocity += new Vector3(
+            0,
+            Physics.gravity.y * settings.gravityScale * Time.fixedDeltaTime,
+            0
+        );
 
         if (rb.linearVelocity.y < -settings.maxFallSpeed)
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, -settings.maxFallSpeed, 0);
@@ -224,7 +254,11 @@ public class PlayerController : MonoBehaviour
         if (settings.enableWallJump && canWallJump && !IsGrounded)
         {
             int wallDir = IsTouchingWall ? wallDirection : lastWallDirection;
-            rb.linearVelocity = new Vector3(-wallDir * settings.wallJumpPushForce, settings.wallJumpForce, 0);
+            rb.linearVelocity = new Vector3(
+                -wallDir * settings.wallJumpPushForce,
+                settings.wallJumpForce,
+                0
+            );
             FacingDirection = -wallDir;
             hasDoubleJump = true;
             hasAirDash = true;
@@ -243,7 +277,11 @@ public class PlayerController : MonoBehaviour
         // Double jump
         if (settings.enableDoubleJump && hasDoubleJump && !IsGrounded)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce * settings.doubleJumpMultiplier, 0);
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                settings.jumpForce * settings.doubleJumpMultiplier,
+                0
+            );
             hasDoubleJump = false;
         }
     }
@@ -281,7 +319,8 @@ public class PlayerController : MonoBehaviour
 
     void TryDash()
     {
-        if (dashCooldownTimer > 0) return;
+        if (dashCooldownTimer > 0)
+            return;
 
         if (IsGrounded && settings.enableDash)
         {
@@ -318,7 +357,11 @@ public class PlayerController : MonoBehaviour
         {
             IsDashing = false;
             if (isAirDash)
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x * settings.airDashDrag, rb.linearVelocity.y, 0);
+                rb.linearVelocity = new Vector3(
+                    rb.linearVelocity.x * settings.airDashDrag,
+                    rb.linearVelocity.y,
+                    0
+                );
         }
     }
 
@@ -334,7 +377,8 @@ public class PlayerController : MonoBehaviour
 
     void HandleFlip()
     {
-        if (!settings.enableFlip || spriteTransform == null) return;
+        if (!settings.enableFlip || spriteTransform == null)
+            return;
 
         if (Mathf.Abs(moveInput.x) > 0.1f)
             FacingDirection = moveInput.x > 0 ? 1 : -1;
@@ -359,14 +403,24 @@ public class PlayerController : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (!showGizmos || settings == null) return;
+        if (!showGizmos || settings == null)
+            return;
 
         Gizmos.color = IsGrounded ? Color.green : Color.red;
         Vector3 gPos = transform.position + (Vector3)settings.groundCheckOffset;
-        Gizmos.DrawWireCube(gPos, new Vector3(settings.groundCheckSize.x, settings.groundCheckSize.y, 0.2f));
+        Gizmos.DrawWireCube(
+            gPos,
+            new Vector3(settings.groundCheckSize.x, settings.groundCheckSize.y, 0.2f)
+        );
 
         Gizmos.color = IsTouchingWall ? Color.blue : Color.yellow;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * settings.wallCheckDistance);
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * settings.wallCheckDistance);
+        Gizmos.DrawLine(
+            transform.position,
+            transform.position + Vector3.right * settings.wallCheckDistance
+        );
+        Gizmos.DrawLine(
+            transform.position,
+            transform.position + Vector3.left * settings.wallCheckDistance
+        );
     }
 }

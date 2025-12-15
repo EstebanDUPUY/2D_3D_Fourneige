@@ -13,7 +13,8 @@ public class PlayerDamageSystem : MonoBehaviour
     void Awake()
     {
         //player = GetComponent<PlayerController>();
-        rb = GetComponent<PlayerIceSystem>().GetRigidbody();
+        // rb = GetComponent<PlayerIceSystem>().GetRigidbody();
+        rb = GetComponent<Rigidbody>();
     }
 
     public void Explode(float time)

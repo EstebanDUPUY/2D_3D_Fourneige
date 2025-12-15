@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class ResetPlayer : MonoBehaviour
 {
+    PlayerController player;
     Vector3 startPos;
     Quaternion startRot;
     Rigidbody rb;
 
     void Awake()
     {
+        player = GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody>();
         startPos = transform.position;
         startRot = transform.rotation;
@@ -32,6 +34,7 @@ public class ResetPlayer : MonoBehaviour
 
         rb.MovePosition(startPos);
         rb.MoveRotation(startRot);
+        player.StopMoving = false;
 
         Debug.Log("ResetPlayer -> Reset() apres");
     }

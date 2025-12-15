@@ -54,7 +54,8 @@ public class SulfurCaveTrigger : MonoBehaviour
         }
 
         // Déclencher l'explosion du joueur
-        other.GetComponent<PlayerDamageSystem>().Explode(time);
+        player.GetComponent<PlayerDamageSystem>().Explode(time);
+        player.StopMoving = true;
     }
 
     IEnumerator StopExplode(float time, ParticleSystem ps)
