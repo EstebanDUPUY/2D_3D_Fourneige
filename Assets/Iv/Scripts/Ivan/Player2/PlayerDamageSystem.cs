@@ -19,8 +19,6 @@ public class PlayerDamageSystem : MonoBehaviour
 
     public void Explode(float time)
     {
-        Debug.Log("PlayerDamageSystem Explode Call");
-
         Vector3 baseDir = (Vector3.right + Vector3.down * 0.6f).normalized;
 
         // Vérifie si le joueur se déplace vers la gauche ou la droite

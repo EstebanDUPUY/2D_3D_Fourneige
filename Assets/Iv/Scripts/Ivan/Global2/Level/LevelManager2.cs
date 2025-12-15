@@ -63,7 +63,6 @@ public class LevelManager2 : MonoBehaviour
 
     public static void GameOver(float time)
     {
-        Debug.Log("LevelManager2 -> GameOver() call");
         Instance.StartCoroutine(Instance.GameOverRoutine(time));
     }
 
@@ -71,12 +70,10 @@ public class LevelManager2 : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         OnLevelReset?.Invoke();
-        Debug.Log("LevelManager2 -> GameOverRoutine with reset level call");
     }
 
     public void PlayPauseTime()
     {
-        Debug.Log("Toggle Play");
         onPause = !onPause;
         if (onPause)
         {

@@ -1,10 +1,12 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SulfurCaveTrigger : MonoBehaviour
 {
     private string particleResourcePath = "Particles/SulfurExplosion";
     private float time = 3f;
+    bool everExplode;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -13,7 +15,10 @@ public class SulfurCaveTrigger : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        HandleExplode(other);
+        if (!everExplode)
+        {
+            HandleExplode(other);
+        }
     }
 
     void HandleExplode(Collider other)
@@ -56,6 +61,8 @@ public class SulfurCaveTrigger : MonoBehaviour
         // Déclencher l'explosion du joueur
         player.GetComponent<PlayerDamageSystem>().Explode(time);
         player.StopMoving = true;
+
+        everExplode = true;
     }
 
     IEnumerator StopExplode(float time, ParticleSystem ps)
@@ -63,5 +70,6 @@ public class SulfurCaveTrigger : MonoBehaviour
         yield return new WaitForSeconds(time);
         ps.Stop();
         Destroy(ps.gameObject);
+        everExplode = false;
     }
 }
