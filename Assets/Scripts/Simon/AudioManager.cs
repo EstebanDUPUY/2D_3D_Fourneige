@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
     [Header("-----------------Audio Source-----------------")]
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioSource SFXSource;
-    public AudioMixerGroup masterMixerGroup; // Assigné dans l'Inspector
+    public AudioMixerGroup masterMixerGroup;
 
     [Header("-----------------Audio Source-----------------")]
     public AudioClip musicMenu;
@@ -59,7 +59,7 @@ public class AudioManager : MonoBehaviour
         // Source pour les bruitages
         SFXSource = gameObject.AddComponent<AudioSource>();
         SFXSource.loop = false;
-        SFXSource.outputAudioMixerGroup = masterMixerGroup; 
+        SFXSource.outputAudioMixerGroup = masterMixerGroup;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -69,8 +69,8 @@ public class AudioManager : MonoBehaviour
         PlayMusicForScene(SceneManager.GetActiveScene().name);
     }
 
-    public void PlaySound(AudioClip clip)
-    {
+    public void PlaySound(AudioClip clip) 
+    { 
         SFXSource.PlayOneShot(clip);
     }
 
@@ -91,12 +91,12 @@ public class AudioManager : MonoBehaviour
             musicSource.clip = musicSelectLevel;
             musicSource.Play();
         }
-        else if (sceneName == "TestSceneBuild" && musicSource.clip != musicLevel1)
+        else if (sceneName == "Test" && musicSource.clip != musicLevel1)
         {
             musicSource.clip = musicLevel1;
             musicSource.Play();
         }
-        else if (sceneName == "Level" && musicSource.clip != musicLevel2)
+        else if (sceneName == "Test 2" && musicSource.clip != musicLevel2)
         {
             musicSource.clip = musicLevel2;
             musicSource.Play();
