@@ -12,32 +12,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26ec779abc8d944aa8cfb35dad5daa1, type: 3}
   m_Name: IceState
   m_EditorClassIdentifier: 
-  gravityScale: 3
+  formName: Ice
+  gravityScale: 3.5
   maxFallSpeed: 20
+  enableFallGravityMultiplier: 1
+  fallGravityMultiplier: 1.4
+  enableApexModifier: 0
+  apexGravityMultiplier: 0.5
+  apexThreshold: 2
   enableMovement: 1
   moveSpeed: 18
+  enableAcceleration: 1
   acceleration: 50
-  deceleration: 60
+  enableDeceleration: 0
+  deceleration: 100
+  enableAirControl: 1
+  airControlMultiplier: 1
+  enableAirAcceleration: 1
+  airAcceleration: 90
+  enableAirDeceleration: 1
+  airDeceleration: 80
   enableJump: 1
   jumpForce: 12
   coyoteTime: 0.3
+  enableVariableJump: 1
+  jumpCutMultiplier: 0.5
   enableDoubleJump: 1
   doubleJumpMultiplier: 0.85
   enableWallSlide: 1
-  wallSlideSpeed: 2
-  wallSlideFriction: 0.1
+  wallSlideSpeed: 1.5
+  wallSlideGravityScale: 1
+  enableWallStick: 0
+  wallStickDuration: 0.1
   enableWallJump: 1
   wallJumpForce: 14
   wallJumpPushForce: 10
   wallCoyoteTime: 0.15
+  enableWallJumpLock: 1
+  wallJumpLockDuration: 0.15
+  wallJumpLockControlMultiplier: 0
   enableDash: 1
-  dashSpeed: 18
-  dashDuration: 0.2
   dashCooldown: 0
+  enableGroundDash: 1
+  groundDashSpeed: 20
+  groundDashDuration: 0.2
   enableAirDash: 1
   airDashSpeed: 28
   airDashDuration: 0.2
-  airDashDrag: 0
+  maxAirDashes: 1
+  dashRefreshOnGround: 1
+  enableDashGravity: 0
+  dashGravityScale: 0
+  enableDashAirControl: 0
+  dashAirControlMultiplier: 0.3
+  dashEndVelocityRetention: 0.3
+  dashEndVerticalVelocity: 0
+  enableDashCancelWithJump: 0
   enableFlip: 1
   useScaleFlip: 0
   flipSpeed: 15
