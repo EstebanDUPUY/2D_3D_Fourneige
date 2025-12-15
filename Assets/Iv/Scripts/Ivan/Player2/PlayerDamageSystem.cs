@@ -28,9 +28,7 @@ public class PlayerDamageSystem : MonoBehaviour
         // On inverse seulement la partie horizontale du vecteur
         Vector3 finalDir = new Vector3(baseDir.x * directionSign, baseDir.y, baseDir.z);
 
-        rb.linearVelocity = -finalDir * 13f;
-        rb.linearDamping = 1.6f;
-
-        Die?.Invoke();
+        rb.linearVelocity = -finalDir * speedExplode;
+        rb.linearDamping = 1.8f;
     }
 }
