@@ -2625,6 +2625,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 1.945946
       objectReference: {fileID: 0}
+    - target: {fileID: 8027896742195303000, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8259072043044659145, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
       propertyPath: m_Name
       value: Player
