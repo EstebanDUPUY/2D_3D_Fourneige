@@ -225,7 +225,7 @@ public class PlayerController : MonoBehaviour
             accel = settings.deceleration;
 
         float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, accel * Time.fixedDeltaTime);
-        rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
+        rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0) * bonusSlopeSpeed;
     }
 
     void ApplyGravity()
