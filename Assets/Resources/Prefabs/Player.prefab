@@ -57,7 +57,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 105.9
+    FieldOfView: 147.8
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -163,7 +163,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -189,7 +189,7 @@ SpriteRenderer:
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 3.4594595, y: 1.945946}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -285,7 +285,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 105.9
+  field of view: 147.8
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -403,7 +403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5838894274585241446
 Transform:
   m_ObjectHideFlags: 0
@@ -500,10 +500,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5441823
-  m_Height: 1.9668629
+  m_Radius: 2.682106
+  m_Height: 10.385969
   m_Direction: 1
-  m_Center: {x: -0.0441823, y: -0.016568542, z: 0}
+  m_Center: {x: -0.37496948, y: -0.13398361, z: 0}
 --- !u!54 &8027896742195303000
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -690,7 +690,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Gamepad
-  m_DefaultActionMap: df70fa95-8a34-4494-b137-73ab6b9c7d37
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &4955083339852982041
@@ -713,6 +713,10 @@ MonoBehaviour:
   startAsIce: 0
   showGizmos: 1
   bonusSlopeSpeed: 1
+  IsJumpingAnim: 0
+  IsFallingAnim: 0
+  IsWallJumping: 0
+  wallJumpAnimTime: 0.15
 --- !u!114 &5622798866998533190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,10 +729,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba4dec9631dcd8439c565be50fb5d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDashing: 0
+  player: {fileID: 4955083339852982041}
+  IsJumping: 0
   IsWallJumping: 0
   IsDead: 0
   IsWallSliding: 0
+  IsDashing: 0
 --- !u!114 &973344001146696176
 MonoBehaviour:
   m_ObjectHideFlags: 0
