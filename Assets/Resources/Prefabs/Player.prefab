@@ -57,7 +57,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 105.9
+    FieldOfView: 147.2
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -118,6 +118,7 @@ GameObject:
   - component: {fileID: 9057673395703695864}
   - component: {fileID: 7227424865424139471}
   - component: {fileID: 555550057014398930}
+  - component: {fileID: 8172759196173825388}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -163,7 +164,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -217,6 +218,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8172759196173825388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3476154879524855551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49cd221c8fd0d8a40ac276e319e4f3cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 7227424865424139471}
+  fireMaterial: {fileID: -876546973899608171, guid: a77220c0039bcbb4cae5ab0a7583cded, type: 3}
+  iceMaterial: {fileID: -876546973899608171, guid: 76e454c18066c8045b4dd398715a743a, type: 3}
 --- !u!1 &5157385930509126453
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +301,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 105.9
+  field of view: 147.2
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -403,7 +419,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5838894274585241446
 Transform:
   m_ObjectHideFlags: 0

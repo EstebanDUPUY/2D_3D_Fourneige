@@ -32,11 +32,11 @@ public class PlayerVisuals : MonoBehaviour
     void Start()
     {
         // Appliquer la forme de départ
-        OnFormChanged(player.IsFireForm);
+        OnFormChanged(player.IsIceForm);
     }
 
-    void OnFormChanged(bool isFire)
+    void OnFormChanged(bool isIce)
     {
-        spriteRenderer.material = isFire ? fireMaterial : iceMaterial;
+        spriteRenderer.material = isIce ? iceMaterial : fireMaterial;
     }
 }
