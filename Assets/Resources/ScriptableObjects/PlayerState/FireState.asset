@@ -12,32 +12,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26ec779abc8d944aa8cfb35dad5daa1, type: 3}
   m_Name: FireState
   m_EditorClassIdentifier: 
-  gravityScale: 3
+  formName: Fire
+  gravityScale: 2
   maxFallSpeed: 20
+  enableFallGravityMultiplier: 1
+  fallGravityMultiplier: 0.9
+  enableApexModifier: 1
+  apexGravityMultiplier: 0.4
+  apexThreshold: 2
   enableMovement: 1
   moveSpeed: 40
+  enableAcceleration: 1
   acceleration: 100
-  deceleration: 15
+  enableDeceleration: 1
+  deceleration: 30
+  enableAirControl: 1
+  airControlMultiplier: 1
+  enableAirAcceleration: 1
+  airAcceleration: 70
+  enableAirDeceleration: 1
+  airDeceleration: 20
   enableJump: 1
   jumpForce: 25
   coyoteTime: 0.15
-  enableDoubleJump: 1
+  enableVariableJump: 1
+  jumpCutMultiplier: 0.5
+  enableDoubleJump: 0
   doubleJumpMultiplier: 1.5
   enableWallSlide: 1
-  wallSlideSpeed: 2
-  wallSlideFriction: -2
+  wallSlideSpeed: 5
+  wallSlideGravityScale: 1
+  enableWallStick: 0
+  wallStickDuration: 0.1
   enableWallJump: 1
   wallJumpForce: 20
   wallJumpPushForce: 15
   wallCoyoteTime: 0
+  enableWallJumpLock: 1
+  wallJumpLockDuration: 0.05
+  wallJumpLockControlMultiplier: 0
   enableDash: 1
-  dashSpeed: 25
-  dashDuration: 0.2
   dashCooldown: 0
+  enableGroundDash: 1
+  groundDashSpeed: 20
+  groundDashDuration: 0.25
   enableAirDash: 1
   airDashSpeed: 50
   airDashDuration: 0.2
-  airDashDrag: 0
+  maxAirDashes: 1
+  dashRefreshOnGround: 1
+  enableDashGravity: 1
+  dashGravityScale: 0.3
+  enableDashAirControl: 0
+  dashAirControlMultiplier: 0.3
+  dashEndVelocityRetention: 0.5
+  dashEndVerticalVelocity: 0
+  enableDashCancelWithJump: 1
   enableFlip: 1
   useScaleFlip: 0
   flipSpeed: 15

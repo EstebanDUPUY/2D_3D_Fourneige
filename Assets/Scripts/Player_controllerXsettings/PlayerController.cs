@@ -7,12 +7,20 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     public PlayerSettings settings;
     public Transform spriteTransform;
+    [Tooltip("Auto-detects child named 'Visuals' if not assigned")]
+    public SpriteRenderer spriteRenderer;
+    [Tooltip("Auto-detects from spriteRenderer's GameObject if not assigned")]
+    public Animator animator;
 
     [Header("Form Switching")]
     public bool enableFormSwitch = true;
     public PlayerSettings iceSettings;
     public PlayerSettings fireSettings;
     public bool startAsIce = false;
+
+    [Header("Form Sprites")]
+    public Sprite fireSprite;
+    public Sprite iceSprite;
 
     // Events (subscribe to these for visual feedback)
     public System.Action<bool> OnFormSwitch; // true = ice, false = fire
@@ -61,10 +69,25 @@ public class PlayerController : MonoBehaviour
         if (spriteTransform == null)
             spriteTransform = transform;
 
+        // Auto-detect SpriteRenderer on "Visuals" child
+        if (spriteRenderer == null)
+        {
+            Transform visuals = transform.Find("Visuals");
+            if (visuals != null)
+                spriteRenderer = visuals.GetComponent<SpriteRenderer>();
+        }
+
+        // Auto-detect Animator from spriteRenderer's GameObject
+        if (animator == null && spriteRenderer != null)
+            animator = spriteRenderer.GetComponent<Animator>();
+
         // Initialize form
         IsIceForm = startAsIce;
         if (enableFormSwitch && iceSettings != null && fireSettings != null)
+        {
             settings = IsIceForm ? iceSettings : fireSettings;
+            UpdateFormSprite();
+        }
     }
 
     void Update()
@@ -128,6 +151,7 @@ public class PlayerController : MonoBehaviour
         if (!enableFormSwitch || iceSettings == null || fireSettings == null) return;
         IsIceForm = !IsIceForm;
         settings = IsIceForm ? iceSettings : fireSettings;
+        UpdateFormSprite();
         OnFormSwitch?.Invoke(IsIceForm);
     }
 
@@ -136,6 +160,7 @@ public class PlayerController : MonoBehaviour
         if (iceSettings == null) return;
         IsIceForm = true;
         settings = iceSettings;
+        UpdateFormSprite();
         OnFormSwitch?.Invoke(true);
     }
 
@@ -144,7 +169,17 @@ public class PlayerController : MonoBehaviour
         if (fireSettings == null) return;
         IsIceForm = false;
         settings = fireSettings;
+        UpdateFormSprite();
         OnFormSwitch?.Invoke(false);
+    }
+
+    private void UpdateFormSprite()
+    {
+        if (spriteRenderer == null) return;
+
+        Sprite targetSprite = IsIceForm ? iceSprite : fireSprite;
+        if (targetSprite != null)
+            spriteRenderer.sprite = targetSprite;
     }
 
     // ══════════════════════════════════════════════════════════════
