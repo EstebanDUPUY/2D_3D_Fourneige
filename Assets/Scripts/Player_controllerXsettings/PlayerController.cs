@@ -59,6 +59,13 @@ public class PlayerController : MonoBehaviour
     private bool isAirDash;
     private float flipAngle;
 
+    [Header("Detection")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.8f, 0.1f);
+    [SerializeField] private Vector2 groundCheckOffset = new Vector2(0f, -0.5f);
+    [SerializeField] private float wallCheckDistance = 0.6f;
+    
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -189,8 +196,8 @@ public class PlayerController : MonoBehaviour
     void CheckGrounded()
     {
         bool wasGrounded = IsGrounded;
-        Vector3 pos = transform.position + (Vector3)settings.groundCheckOffset;
-        IsGrounded = Physics.CheckBox(pos, new Vector3(settings.groundCheckSize.x / 2f, settings.groundCheckSize.y / 2f, 0.1f), Quaternion.identity, settings.groundLayer);
+        Vector3 pos = transform.position + (Vector3)groundCheckOffset;
+        IsGrounded = Physics.CheckBox(pos, new Vector3(groundCheckSize.x / 2f, groundCheckSize.y / 2f, 0.1f), Quaternion.identity, groundLayer);
 
         if (IsGrounded)
         {
@@ -205,8 +212,8 @@ public class PlayerController : MonoBehaviour
 
     void CheckWalls()
     {
-        bool right = Physics.Raycast(transform.position, Vector3.right, settings.wallCheckDistance, settings.wallLayer);
-        bool left = Physics.Raycast(transform.position, Vector3.left, settings.wallCheckDistance, settings.wallLayer);
+        bool right = Physics.Raycast(transform.position, Vector3.right, wallCheckDistance, wallLayer);
+        bool left = Physics.Raycast(transform.position, Vector3.left, wallCheckDistance, wallLayer);
         IsTouchingWall = right || left;
         wallDirection = right ? 1 : (left ? -1 : 0);
 
@@ -397,11 +404,11 @@ public class PlayerController : MonoBehaviour
         if (!showGizmos || settings == null) return;
 
         Gizmos.color = IsGrounded ? Color.green : Color.red;
-        Vector3 gPos = transform.position + (Vector3)settings.groundCheckOffset;
-        Gizmos.DrawWireCube(gPos, new Vector3(settings.groundCheckSize.x, settings.groundCheckSize.y, 0.2f));
+        Vector3 gPos = transform.position + (Vector3)groundCheckOffset;
+        Gizmos.DrawWireCube(gPos, new Vector3(groundCheckSize.x, groundCheckSize.y, 0.2f));
 
         Gizmos.color = IsTouchingWall ? Color.blue : Color.yellow;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * settings.wallCheckDistance);
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * settings.wallCheckDistance);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * wallCheckDistance);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * wallCheckDistance);
     }
 }

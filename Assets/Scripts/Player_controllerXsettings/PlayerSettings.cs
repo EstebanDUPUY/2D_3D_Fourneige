@@ -50,11 +50,4 @@ public class PlayerSettings : ScriptableObject
     public bool enableFlip = true;
     public bool useScaleFlip = true;
     public float flipSpeed = 15f;
-
-    [Header("Detection")]
-    public LayerMask groundLayer;
-    public LayerMask wallLayer;
-    public Vector2 groundCheckSize = new Vector2(0.8f, 0.1f);
-    public Vector2 groundCheckOffset = new Vector2(0f, -0.5f);
-    public float wallCheckDistance = 0.6f;
 }
