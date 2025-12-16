@@ -75,10 +75,7 @@ public class LevelUISystem2 : MonoBehaviour
         // Not use that in prod
         if (null == GameManager2.instance)
         {
-            Debug.LogWarning(
-                "GameManager2.instance is NULL at start. "
-                    + "The LevelManager2 create it for Dev Mode with GameManager2.InstantiateIfNeededInDevMode()"
-            );
+            Debug.LogWarning("GameManager2.instance is NULL at start. " + "The LevelManager2 create it for Dev Mode with GameManager2.InstantiateIfNeededInDevMode()");
             GameManager2.InstantiateIfNeededInDevMode();
         }
         // Delete for prod above

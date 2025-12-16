@@ -77,6 +77,6 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
-  groundCheckSize: {x: 0.8, y: 0.1}
-  groundCheckOffset: {x: 0, y: -1}
-  wallCheckDistance: 0.65
+  groundCheckSize: {x: 1.02, y: 0.1}
+  groundCheckOffset: {x: 0, y: -3.1}
+  wallCheckDistance: 2.4
