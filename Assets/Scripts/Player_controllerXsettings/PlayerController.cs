@@ -51,6 +51,13 @@ public class PlayerController : MonoBehaviour
     private bool isAirDash;
     private float flipAngle;
 
+    [Header("Animation State")]
+    public bool IsJumpingAnim;
+    public bool IsFallingAnim;
+    public bool IsWallJumping;
+    public float wallJumpAnimTime = 0.15f;
+    private float wallJumpAnimTimer;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -73,7 +80,24 @@ public class PlayerController : MonoBehaviour
         CheckWalls();
         HandleFlip();
         UpdateTimers();
+
+    if (IsWallJumping)
+    {
+        wallJumpAnimTimer -= Time.deltaTime;
+        if (wallJumpAnimTimer <= 0)
+        IsWallJumping = false;
     }
+
+        // Falling
+        IsFallingAnim = !IsGrounded && rb.linearVelocity.y < -0.1f;
+
+        // Reset au sol
+        if (IsGrounded)
+        {
+            IsJumpingAnim = false;
+            IsWallJumping = false;
+        }
+}
 
     void FixedUpdate()
     {
@@ -219,24 +243,39 @@ public class PlayerController : MonoBehaviour
 
     void TryJump()
     {
-        // Wall jump (with wall coyote time)
+
         bool canWallJump = IsTouchingWall || (Time.time - lastWallTime <= settings.wallCoyoteTime);
+
         if (settings.enableWallJump && canWallJump && !IsGrounded)
         {
             int wallDir = IsTouchingWall ? wallDirection : lastWallDirection;
+
             rb.linearVelocity = new Vector3(-wallDir * settings.wallJumpPushForce, settings.wallJumpForce, 0);
+
             FacingDirection = -wallDir;
             hasDoubleJump = true;
             hasAirDash = true;
-            lastWallTime = 0; // Consume wall coyote
+            lastWallTime = 0;
+
+            // 🔥 ANIMATION
+            IsWallJumping = true;
+            wallJumpAnimTimer = wallJumpAnimTime;
+            IsJumpingAnim = true;
+            IsWallSliding = false;
+
             return;
         }
 
-        // Ground jump (with coyote time)
+
+        // Ground jump
         if (settings.enableJump && Time.time - lastGroundedTime <= settings.coyoteTime)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce, 0);
             lastGroundedTime = 0;
+
+            // 🔥 ANIMATION
+            IsJumpingAnim = true;
+
             return;
         }
 
@@ -245,6 +284,9 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce * settings.doubleJumpMultiplier, 0);
             hasDoubleJump = false;
+
+            // 🔥 ANIMATION
+            IsJumpingAnim = true;
         }
     }
 
