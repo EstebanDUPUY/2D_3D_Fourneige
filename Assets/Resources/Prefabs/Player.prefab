@@ -189,7 +189,7 @@ SpriteRenderer:
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 3.4594595, y: 1.945946}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -500,10 +500,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5441823
-  m_Height: 1.9668629
+  m_Radius: 1.6922722
+  m_Height: 6.184718
   m_Direction: 1
-  m_Center: {x: -0.0441823, y: -0.016568542, z: 0}
+  m_Center: {x: -0.22542953, y: -0.055199623, z: 0}
 --- !u!54 &8027896742195303000
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -756,7 +756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8cc14f975e2c6a49940de0e90e43c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedExplode: 1.34
+  speedExplode: 75
 --- !u!114 &4291476540881444340
 MonoBehaviour:
   m_ObjectHideFlags: 0
