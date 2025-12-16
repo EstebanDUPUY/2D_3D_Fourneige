@@ -59,13 +59,13 @@ public class PlayerController : MonoBehaviour
     private bool isAirDash;
     private float flipAngle;
 
-    [Header("Detection")]
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask wallLayer;
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.8f, 0.1f);
-    [SerializeField] private Vector2 groundCheckOffset = new Vector2(0f, -0.5f);
-    [SerializeField] private float wallCheckDistance = 0.6f;
-    
+    [Header("Animation State")]
+    public bool IsJumpingAnim;
+    public bool IsFallingAnim;
+    public bool IsWallJumping;
+    public float wallJumpAnimTime = 0.15f;
+    private float wallJumpAnimTimer;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -103,7 +103,24 @@ public class PlayerController : MonoBehaviour
         CheckWalls();
         HandleFlip();
         UpdateTimers();
+
+    if (IsWallJumping)
+    {
+        wallJumpAnimTimer -= Time.deltaTime;
+        if (wallJumpAnimTimer <= 0)
+        IsWallJumping = false;
     }
+
+        // Falling
+        IsFallingAnim = !IsGrounded && rb.linearVelocity.y < -0.1f;
+
+        // Reset au sol
+        if (IsGrounded)
+        {
+            IsJumpingAnim = false;
+            IsWallJumping = false;
+        }
+}
 
     void FixedUpdate()
     {
@@ -196,8 +213,8 @@ public class PlayerController : MonoBehaviour
     void CheckGrounded()
     {
         bool wasGrounded = IsGrounded;
-        Vector3 pos = transform.position + (Vector3)groundCheckOffset;
-        IsGrounded = Physics.CheckBox(pos, new Vector3(groundCheckSize.x / 2f, groundCheckSize.y / 2f, 0.1f), Quaternion.identity, groundLayer);
+        Vector3 pos = transform.position + (Vector3)settings.groundCheckOffset;
+        IsGrounded = Physics.CheckBox(pos, new Vector3(settings.groundCheckSize.x / 2f, settings.groundCheckSize.y / 2f, 0.1f), Quaternion.identity, settings.groundLayer);
 
         if (IsGrounded)
         {
@@ -212,8 +229,8 @@ public class PlayerController : MonoBehaviour
 
     void CheckWalls()
     {
-        bool right = Physics.Raycast(transform.position, Vector3.right, wallCheckDistance, wallLayer);
-        bool left = Physics.Raycast(transform.position, Vector3.left, wallCheckDistance, wallLayer);
+        bool right = Physics.Raycast(transform.position, Vector3.right, settings.wallCheckDistance, settings.wallLayer);
+        bool left = Physics.Raycast(transform.position, Vector3.left, settings.wallCheckDistance, settings.wallLayer);
         IsTouchingWall = right || left;
         wallDirection = right ? 1 : (left ? -1 : 0);
 
@@ -261,24 +278,39 @@ public class PlayerController : MonoBehaviour
 
     void TryJump()
     {
-        // Wall jump (with wall coyote time)
+
         bool canWallJump = IsTouchingWall || (Time.time - lastWallTime <= settings.wallCoyoteTime);
+
         if (settings.enableWallJump && canWallJump && !IsGrounded)
         {
             int wallDir = IsTouchingWall ? wallDirection : lastWallDirection;
+
             rb.linearVelocity = new Vector3(-wallDir * settings.wallJumpPushForce, settings.wallJumpForce, 0);
+
             FacingDirection = -wallDir;
             hasDoubleJump = true;
             hasAirDash = true;
-            lastWallTime = 0; // Consume wall coyote
+            lastWallTime = 0;
+
+            // 🔥 ANIMATION
+            IsWallJumping = true;
+            wallJumpAnimTimer = wallJumpAnimTime;
+            IsJumpingAnim = true;
+            IsWallSliding = false;
+
             return;
         }
 
-        // Ground jump (with coyote time)
+
+        // Ground jump
         if (settings.enableJump && Time.time - lastGroundedTime <= settings.coyoteTime)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce, 0);
             lastGroundedTime = 0;
+
+            // 🔥 ANIMATION
+            IsJumpingAnim = true;
+
             return;
         }
 
@@ -287,6 +319,9 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce * settings.doubleJumpMultiplier, 0);
             hasDoubleJump = false;
+
+            // 🔥 ANIMATION
+            IsJumpingAnim = true;
         }
     }
 
@@ -404,11 +439,11 @@ public class PlayerController : MonoBehaviour
         if (!showGizmos || settings == null) return;
 
         Gizmos.color = IsGrounded ? Color.green : Color.red;
-        Vector3 gPos = transform.position + (Vector3)groundCheckOffset;
-        Gizmos.DrawWireCube(gPos, new Vector3(groundCheckSize.x, groundCheckSize.y, 0.2f));
+        Vector3 gPos = transform.position + (Vector3)settings.groundCheckOffset;
+        Gizmos.DrawWireCube(gPos, new Vector3(settings.groundCheckSize.x, settings.groundCheckSize.y, 0.2f));
 
         Gizmos.color = IsTouchingWall ? Color.blue : Color.yellow;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * wallCheckDistance);
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * wallCheckDistance);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.right * settings.wallCheckDistance);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.left * settings.wallCheckDistance);
     }
 }

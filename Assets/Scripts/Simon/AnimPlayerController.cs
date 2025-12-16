@@ -2,31 +2,30 @@ using UnityEngine;
 
 public class AnimPlayerController : MonoBehaviour
 {
-    Animator anim;
-    Rigidbody rb;
-
-    public bool IsDashing;
+    private Animator anim;
+    private Rigidbody2D rb;
+    public PlayerController player;
+    public bool IsJumping;
     public bool IsWallJumping;
     public bool IsDead;
     public bool IsWallSliding;
+    public bool IsDashing;
 
-
-    void Start() 
+    void Start()
     {
         anim = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update() 
+    void Update()
     {
-        float moveSpeed = Mathf.Abs(rb.linearVelocity.x);
-        anim.SetFloat("Speed", moveSpeed);
-
-        anim.SetBool("IsJumping", rb.linearVelocity.y > 0);
-        anim.SetBool("IsFalling", rb.linearVelocity.y < 0);
-        anim.SetBool("IsDashing", IsDashing);
-        anim.SetBool("IsWallJumping", IsWallJumping);
-        anim.SetBool("IsDead", IsDead);
-        anim.SetBool("IsWallSliding", IsWallSliding);
+        anim.SetFloat("Speed", Mathf.Abs(player.GetComponent<Rigidbody>().linearVelocity.x));
+        anim.SetBool("IsGrounded", player.IsGrounded);
+        anim.SetBool("IsJumping", player.IsJumpingAnim);
+        anim.SetBool("IsFalling", player.IsFallingAnim);
+        anim.SetBool("IsWallSliding", player.IsWallSliding);
+        anim.SetBool("IsDashing", player.IsDashing);
+        anim.SetBool("IsDead", false);
+        anim.SetBool("IsWallJumping", player.IsWallJumping);
     }
 }
