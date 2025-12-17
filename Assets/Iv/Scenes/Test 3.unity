@@ -4843,7 +4843,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6170624733514254270, guid: 8b8d216c62cb33d4aa0010d079ba8f93, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.6
+      value: 110.6
       objectReference: {fileID: 0}
     - target: {fileID: 6170624733514254270, guid: 8b8d216c62cb33d4aa0010d079ba8f93, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4888,7 +4888,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4123099504554500481, guid: 8b8d216c62cb33d4aa0010d079ba8f93, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 8b8d216c62cb33d4aa0010d079ba8f93, type: 3}
 --- !u!1001 &8460387729271234839
 PrefabInstance:
@@ -4938,6 +4941,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1397923380503018712, guid: dfa6343290bf1884b88d96d701a40495, type: 3}
+      propertyPath: m_Constraints
+      value: 106
+      objectReference: {fileID: 0}
+    - target: {fileID: 1397923380503018712, guid: dfa6343290bf1884b88d96d701a40495, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8055666699382481762, guid: dfa6343290bf1884b88d96d701a40495, type: 3}
       propertyPath: m_Name
       value: StalactiteZone
@@ -4945,7 +4956,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2721968375447323568, guid: dfa6343290bf1884b88d96d701a40495, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5098801833734017806, guid: dfa6343290bf1884b88d96d701a40495, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: dfa6343290bf1884b88d96d701a40495, type: 3}
 --- !u!1001 &8856825157523568040
 PrefabInstance:
