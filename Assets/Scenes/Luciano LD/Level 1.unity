@@ -2934,7 +2934,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2319214210934537081, guid: 5de9a7f49872c1a45b08e34de8d9c87a, type: 3}
       propertyPath: m_Name
-      value: FireSurface 2 (1)
+      value: FireSurface 3
       objectReference: {fileID: 0}
     - target: {fileID: 7830189500087131890, guid: 5de9a7f49872c1a45b08e34de8d9c87a, type: 3}
       propertyPath: m_LocalScale.x
