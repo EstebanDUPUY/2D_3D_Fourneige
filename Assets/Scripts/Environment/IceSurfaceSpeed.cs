@@ -3,7 +3,7 @@ using UnityEngine;
 public class IceSurfaceSpeed : MonoBehaviour
 {
     private float bonus = 3.0f;
-    private float malus = 0.25f;
+    private float malus = 0.75f;
 
     void OnCollisionEnter(Collision other)
     {

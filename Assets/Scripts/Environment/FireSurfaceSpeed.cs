@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FireSurfaceSpeed : MonoBehaviour
 {
-    private float bonus = 2.0f;
+    private float bonus = 3.0f;
     private float malus = 0.75f;
 
     void OnCollisionEnter(Collision other)
