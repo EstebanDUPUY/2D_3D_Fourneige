@@ -271,7 +271,7 @@ public class PlayerController : MonoBehaviour
     // ══════════════════════════════════════════════════════════════
     // MOVEMENT
     // ══════════════════════════════════════════════════════════════
-
+    /*
     void HandleMovement()
     {
         if (!settings.enableMovement)
@@ -292,6 +292,23 @@ public class PlayerController : MonoBehaviour
 
         float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, accel * speedMultiplier * Time.fixedDeltaTime);
         rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0) * bonusSlopeSpeed;
+    }
+    */
+
+    void HandleMovement()
+    {
+        if (!settings.enableMovement) return;
+
+        if (Mathf.Abs(moveInput.x) < 0.1f)
+        {
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            return;
+        }
+
+        // Has input = accelerate toward target
+        float target = moveInput.x * settings.moveSpeed * speedMultiplier;
+        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, settings.acceleration * speedMultiplier * Time.fixedDeltaTime);
+        rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
     }
 
     // Use this function to set the speed multiplier
