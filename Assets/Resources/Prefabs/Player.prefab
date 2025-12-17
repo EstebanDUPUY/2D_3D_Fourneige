@@ -419,7 +419,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5838894274585241446
 Transform:
   m_ObjectHideFlags: 0
@@ -471,6 +471,7 @@ GameObject:
   - component: {fileID: 4291476540881444340}
   - component: {fileID: 7004219147037838516}
   - component: {fileID: 320205376639398608}
+  - component: {fileID: 2842666722384785698}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -723,12 +724,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: f3702be6c161e4b4bb9ef1cc13360d76, type: 2}
   spriteTransform: {fileID: 9057673395703695864}
+  spriteRenderer: {fileID: 0}
+  animator: {fileID: 0}
+  fireSprite: {fileID: 0}
+  iceSprite: {fileID: 0}
   enableFormSwitch: 1
   iceSettings: {fileID: 11400000, guid: 1811f7ce08f94e44b884cc7ef50cd677, type: 2}
   fireSettings: {fileID: 11400000, guid: f3702be6c161e4b4bb9ef1cc13360d76, type: 2}
   startAsIce: 0
   showGizmos: 1
+  speedMultiplier: 1
+  damageSystem: {fileID: 0}
   bonusSlopeSpeed: 1
+  IsJumpingAnim: 0
+  IsFallingAnim: 0
+  IsWallJumping: 0
+  wallJumpAnimTime: 0.15
 --- !u!114 &5622798866998533190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -741,6 +752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba4dec9631dcd8439c565be50fb5d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 4955083339852982041}
   IsDashing: 0
   IsWallJumping: 0
   IsDead: 0
@@ -813,3 +825,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e59bec46e2eb0f45acef5aa4a76bd8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2842666722384785698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8259072043044659145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85f466623404da40976a3d4b5adc818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FireStateChange:
+  - {fileID: 5160356482348007585, guid: b586db1bbb4c9264b8d8ab5bbef2bea3, type: 3}
+  - {fileID: 55573509831431461, guid: f01a6317a3b79e146b550cae8b998bd4, type: 3}
+  - {fileID: 4074630718694451131, guid: 73dd5f89c44309c43b9eae333ff006b2, type: 3}
+  - {fileID: 5730420637130902870, guid: 223da7abc5f7d894f948ba04c63a8537, type: 3}
+  IceStateChange:
+  - {fileID: 4074630718694451131, guid: 00fce45364439c04dbf5bc427b041c9f, type: 3}
+  - {fileID: 5160356482348007585, guid: 3f43a122b03fc6d43b94977483e5de13, type: 3}
+  controller: {fileID: 4955083339852982041}
