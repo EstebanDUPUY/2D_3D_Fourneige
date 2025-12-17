@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerDamageSystem : MonoBehaviour
 {
-    public static Action Die;
+    public static Action<float> Die;
 
     // PlayerController player;
     Rigidbody rb;
@@ -13,13 +13,12 @@ public class PlayerDamageSystem : MonoBehaviour
     void Awake()
     {
         //player = GetComponent<PlayerController>();
-        rb = GetComponent<PlayerIceSystem>().GetRigidbody();
+        // rb = GetComponent<PlayerIceSystem>().GetRigidbody();
+        rb = GetComponent<Rigidbody>();
     }
 
-    public void Explode()
+    public void Explode(float time)
     {
-        Debug.Log("PlayerDamageSystem Explode Call");
-
         Vector3 baseDir = (Vector3.right + Vector3.down * 0.6f).normalized;
 
         // Vérifie si le joueur se déplace vers la gauche ou la droite
@@ -28,9 +27,9 @@ public class PlayerDamageSystem : MonoBehaviour
         // On inverse seulement la partie horizontale du vecteur
         Vector3 finalDir = new Vector3(baseDir.x * directionSign, baseDir.y, baseDir.z);
 
-        rb.linearVelocity = -finalDir * 13f;
-        rb.linearDamping = 1.6f;
+        // rb.linearVelocity = -finalDir * speedExplode;
+        // rb.linearDamping = 1.8f;
 
-        Die?.Invoke();
+        Die?.Invoke(time);
     }
 }
