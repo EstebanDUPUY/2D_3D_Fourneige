@@ -2,45 +2,52 @@ using UnityEngine;
 
 public class IceSurfaceSpeed : MonoBehaviour
 {
-    private float bonusIce = 2.0f;
-    private float malusFire = 1.0f;
+    private float bonus = 3.0f;
+    private float malus = 0.25f;
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            PlayerController player = other.GetComponent<PlayerController>();
+            PlayerController player = other.gameObject.GetComponent<PlayerController>();
 
             if (player.IsIceForm)
-                player.bonusSlopeSpeed = bonusIce;
-            // player.SetBonus(bonusFire);
+            {
+                player.SetSpeedMultiplier(bonus);
+                Debug.Log("bonusIce : " + bonus);
+            }
             else
-                player.bonusSlopeSpeed = malusFire;
-            // player.SetBonus(malusIce);
+            {
+                player.SetSpeedMultiplier(malus);
+                Debug.Log("malusFire : " + malus);
+            }
         }
     }
 
-    void OnTriggerStay(Collider other)
+    void OnCollisionStay(Collision other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            PlayerController player = other.GetComponent<PlayerController>();
+            PlayerController player = other.gameObject.GetComponent<PlayerController>();
 
             if (player.IsIceForm)
-                player.bonusSlopeSpeed = bonusIce;
-            // player.SetBonus(bonusFire);
+            {
+                player.SetSpeedMultiplier(bonus);
+                Debug.Log("bonusIce : " + bonus);
+            }
             else
-                player.bonusSlopeSpeed = malusFire;
-            // player.SetBonus(malusIce);
+            {
+                player.SetSpeedMultiplier(malus);
+                Debug.Log("malusFire : " + malus);
+            }
         }
     }
 
-    void OnTriggerExit(Collider other)
+    void OnCollisionExit(Collision other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().bonusSlopeSpeed = 1f;
-            // other.GetComponent<PlayerController>().ResetBonus();
+            other.gameObject.GetComponent<PlayerController>().ResetSpeedMultiplier();
         }
     }
 }

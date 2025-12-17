@@ -499,8 +499,12 @@ PrefabInstance:
       value: FireSurface
       objectReference: {fileID: 0}
     - target: {fileID: 7830189500087131890, guid: 5de9a7f49872c1a45b08e34de8d9c87a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7830189500087131890, guid: 5de9a7f49872c1a45b08e34de8d9c87a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 39.3
+      value: 352
       objectReference: {fileID: 0}
     - target: {fileID: 7830189500087131890, guid: 5de9a7f49872c1a45b08e34de8d9c87a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2203,6 +2207,10 @@ PrefabInstance:
     - target: {fileID: 9051012073289300858, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
       propertyPath: m_Name
       value: IceWall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9051012073289300858, guid: 492ba53c4387a9c40a069bfb3712894c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
