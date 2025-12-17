@@ -4,6 +4,7 @@ public class AnimPlayerController : MonoBehaviour
 {
     Animator anim;
     Rigidbody rb;
+    public PlayerController player;
 
     public bool IsDashing;
     public bool IsWallJumping;
@@ -19,14 +20,14 @@ public class AnimPlayerController : MonoBehaviour
 
     void Update() 
     {
-        float moveSpeed = Mathf.Abs(rb.linearVelocity.x);
-        anim.SetFloat("Speed", moveSpeed);
-
-        anim.SetBool("IsJumping", rb.linearVelocity.y > 0);
-        anim.SetBool("IsFalling", rb.linearVelocity.y < 0);
-        anim.SetBool("IsDashing", IsDashing);
-        anim.SetBool("IsWallJumping", IsWallJumping);
+        anim.SetFloat("Speed", Mathf.Abs(player.GetComponent<Rigidbody>().linearVelocity.x));
+        anim.SetBool("IsGrounded", player.IsGrounded);
+        anim.SetBool("IsJumping", player.IsJumpingAnim);
+        anim.SetBool("IsWallJumping", player.IsWallJumping);
+        anim.SetBool("IsFalling", player.IsFallingAnim);
+        anim.SetBool("IsWallSliding", player.IsWallSliding);
+        anim.SetBool("IsDashing", player.IsDashing);
         anim.SetBool("IsDead", IsDead);
-        anim.SetBool("IsWallSliding", IsWallSliding);
+
     }
 }

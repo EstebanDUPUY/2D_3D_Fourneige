@@ -1597,6 +1597,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.4699993, y: 3.86, z: 0.2}
   m_Center: {x: 0, y: 0.0000019073486, z: 0}
+--- !u!95 &591237826 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 555550057014398930, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+  m_PrefabInstance: {fileID: 1044722007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &591237827 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7227424865424139471, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+  m_PrefabInstance: {fileID: 1044722007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &601499521 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4681691943528955619, guid: 515ead5d7480c3b4faf367f05417dcb6, type: 3}
@@ -2520,6 +2530,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 591237826}
+    - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: iceSprite
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 76e454c18066c8045b4dd398715a743a, type: 3}
+    - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: fireSprite
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: a77220c0039bcbb4cae5ab0a7583cded, type: 3}
+    - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 591237827}
+    - target: {fileID: 5622798866998533190, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1430131157}
     - target: {fileID: 8259072043044659145, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
       propertyPath: m_Name
       value: Player

@@ -8,6 +8,15 @@ public class PlayerController : MonoBehaviour
     public PlayerSettings settings;
     public Transform spriteTransform;
 
+    [Tooltip("Auto-detects child named 'Visuals' if not assigned")]
+    public SpriteRenderer spriteRenderer;
+    [Tooltip("Auto-detects from spriteRenderer's GameObject if not assigned")]
+    public Animator animator;
+
+    [Header("Form Sprites")]
+    public Material fireSprite;
+    public Material iceSprite;
+
     [Header("Form Switching")]
     public bool enableFormSwitch = true;
     public PlayerSettings iceSettings;
@@ -29,6 +38,8 @@ public class PlayerController : MonoBehaviour
     // Input
     private Vector2 moveInput;
     private bool jumpHeld;
+
+    [HideInInspector] public PlayerDamageSystem damageSystem;
 
     // State (public for external access)
     public bool IsGrounded { get; private set; }
@@ -52,8 +63,18 @@ public class PlayerController : MonoBehaviour
     private bool isAirDash;
     private float flipAngle;
 
+    [Header("Animation State")]
+    public bool IsJumpingAnim;
+    public bool IsFallingAnim;
+    public bool IsWallJumping;
+    public float wallJumpAnimTime = 0.15f;
+    private float wallJumpAnimTimer;
+
+
     void Awake()
     {
+        damageSystem = GetComponent<PlayerDamageSystem>();
+        
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
@@ -62,10 +83,25 @@ public class PlayerController : MonoBehaviour
         if (spriteTransform == null)
             spriteTransform = transform;
 
+        // Auto-detect SpriteRenderer on "Visuals" child
+        if (spriteRenderer == null)
+        {
+            Transform visuals = transform.Find("Visuals");
+            if (visuals != null)
+                spriteRenderer = visuals.GetComponent<SpriteRenderer>();
+        }
+
+        // Auto-detect Animator from spriteRenderer's GameObject
+        if (animator == null && spriteRenderer != null)
+            animator = spriteRenderer.GetComponent<Animator>();
+
         // Initialize form
         IsIceForm = startAsIce;
         if (enableFormSwitch && iceSettings != null && fireSettings != null)
+        {
             settings = IsIceForm ? iceSettings : fireSettings;
+            UpdateFormSprite();
+        }
     }
 
     void Update()
@@ -74,6 +110,23 @@ public class PlayerController : MonoBehaviour
         CheckWalls();
         HandleFlip();
         UpdateTimers();
+
+        if (IsWallJumping)
+        {
+            wallJumpAnimTimer -= Time.deltaTime;
+            if (wallJumpAnimTimer <= 0)
+            IsWallJumping = false;
+        }
+
+        // Falling
+        IsFallingAnim = !IsGrounded && rb.linearVelocity.y < -0.1f;
+
+        // Reset au sol
+        if (IsGrounded)
+        {
+            IsJumpingAnim = false;
+            IsWallJumping = false;
+        }
     }
 
     void FixedUpdate()
@@ -126,29 +179,38 @@ public class PlayerController : MonoBehaviour
 
     public void SwitchForm()
     {
-        if (!enableFormSwitch || iceSettings == null || fireSettings == null)
-            return;
+        if (!enableFormSwitch || iceSettings == null || fireSettings == null) return;
         IsIceForm = !IsIceForm;
         settings = IsIceForm ? iceSettings : fireSettings;
+        UpdateFormSprite();
         OnFormSwitch?.Invoke(IsIceForm);
     }
 
     public void SetIceForm()
     {
-        if (iceSettings == null)
-            return;
+        if (iceSettings == null) return;
         IsIceForm = true;
         settings = iceSettings;
+        UpdateFormSprite();
         OnFormSwitch?.Invoke(true);
     }
 
     public void SetFireForm()
     {
-        if (fireSettings == null)
-            return;
+        if (fireSettings == null) return;
         IsIceForm = false;
         settings = fireSettings;
+        UpdateFormSprite();
         OnFormSwitch?.Invoke(false);
+    }
+
+    private void UpdateFormSprite()
+    {
+        if (spriteRenderer == null) return;
+
+        Material targetSprite = IsIceForm ? iceSprite : fireSprite;
+        if (targetSprite != null)
+            spriteRenderer.material = targetSprite;
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -263,6 +325,13 @@ public class PlayerController : MonoBehaviour
             hasDoubleJump = true;
             hasAirDash = true;
             lastWallTime = 0; // Consume wall coyote
+
+            //ANIMATION
+            IsWallJumping = true;
+            wallJumpAnimTimer = wallJumpAnimTime;
+            IsJumpingAnim = true;
+            IsWallSliding = false;
+
             return;
         }
 
@@ -271,6 +340,10 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce, 0);
             lastGroundedTime = 0;
+
+            //ANIMATION
+            IsJumpingAnim = true;
+
             return;
         }
 
@@ -283,6 +356,9 @@ public class PlayerController : MonoBehaviour
                 0
             );
             hasDoubleJump = false;
+
+            //ANIMATION
+            IsJumpingAnim = true;
         }
     }
 
