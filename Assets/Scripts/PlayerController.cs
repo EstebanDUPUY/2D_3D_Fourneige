@@ -300,6 +300,7 @@ public class PlayerController : MonoBehaviour
         speedMultiplier = multiplier;
     }
 
+    // Use this function to reset the speed multiplier
     public void ResetSpeedMultiplier()
     {
         speedMultiplier = 1;
