@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Iv/Scenes/HomeScene.unity
     guid: f9434a5718ee4fb438c828c47cbdc681
+  - enabled: 1
+    path: Assets/Scenes/Luciano LD/Level 1.unity
+    guid: 5d5bd1abbdd822140976ac256765476e
+  - enabled: 1
+    path: Assets/Scenes/Luciano LD/Level 2.unity
+    guid: 2375d1a38e96cec4d8abc3a10940f86b
   - enabled: 0
     path: Assets/Scenes/TestSceneBuild.unity
     guid: 64cbb8c404ed9384f8bc365b8e2a4d01
