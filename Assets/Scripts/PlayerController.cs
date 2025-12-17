@@ -29,6 +29,10 @@ public class PlayerController : MonoBehaviour
     [Header("Debug")]
     public bool showGizmos = true;
 
+    [Header("Speed Modifier")]
+    //[SerializeField] private float baseSpeedMultiplier = 1.0f;
+    [SerializeField] private float speedMultiplier = 1f;
+
     // Form state
     public bool IsIceForm { get; private set; }
 
@@ -275,7 +279,7 @@ public class PlayerController : MonoBehaviour
         if (StopMoving)
             return;
 
-        float target = moveInput.x * settings.moveSpeed;
+        float target = moveInput.x * settings.moveSpeed * speedMultiplier;
         float accel;
 
         if (Mathf.Abs(moveInput.x) > 0.1f)
@@ -286,8 +290,26 @@ public class PlayerController : MonoBehaviour
         else
             accel = settings.deceleration;
 
-        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, accel * Time.fixedDeltaTime);
+        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, accel * speedMultiplier * Time.fixedDeltaTime);
         rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0) * bonusSlopeSpeed;
+    }
+
+    // Use this function to set the speed multiplier
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        speedMultiplier = multiplier;
+    }
+
+    // Use this function to reset the speed multiplier
+    public void ResetSpeedMultiplier()
+    {
+        speedMultiplier = 1;
+    }
+
+    // Use this function to get the speed multiplier
+    public float GetSpeedMultiplier()
+    {
+        return speedMultiplier;
     }
 
     void ApplyGravity()
