@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public bool showGizmos = true;
 
     [Header("Speed Modifier")]
+    //[SerializeField] private float baseSpeedMultiplier = 1.0f;
     [SerializeField] private float speedMultiplier = 1f;
 
     // Form state
@@ -289,7 +290,7 @@ public class PlayerController : MonoBehaviour
         else
             accel = settings.deceleration;
 
-        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, accel * Time.fixedDeltaTime);
+        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, accel * speedMultiplier * Time.fixedDeltaTime);
         rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0) * bonusSlopeSpeed;
     }
 
@@ -297,6 +298,11 @@ public class PlayerController : MonoBehaviour
     public void SetSpeedMultiplier(float multiplier)
     {
         speedMultiplier = multiplier;
+    }
+
+    public void ResetSpeedMultiplier()
+    {
+        speedMultiplier = 1;
     }
 
     // Use this function to get the speed multiplier
