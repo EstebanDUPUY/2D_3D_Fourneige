@@ -17,19 +17,8 @@ public class PlayerDamageSystem : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void Explode(float time)
+    public void DieNow(float time)
     {
-        Vector3 baseDir = (Vector3.right + Vector3.down * 0.6f).normalized;
-
-        // Vérifie si le joueur se déplace vers la gauche ou la droite
-        float directionSign = rb.linearVelocity.x < 0 ? -1f : 1f;
-
-        // On inverse seulement la partie horizontale du vecteur
-        Vector3 finalDir = new Vector3(baseDir.x * directionSign, baseDir.y, baseDir.z);
-
-        // rb.linearVelocity = -finalDir * speedExplode;
-        // rb.linearDamping = 1.8f;
-
         Die?.Invoke(time);
     }
 }

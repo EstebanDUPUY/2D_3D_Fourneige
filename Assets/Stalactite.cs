@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Stalactite : MonoBehaviour
@@ -18,29 +19,26 @@ public class Stalactite : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             PlayerDamageSystem playerDamage = other.gameObject.GetComponent<PlayerDamageSystem>();
+            playerDamage.DieNow(1f);
             // Ici Gérer le die
         }
-        Reset();
+        StartCoroutine(Reset());
     }
 
     public void Fall()
     {
-        Debug.Log("Fall");
         rb.useGravity = true;
         isUp = false;
     }
 
-    public void ResetGravity()
-    {
-        rb.useGravity = false;
-    }
-
     IEnumerator Reset()
     {
-        Debug.Log("Reset");
-        gameObject.SetActive(false);
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        renderer.enabled = false;
         yield return new WaitForSeconds(1f);
-        ResetGravity();
+        renderer.enabled = true;
+        rb.useGravity = false;
+        rb.linearVelocity = Vector3.zero;
         transform.position = position;
         isUp = true;
     }

@@ -14,12 +14,10 @@ public class FireSurfaceSpeed : MonoBehaviour
             if (!player.IsIceForm)
             {
                 player.SetSpeedMultiplier(bonus);
-                Debug.Log("bonusFire : " + bonus);
             }
             else
             {
                 player.SetSpeedMultiplier(malus);
-                Debug.Log("malusIce : " + malus);
             }
         }
     }
@@ -33,12 +31,10 @@ public class FireSurfaceSpeed : MonoBehaviour
             if (!player.IsIceForm)
             {
                 player.SetSpeedMultiplier(bonus);
-                Debug.Log("bonusFire : " + bonus);
             }
             else
             {
                 player.SetSpeedMultiplier(malus);
-                Debug.Log("malusIce : " + malus);
             }
         }
     }
