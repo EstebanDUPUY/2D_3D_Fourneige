@@ -58,8 +58,7 @@ public class SulfurCaveTrigger : MonoBehaviour
             StartCoroutine(StopExplode(time, ps));
         }
 
-        // Déclencher l'explosion du joueur
-        player.GetComponent<PlayerDamageSystem>().Explode(time);
+        player.GetComponent<PlayerDamageSystem>().DieNow(time);
         player.StopMoving = true;
 
         everExplode = true;
