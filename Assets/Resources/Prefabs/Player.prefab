@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1387178159170770050}
   - component: {fileID: 5442226958280963676}
+  - component: {fileID: 875644152324915866}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -56,7 +57,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 147.2
+    FieldOfView: 160
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -75,6 +76,25 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &875644152324915866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453901086017347864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TrackerSettings:
+    BindingMode: 3
+    PositionDamping: {x: 1, y: 0.52, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  FollowOffset: {x: 0, y: 0, z: -10}
 --- !u!1 &2867723401984347373
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +322,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 147.2
+  field of view: 160
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -708,8 +728,8 @@ MonoBehaviour:
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: 
+  m_DefaultControlScheme: Gamepad
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &4955083339852982041
@@ -725,17 +745,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: f3702be6c161e4b4bb9ef1cc13360d76, type: 2}
+  modifier: {fileID: 0}
   spriteTransform: {fileID: 9057673395703695864}
   spriteRenderer: {fileID: 7227424865424139471}
   animator: {fileID: 555550057014398930}
-  fireSprite: {fileID: 0}
-  iceSprite: {fileID: 0}
+  fireSprite: {fileID: -876546973899608171, guid: a77220c0039bcbb4cae5ab0a7583cded, type: 3}
+  iceSprite: {fileID: -876546973899608171, guid: 76e454c18066c8045b4dd398715a743a, type: 3}
   enableFormSwitch: 1
-  iceSettings: {fileID: 11400000, guid: 1811f7ce08f94e44b884cc7ef50cd677, type: 2}
-  fireSettings: {fileID: 11400000, guid: f3702be6c161e4b4bb9ef1cc13360d76, type: 2}
+  iceSettings: {fileID: 11400000, guid: 4c9d7a5ccbbe1684cac425655eee806c, type: 2}
+  fireSettings: {fileID: 11400000, guid: 37de15b417d23844993034f32cee1ec0, type: 2}
   startAsIce: 0
   showGizmos: 1
-  speedMultiplier: 1
+  speedMultiplier: 2
   damageSystem: {fileID: 0}
   bonusSlopeSpeed: 1
   IsJumpingAnim: 0
@@ -786,7 +807,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8cc14f975e2c6a49940de0e90e43c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedExplode: 75
 --- !u!114 &4291476540881444340
 MonoBehaviour:
   m_ObjectHideFlags: 0
