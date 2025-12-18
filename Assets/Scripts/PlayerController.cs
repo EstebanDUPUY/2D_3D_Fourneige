@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Unity.Cinemachine.CinemachineFreeLookModifier;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     public PlayerSettings settings;
+    public PlayerSettingsModifier modifier;
     public Transform spriteTransform;
 
     [Tooltip("Auto-detects child named 'Visuals' if not assigned")]
@@ -19,8 +21,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Form Switching")]
     public bool enableFormSwitch = true;
-    public PlayerSettings iceSettings;
-    public PlayerSettings fireSettings;
+    public PlayerSettingsModifier iceSettings;
+    public PlayerSettingsModifier fireSettings;
     public bool startAsIce = false;
 
     // Events (subscribe to these for visual feedback)
@@ -64,6 +66,7 @@ public class PlayerController : MonoBehaviour
     private int lastWallDirection;
     private float dashTimer;
     private float dashCooldownTimer;
+    private float wallSlideTimer;
     private bool isAirDash;
     private float flipAngle;
 
@@ -103,7 +106,8 @@ public class PlayerController : MonoBehaviour
         IsIceForm = startAsIce;
         if (enableFormSwitch && iceSettings != null && fireSettings != null)
         {
-            settings = IsIceForm ? iceSettings : fireSettings;
+            //settings = IsIceForm ? iceSettings : fireSettings;
+            modifier = IsIceForm ? iceSettings : fireSettings;
             UpdateFormSprite();
         }
     }
@@ -185,7 +189,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!enableFormSwitch || iceSettings == null || fireSettings == null) return;
         IsIceForm = !IsIceForm;
-        settings = IsIceForm ? iceSettings : fireSettings;
+        modifier = IsIceForm ? iceSettings : fireSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(IsIceForm);
     }
@@ -194,7 +198,7 @@ public class PlayerController : MonoBehaviour
     {
         if (iceSettings == null) return;
         IsIceForm = true;
-        settings = iceSettings;
+        modifier = iceSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(true);
     }
@@ -203,7 +207,7 @@ public class PlayerController : MonoBehaviour
     {
         if (fireSettings == null) return;
         IsIceForm = false;
-        settings = fireSettings;
+        modifier = fireSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(false);
     }
@@ -237,6 +241,8 @@ public class PlayerController : MonoBehaviour
             lastGroundedTime = Time.time;
             if (!wasGrounded)
             {
+            wallSlideTimer = 0;
+                IsWallSliding = false;
                 hasDoubleJump = true;
                 hasAirDash = true;
             }
@@ -306,8 +312,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Has input = accelerate toward target
-        float target = moveInput.x * settings.moveSpeed * speedMultiplier;
-        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, settings.acceleration * speedMultiplier * Time.fixedDeltaTime);
+        float target = moveInput.x * settings.moveSpeed * modifier.moveSpeed * speedMultiplier;
+        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, settings.acceleration * modifier.acceleration * speedMultiplier * Time.fixedDeltaTime);
         rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
     }
 
@@ -336,12 +342,12 @@ public class PlayerController : MonoBehaviour
 
         rb.linearVelocity += new Vector3(
             0,
-            Physics.gravity.y * settings.gravityScale * Time.fixedDeltaTime,
+            Physics.gravity.y * settings.gravityScale * modifier.gravityScale * Time.fixedDeltaTime,
             0
         );
 
-        if (rb.linearVelocity.y < -settings.maxFallSpeed)
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, -settings.maxFallSpeed, 0);
+        if (rb.linearVelocity.y < -settings.maxFallSpeed * modifier.maxFallSpeed)
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, -settings.maxFallSpeed * modifier.maxFallSpeed, 0);
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -354,10 +360,11 @@ public class PlayerController : MonoBehaviour
         bool canWallJump = IsTouchingWall || (Time.time - lastWallTime <= settings.wallCoyoteTime);
         if (settings.enableWallJump && canWallJump && !IsGrounded)
         {
+            wallSlideTimer = 0f;
             int wallDir = IsTouchingWall ? wallDirection : lastWallDirection;
             rb.linearVelocity = new Vector3(
-                -wallDir * settings.wallJumpPushForce,
-                settings.wallJumpForce,
+                -wallDir * settings.wallJumpPushForce * modifier.wallJumpPushForce,
+                settings.wallJumpForce * modifier.wallJumpForce,
                 0
             );
             FacingDirection = -wallDir;
@@ -377,7 +384,7 @@ public class PlayerController : MonoBehaviour
         // Ground jump (with coyote time)
         if (settings.enableJump && Time.time - lastGroundedTime <= settings.coyoteTime)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce, 0);
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce * modifier.jumpForce, 0);
             lastGroundedTime = 0;
 
             //ANIMATION
@@ -391,7 +398,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
-                settings.jumpForce * settings.doubleJumpMultiplier,
+                settings.jumpForce * modifier.jumpForce * settings.doubleJumpMultiplier * modifier.doubleJumpMultiplier,
                 0
             );
             hasDoubleJump = false;
@@ -418,12 +425,13 @@ public class PlayerController : MonoBehaviour
             IsWallSliding = false;
             return;
         }
-
+        if (wallSlideTimer < settings.timeBetweenWallSlide)
+            return;
         IsWallSliding = IsTouchingWall && !IsGrounded && Mathf.Sign(moveInput.x) != -wallDirection;
 
         if (IsWallSliding)
         {
-            float speed = -settings.wallSlideSpeed * (1f - settings.wallSlideFriction);
+            float speed = -settings.wallSlideSpeed * modifier.wallSlideSpeed * (1f - settings.wallSlideFriction * modifier.wallSlideFriction);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, speed, 0);
         }
     }
@@ -452,13 +460,13 @@ public class PlayerController : MonoBehaviour
     {
         IsDashing = true;
         isAirDash = air;
-        dashTimer = air ? settings.airDashDuration : settings.dashDuration;
-        dashCooldownTimer = settings.dashCooldown;
+        dashTimer = air ? settings.airDashDuration * modifier.airDashDuration : settings.dashDuration * modifier.dashDuration;
+        dashCooldownTimer = settings.dashCooldown * modifier.dashCooldown;
     }
 
     void HandleDash()
     {
-        float speed = isAirDash ? settings.airDashSpeed : settings.dashSpeed;
+        float speed = isAirDash ? settings.airDashSpeed * modifier.airDashSpeed : settings.dashSpeed * modifier.dashSpeed;
         Vector2 dir;
         if (moveInput.magnitude > 0.1f)
             dir = moveInput.normalized;
@@ -473,7 +481,7 @@ public class PlayerController : MonoBehaviour
             IsDashing = false;
             if (isAirDash)
                 rb.linearVelocity = new Vector3(
-                    rb.linearVelocity.x * settings.airDashDrag,
+                    rb.linearVelocity.x * settings.airDashDrag * modifier.airDashDrag,
                     rb.linearVelocity.y,
                     0
                 );
@@ -484,6 +492,10 @@ public class PlayerController : MonoBehaviour
     {
         if (dashCooldownTimer > 0)
             dashCooldownTimer -= Time.deltaTime;
+        if (!IsWallSliding)
+        {
+            wallSlideTimer += Time.deltaTime;
+        }
     }
 
     // ══════════════════════════════════════════════════════════════
