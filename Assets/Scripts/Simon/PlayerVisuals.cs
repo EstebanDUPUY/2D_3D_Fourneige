@@ -2,11 +2,16 @@ using UnityEngine;
 
 public class PlayerVisuals : MonoBehaviour
 {
+    [Header("Sprite")]
     public SpriteRenderer spriteRenderer;
 
     [Header("Materials")]
     public Material iceMaterial;
     public Material fireMaterial;
+
+    [Header("FX Parents")]
+    public GameObject iceFX;
+    public GameObject fireFX;
 
     private PlayerController player;
 
@@ -15,7 +20,7 @@ public class PlayerVisuals : MonoBehaviour
         player = GetComponentInParent<PlayerController>();
 
         if (spriteRenderer == null)
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     void OnEnable()
@@ -37,13 +42,26 @@ public class PlayerVisuals : MonoBehaviour
 
     void OnFormChanged(bool isIce)
     {
+        UpdateSprite(isIce);
+        UpdateFX(isIce);
+    }
+
+    void UpdateSprite(bool isIce)
+    {
         if (spriteRenderer == null) return;
 
         Material target = isIce ? iceMaterial : fireMaterial;
 
-        if (target != null && spriteRenderer.sharedMaterial != target)
-        {
+        if (spriteRenderer.sharedMaterial != target)
             spriteRenderer.sharedMaterial = target;
-        }
+    }
+
+    void UpdateFX(bool isIce)
+    {
+        if (iceFX != null)
+            iceFX.SetActive(isIce);
+
+        if (fireFX != null)
+            fireFX.SetActive(!isIce);
     }
 }
