@@ -23,7 +23,7 @@ MonoBehaviour:
   enableDoubleJump: 1
   doubleJumpMultiplier: 1
   enableWallSlide: 1
-  wallSlideSpeed: 1
+  wallSlideSpeed: 1.5
   wallSlideFriction: 1
   timeBetweenWallSlide: 1
   enableWallJump: 1
