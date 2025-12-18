@@ -1,20 +1,14 @@
 using UnityEngine;
 
-public class ResetPlayer : MonoBehaviour
+public class PlayerReset : MonoBehaviour
 {
     PlayerController player;
-    Vector3 startPos;
-    Quaternion startRot;
+    Vector3 savePos;
+    Quaternion saveRot;
+
     Rigidbody rb;
 
-    void Awake()
-    {
-        player = GetComponent<PlayerController>();
-        rb = GetComponent<Rigidbody>();
-        startPos = transform.position;
-        startRot = transform.rotation;
-        rb.linearDamping = 0;
-    }
+    public Checkpoint lastCheckpoint;
 
     void OnEnable()
     {
@@ -26,16 +20,33 @@ public class ResetPlayer : MonoBehaviour
         LevelManager2.OnLevelReset -= Reset;
     }
 
+    void Awake()
+    {
+        player = GetComponent<PlayerController>();
+        rb = GetComponent<Rigidbody>();
+        rb.linearDamping = 0;
+        // Save la pos et rot du player au depart
+        savePos = transform.position;
+        saveRot = transform.rotation;
+    }
+
+    public void SaveCheckpoint(Checkpoint checkpoint)
+    {
+        lastCheckpoint = checkpoint;
+        savePos = lastCheckpoint.transform.position;
+        saveRot = lastCheckpoint.transform.rotation;
+    }
+
     void Reset()
     {
-        Debug.Log("ResetPlayer -> Reset() avant");
+        Debug.Log("PlayerReset -> Reset() avant");
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        rb.MovePosition(startPos);
-        rb.MoveRotation(startRot);
+        rb.MovePosition(savePos);
+        rb.MoveRotation(saveRot);
         player.StopMoving = false;
 
-        Debug.Log("ResetPlayer -> Reset() apres");
+        Debug.Log("PlayerReset -> Reset() apres");
     }
 }
