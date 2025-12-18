@@ -7,7 +7,7 @@ public class LavaFlow : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerDamageSystem playerDamage = other.GetComponent<PlayerDamageSystem>();
-            playerDamage.DieNow(1f);
+            playerDamage.DieNow();
         }
     }
 }

@@ -2,13 +2,13 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Stalactite : MonoBehaviour
+public class Rock : MonoBehaviour
 {
-    public float respawnTime = 1.0f;
     public Rigidbody rb;
     Vector3 position;
 
     public bool isUp = true;
+    public float respawnTime = 1.0f;
 
     void Awake()
     {
