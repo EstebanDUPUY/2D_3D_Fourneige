@@ -525,7 +525,7 @@
         "preventRotation": false
     },
     "m_Path": "Shader Graphs",
-    "m_GraphPrecision": 1,
+    "m_GraphPrecision": 0,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": ""
@@ -1390,8 +1390,8 @@
     "m_ObjectId": "3baa35b2b3014283ae87e0706426ec7d",
     "m_Title": "Depth Fade",
     "m_Position": {
-        "x": -1830.4000244140625,
-        "y": 659.2000122070313
+        "x": -1830.400146484375,
+        "y": 659.1998291015625
     }
 }
 
