@@ -27,6 +27,7 @@ public class PlayerSettings : ScriptableObject
     public bool enableWallSlide = true;
     public float wallSlideSpeed = 2f;
     public float wallSlideFriction = 0.1f;
+    public float timeBetweenWallSlide = 0.5f;
 
     [Header("Wall Jump")]
     public bool enableWallJump = true;

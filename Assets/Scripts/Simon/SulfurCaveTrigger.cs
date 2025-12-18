@@ -8,6 +8,8 @@ public class SulfurCaveTrigger : MonoBehaviour
     private float time = 3f;
     bool everExplode;
 
+    public float speedExplode = 30f;
+
     private void OnTriggerEnter(Collider other)
     {
         HandleExplode(other);
@@ -58,7 +60,8 @@ public class SulfurCaveTrigger : MonoBehaviour
             StartCoroutine(StopExplode(time, ps));
         }
 
-        player.GetComponent<PlayerDamageSystem>().DieNow();
+        // player.GetComponent<PlayerDamageSystem>().DieNow();
+        player.GetComponent<PlayerDamageSystem>().Explode(speedExplode);
         player.StopMoving = true;
 
         everExplode = true;
