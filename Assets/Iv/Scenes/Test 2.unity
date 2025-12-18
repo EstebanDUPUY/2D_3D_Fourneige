@@ -2498,7 +2498,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4084485172196279516, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 78.3
+      value: 103.2
       objectReference: {fileID: 0}
     - target: {fileID: 4084485172196279516, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4237,7 +4237,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2864356094334339939, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 67.6
       objectReference: {fileID: 0}
     - target: {fileID: 2864356094334339939, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4278,10 +4278,6 @@ PrefabInstance:
     - target: {fileID: 9051012073289300858, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
       propertyPath: m_Name
       value: SulfurCave
-      objectReference: {fileID: 0}
-    - target: {fileID: 9051012073289300858, guid: aa00549b453fb7d4280708cd7e7ec7ac, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4518,7 +4514,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3370617391494442854, guid: 7cc6b0d252737004b9dc145ab3ba2a43, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 110.76749
+      value: 155.3
       objectReference: {fileID: 0}
     - target: {fileID: 3370617391494442854, guid: 7cc6b0d252737004b9dc145ab3ba2a43, type: 3}
       propertyPath: m_LocalPosition.y
