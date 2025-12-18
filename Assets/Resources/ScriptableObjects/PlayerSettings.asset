@@ -10,33 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f26ec779abc8d944aa8cfb35dad5daa1, type: 3}
-  m_Name: IceState
+  m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  gravityScale: 3
-  maxFallSpeed: 20
+  gravityScale: 10
+  maxFallSpeed: 200
   enableMovement: 1
-  moveSpeed: 18
-  acceleration: 50
-  deceleration: 60
+  moveSpeed: 65.1
+  acceleration: 59.7
   enableJump: 1
-  jumpForce: 12
-  coyoteTime: 0.3
+  jumpForce: 65
+  coyoteTime: 0.15
   enableDoubleJump: 1
-  doubleJumpMultiplier: 0.85
+  doubleJumpMultiplier: 0.8
   enableWallSlide: 1
   wallSlideSpeed: 2
-  wallSlideFriction: 0.1
+  wallSlideFriction: -2
+  timeBetweenWallSlide: 0.1
   enableWallJump: 1
-  wallJumpForce: 14
-  wallJumpPushForce: 10
-  wallCoyoteTime: 0.15
+  wallJumpForce: 80
+  wallJumpPushForce: 50
+  wallCoyoteTime: 0
   enableDash: 1
-  dashSpeed: 18
+  dashSpeed: 100
   dashDuration: 0.2
   dashCooldown: 0
   enableAirDash: 1
-  airDashSpeed: 28
-  airDashDuration: 0.2
+  airDashSpeed: 150
+  airDashDuration: 0.3
   airDashDrag: 0
   enableFlip: 1
   useScaleFlip: 0
