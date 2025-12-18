@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerDamageSystem : MonoBehaviour
 {
-    public static Action<float> Die;
+    public static Action Die;
 
     // PlayerController player;
     Rigidbody rb;
@@ -17,8 +17,8 @@ public class PlayerDamageSystem : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void DieNow(float time)
+    public void DieNow()
     {
-        Die?.Invoke(time);
+        Die?.Invoke();
     }
 }

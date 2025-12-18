@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: Assets/Iv/Scenes/HomeScene.unity
     guid: f9434a5718ee4fb438c828c47cbdc681
   - enabled: 1
+    path: Assets/Iv/Scenes/Test 1.unity
+    guid: 6c85bfe5556922c42976b8754d8ee253
+  - enabled: 1
+    path: Assets/Iv/Scenes/Test 2.unity
+    guid: 9b46a7d3992c4524083900dfac80ee75
+  - enabled: 0
     path: Assets/Scenes/Luciano LD/Level 1.unity
     guid: 5d5bd1abbdd822140976ac256765476e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Luciano LD/Level 2.unity
     guid: 2375d1a38e96cec4d8abc3a10940f86b
   - enabled: 0
@@ -20,12 +26,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Ivan/FirstScene.unity
     guid: e322399d9c0bca54b80a39dcddcae403
-  - enabled: 1
+  - enabled: 0
     path: Assets/Iv/Scenes/Test.unity
     guid: b335e32f68644714fb07926a6063e127
-  - enabled: 1
-    path: Assets/Iv/Scenes/Test 2.unity
-    guid: 4e467727fa093aa4ca16d2e668059c70
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

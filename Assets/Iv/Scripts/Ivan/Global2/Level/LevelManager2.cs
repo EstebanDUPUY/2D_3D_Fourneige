@@ -7,6 +7,10 @@ public class LevelManager2 : MonoBehaviour
 {
     // public string nextNameScene;
 
+    public GameObject canvasDeadTest;
+
+    public float timeResetGame = 3.0f;
+
     public PlayerController player;
 
     PlayerInput playerInput;
@@ -61,15 +65,21 @@ public class LevelManager2 : MonoBehaviour
         PlayPauseTime();
     }
 
-    public static void GameOver(float time)
+    public static void GameOver()
     {
-        Instance.StartCoroutine(Instance.GameOverRoutine(time));
+        Instance.StartCoroutine(Instance.GameOverRoutine());
+        // To do
+        // Supprime ligne en dessous en prod
+        Instance.canvasDeadTest.SetActive(true);
     }
 
-    private IEnumerator GameOverRoutine(float time)
+    private IEnumerator GameOverRoutine()
     {
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(timeResetGame);
         OnLevelReset?.Invoke();
+        // To do
+        // Supprime ligne en dessous en prod
+        Instance.canvasDeadTest.SetActive(false);
     }
 
     public void PlayPauseTime()
