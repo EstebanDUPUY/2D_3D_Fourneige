@@ -8,6 +8,9 @@
         },
         {
             "m_Id": "26307e916dcd439fb0754c90b3afc178"
+        },
+        {
+            "m_Id": "b589a58d34d94ed6979872add9341b80"
         }
     ],
     "m_Keywords": [],
@@ -1287,6 +1290,9 @@
         },
         {
             "m_Id": "26307e916dcd439fb0754c90b3afc178"
+        },
+        {
+            "m_Id": "b589a58d34d94ed6979872add9341b80"
         }
     ]
 }
@@ -1868,7 +1874,7 @@
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_RenderFace": 0,
+    "m_RenderFace": 1,
     "m_AlphaClip": false,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
@@ -2704,6 +2710,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "b589a58d34d94ed6979872add9341b80",
+    "m_Guid": {
+        "m_GuidSerialized": "9afe8f03-f651-42b1-838a-4a4b807390ed"
+    },
+    "m_Name": "_Form",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "_Form",
+    "m_DefaultReferenceName": "_Form",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 0.0,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "b596116d06704182933704034c741b3f",
@@ -2822,7 +2856,7 @@
     "m_Title": "Depth Fade",
     "m_Position": {
         "x": -2212.000244140625,
-        "y": 951.199951171875
+        "y": 951.2001342773438
     }
 }
 

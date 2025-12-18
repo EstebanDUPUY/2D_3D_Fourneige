@@ -1599,11 +1599,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6.4699993, y: 3.86, z: 0.2}
   m_Center: {x: 0, y: 0.0000019073486, z: 0}
---- !u!95 &591237826 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 555550057014398930, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
-  m_PrefabInstance: {fileID: 1044722007}
-  m_PrefabAsset: {fileID: 0}
 --- !u!212 &591237827 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 7227424865424139471, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
@@ -2496,6 +2491,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 657272969022827200, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2199454860801130126, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_DefaultActionMap
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2199454860801130126, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_DefaultControlScheme
+      value: Gamepad
+      objectReference: {fileID: 0}
+    - target: {fileID: 2867723401984347373, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4084485172196279516, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 78.3
@@ -2537,10 +2548,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
-      propertyPath: animator
-      value: 
-      objectReference: {fileID: 591237826}
-    - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
       propertyPath: iceSprite
       value: 
       objectReference: {fileID: -876546973899608171, guid: 76e454c18066c8045b4dd398715a743a, type: 3}
@@ -2548,26 +2555,53 @@ PrefabInstance:
       propertyPath: fireSprite
       value: 
       objectReference: {fileID: -876546973899608171, guid: a77220c0039bcbb4cae5ab0a7583cded, type: 3}
-    - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
-      propertyPath: spriteRenderer
+    - target: {fileID: 7077179231715069801, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227424865424139471, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227424865424139471, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227424865424139471, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_MaskInteraction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227424865424139471, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 722cbb3a264fa994bacc15aeb1d43385, type: 2}
+    - target: {fileID: 8172759196173825388, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: iceRenderer
       value: 
       objectReference: {fileID: 591237827}
-    - target: {fileID: 4955083339852982041, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
-      propertyPath: speedMultiplier
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5622798866998533190, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
-      propertyPath: player
+    - target: {fileID: 8172759196173825388, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: fireRenderer
       value: 
-      objectReference: {fileID: 1430131157}
+      objectReference: {fileID: 591237827}
     - target: {fileID: 8259072043044659145, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 9057673395703695864, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057673395703695864, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3476154879524855551, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1224943854}
   m_SourcePrefab: {fileID: 100100000, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
 --- !u!1001 &1069242076
 PrefabInstance:
@@ -3245,6 +3279,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8215527195409924947, guid: 5c7d617ae7ae84841b94660f666dee0f, type: 3}
   m_PrefabInstance: {fileID: 3027386313011232554}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1224943851 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3476154879524855551, guid: 6c8248af0d07fb94580d0308f04e5a3b, type: 3}
+  m_PrefabInstance: {fileID: 1044722007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1224943854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224943851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49cd221c8fd0d8a40ac276e319e4f3cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 591237827}
+  iceMaterial: {fileID: -876546973899608171, guid: 76e454c18066c8045b4dd398715a743a, type: 3}
+  fireMaterial: {fileID: -876546973899608171, guid: a77220c0039bcbb4cae5ab0a7583cded, type: 3}
 --- !u!114 &1238294431 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7906119363372439898, guid: 5c7d617ae7ae84841b94660f666dee0f, type: 3}

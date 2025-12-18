@@ -42,8 +42,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Bloom: 1
+    - _Bloom: 14.85
     - _DF_Distance: -0.2
+    - _Form: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors: []

@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class PlayerVisuals : MonoBehaviour
 {
-    [Header("Renderer")]
     public SpriteRenderer spriteRenderer;
 
     [Header("Materials")]
-    public Material fireMaterial;
     public Material iceMaterial;
+    public Material fireMaterial;
 
     private PlayerController player;
 
@@ -21,22 +20,30 @@ public class PlayerVisuals : MonoBehaviour
 
     void OnEnable()
     {
-        player.OnFormSwitch += OnFormChanged;
+        if (player != null)
+            player.OnFormSwitch += OnFormChanged;
     }
 
     void OnDisable()
     {
-        player.OnFormSwitch -= OnFormChanged;
+        if (player != null)
+            player.OnFormSwitch -= OnFormChanged;
     }
 
     void Start()
     {
-        // Appliquer la forme de départ
         OnFormChanged(player.IsIceForm);
     }
 
     void OnFormChanged(bool isIce)
     {
-        spriteRenderer.material = isIce ? iceMaterial : fireMaterial;
+        if (spriteRenderer == null) return;
+
+        Material target = isIce ? iceMaterial : fireMaterial;
+
+        if (target != null && spriteRenderer.sharedMaterial != target)
+        {
+            spriteRenderer.sharedMaterial = target;
+        }
     }
 }
