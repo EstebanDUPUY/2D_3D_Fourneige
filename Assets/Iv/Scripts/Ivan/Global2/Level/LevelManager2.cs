@@ -67,6 +67,7 @@ public class LevelManager2 : MonoBehaviour
 
     public static void GameOver()
     {
+        Instance.player.StopMoving = true;
         Instance.StartCoroutine(Instance.GameOverRoutine());
         // To do
         // Supprime ligne en dessous en prod

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("Auto-detects child named 'Visuals' if not assigned")]
     public SpriteRenderer spriteRenderer;
+
     [Tooltip("Auto-detects from spriteRenderer's GameObject if not assigned")]
     public Animator animator;
 
@@ -33,7 +34,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Speed Modifier")]
     //[SerializeField] private float baseSpeedMultiplier = 1.0f;
-    [SerializeField] private float speedMultiplier = 1f;
+    [SerializeField]
+    private float speedMultiplier = 1f;
 
     // Form state
     public bool IsIceForm { get; private set; }
@@ -45,7 +47,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool jumpHeld;
 
-    [HideInInspector] public PlayerDamageSystem damageSystem;
+    [HideInInspector]
+    public PlayerDamageSystem damageSystem;
 
     // State (public for external access)
     public bool IsGrounded { get; private set; }
@@ -77,11 +80,10 @@ public class PlayerController : MonoBehaviour
     public float wallJumpAnimTime = 0.15f;
     private float wallJumpAnimTimer;
 
-
     void Awake()
     {
         damageSystem = GetComponent<PlayerDamageSystem>();
-        
+
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
@@ -123,7 +125,7 @@ public class PlayerController : MonoBehaviour
         {
             wallJumpAnimTimer -= Time.deltaTime;
             if (wallJumpAnimTimer <= 0)
-            IsWallJumping = false;
+                IsWallJumping = false;
         }
 
         // Falling
@@ -187,7 +189,8 @@ public class PlayerController : MonoBehaviour
 
     public void SwitchForm()
     {
-        if (!enableFormSwitch || iceSettings == null || fireSettings == null) return;
+        if (!enableFormSwitch || iceSettings == null || fireSettings == null)
+            return;
         IsIceForm = !IsIceForm;
         modifier = IsIceForm ? iceSettings : fireSettings;
         UpdateFormSprite();
@@ -196,7 +199,8 @@ public class PlayerController : MonoBehaviour
 
     public void SetIceForm()
     {
-        if (iceSettings == null) return;
+        if (iceSettings == null)
+            return;
         IsIceForm = true;
         modifier = iceSettings;
         UpdateFormSprite();
@@ -205,7 +209,8 @@ public class PlayerController : MonoBehaviour
 
     public void SetFireForm()
     {
-        if (fireSettings == null) return;
+        if (fireSettings == null)
+            return;
         IsIceForm = false;
         modifier = fireSettings;
         UpdateFormSprite();
@@ -214,7 +219,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateFormSprite()
     {
-        if (spriteRenderer == null) return;
+        if (spriteRenderer == null)
+            return;
 
         Material targetSprite = IsIceForm ? iceSprite : fireSprite;
         if (targetSprite != null)
@@ -241,7 +247,7 @@ public class PlayerController : MonoBehaviour
             lastGroundedTime = Time.time;
             if (!wasGrounded)
             {
-            wallSlideTimer = 0;
+                wallSlideTimer = 0;
                 IsWallSliding = false;
                 hasDoubleJump = true;
                 hasAirDash = true;
@@ -303,7 +309,10 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-        if (!settings.enableMovement) return;
+        if (!settings.enableMovement)
+            return;
+        if (StopMoving)
+            return;
 
         if (Mathf.Abs(moveInput.x) < 0.1f)
         {
@@ -313,7 +322,11 @@ public class PlayerController : MonoBehaviour
 
         // Has input = accelerate toward target
         float target = moveInput.x * settings.moveSpeed * modifier.moveSpeed * speedMultiplier;
-        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, settings.acceleration * modifier.acceleration * speedMultiplier * Time.fixedDeltaTime);
+        float newVelX = Mathf.MoveTowards(
+            rb.linearVelocity.x,
+            target,
+            settings.acceleration * modifier.acceleration * speedMultiplier * Time.fixedDeltaTime
+        );
         rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
     }
 
@@ -347,7 +360,11 @@ public class PlayerController : MonoBehaviour
         );
 
         if (rb.linearVelocity.y < -settings.maxFallSpeed * modifier.maxFallSpeed)
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, -settings.maxFallSpeed * modifier.maxFallSpeed, 0);
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                -settings.maxFallSpeed * modifier.maxFallSpeed,
+                0
+            );
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -384,7 +401,11 @@ public class PlayerController : MonoBehaviour
         // Ground jump (with coyote time)
         if (settings.enableJump && Time.time - lastGroundedTime <= settings.coyoteTime)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, settings.jumpForce * modifier.jumpForce, 0);
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                settings.jumpForce * modifier.jumpForce,
+                0
+            );
             lastGroundedTime = 0;
 
             //ANIMATION
@@ -398,7 +419,10 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
-                settings.jumpForce * modifier.jumpForce * settings.doubleJumpMultiplier * modifier.doubleJumpMultiplier,
+                settings.jumpForce
+                    * modifier.jumpForce
+                    * settings.doubleJumpMultiplier
+                    * modifier.doubleJumpMultiplier,
                 0
             );
             hasDoubleJump = false;
@@ -431,7 +455,10 @@ public class PlayerController : MonoBehaviour
 
         if (IsWallSliding)
         {
-            float speed = -settings.wallSlideSpeed * modifier.wallSlideSpeed * (1f - settings.wallSlideFriction * modifier.wallSlideFriction);
+            float speed =
+                -settings.wallSlideSpeed
+                * modifier.wallSlideSpeed
+                * (1f - settings.wallSlideFriction * modifier.wallSlideFriction);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, speed, 0);
         }
     }
@@ -460,13 +487,17 @@ public class PlayerController : MonoBehaviour
     {
         IsDashing = true;
         isAirDash = air;
-        dashTimer = air ? settings.airDashDuration * modifier.airDashDuration : settings.dashDuration * modifier.dashDuration;
+        dashTimer = air
+            ? settings.airDashDuration * modifier.airDashDuration
+            : settings.dashDuration * modifier.dashDuration;
         dashCooldownTimer = settings.dashCooldown * modifier.dashCooldown;
     }
 
     void HandleDash()
     {
-        float speed = isAirDash ? settings.airDashSpeed * modifier.airDashSpeed : settings.dashSpeed * modifier.dashSpeed;
+        float speed = isAirDash
+            ? settings.airDashSpeed * modifier.airDashSpeed
+            : settings.dashSpeed * modifier.dashSpeed;
         Vector2 dir;
         if (moveInput.magnitude > 0.1f)
             dir = moveInput.normalized;
