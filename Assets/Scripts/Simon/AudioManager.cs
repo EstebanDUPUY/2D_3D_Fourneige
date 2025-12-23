@@ -20,15 +20,15 @@ public class AudioManager : MonoBehaviour
 
 
     public AudioClip click;
-    public AudioClip dash;
+    public AudioClip dashClip;
     public AudioClip entranceLevel;
     public AudioClip footstepFire;
     public AudioClip footstepIce;
-    public AudioClip IceFX;
-    public AudioClip fireFX;
+    public AudioClip iceSound;
+    public AudioClip fireSound;
     public AudioClip toggleFX;   
     public AudioClip happy;
-    public AudioClip jump;
+    public AudioClip jumpClip;
     public AudioClip swoosh1;
     public AudioClip swoosh2;
     public AudioClip swoosh3;
@@ -91,7 +91,7 @@ public class AudioManager : MonoBehaviour
             musicSource.clip = musicSelectLevel;
             musicSource.Play();
         }
-        else if (sceneName == "Test" && musicSource.clip != musicLevel1)
+        else if (sceneName == "Test 1" && musicSource.clip != musicLevel1)
         {
             musicSource.clip = musicLevel1;
             musicSource.Play();

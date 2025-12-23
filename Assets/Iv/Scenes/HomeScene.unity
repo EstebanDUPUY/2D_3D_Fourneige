@@ -1374,7 +1374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   sceneConfig: {fileID: 11400000, guid: 737ff0b6a8bb6a1499a21e7cf1d52604, type: 2}
   homeScene: HomeScene
-  firstScene: Level 1
+  firstScene: Test 1
   playerName: 
   currentIndexLevel: 0
   test: 0
@@ -4736,15 +4736,15 @@ MonoBehaviour:
   musicLevel4: {fileID: 8300000, guid: 2edfa1d61cb25d84d861b8bbd73a8acc, type: 3}
   musicLevel5: {fileID: 0}
   click: {fileID: 8300000, guid: 8771990e801bc1c4f9eb893cecee5a6e, type: 3}
-  dash: {fileID: 8300000, guid: a0bf30b21c29f884894cb34ff0f3fc29, type: 3}
+  dashClip: {fileID: 0}
   entranceLevel: {fileID: 8300000, guid: 557b0e04852bb3f468bbd1e0d252ccf9, type: 3}
   footstepFire: {fileID: 8300000, guid: 500bbe2ab24efde40aa4748cf9a279df, type: 3}
   footstepIce: {fileID: 8300000, guid: 3097309cf8e2f7542981532e31309d52, type: 3}
-  IceFX: {fileID: 8300000, guid: 0e8e1d4eabce47b4f99cea51a2800a79, type: 3}
-  fireFX: {fileID: 8300000, guid: 85fa176d75860e947a36aaa69cbe8a28, type: 3}
+  iceSound: {fileID: 0}
+  fireSound: {fileID: 0}
   toggleFX: {fileID: 8300000, guid: 582c16af57d9d38479b7614cae3dbc93, type: 3}
   happy: {fileID: 8300000, guid: d097ee6d721d1194e90ee672ca74a9c3, type: 3}
-  jump: {fileID: 8300000, guid: 24db057b150adee479ece9d782dbd433, type: 3}
+  jumpClip: {fileID: 8300000, guid: a7de869037a532f46b67ee4fcb2f01ad, type: 3}
   swoosh1: {fileID: 8300000, guid: 572e1832e2e28c2479037508710eabff, type: 3}
   swoosh2: {fileID: 8300000, guid: b2b1bce3db106a94ebdb8b0ad4c70738, type: 3}
   swoosh3: {fileID: 8300000, guid: 34094551dc7298f468b9ffa1899a0090, type: 3}
