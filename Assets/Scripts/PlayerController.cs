@@ -184,6 +184,7 @@ public class PlayerController : MonoBehaviour
     {
         if (ctx.started)
             TryDash();
+            AudioManager.Instance.PlaySound(AudioManager.Instance.dashClip);
     }
 
     public void OnSwitchForm(InputAction.CallbackContext ctx)
@@ -200,35 +201,46 @@ public class PlayerController : MonoBehaviour
     {
         if (!enableFormSwitch || iceSettings == null || fireSettings == null)
             return;
+
         IsIceForm = !IsIceForm;
         modifier = IsIceForm ? iceSettings : fireSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(IsIceForm);
 
-        if (IsIceForm)
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.iceSound);
-        else
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.fireSound);
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(
+                IsIceForm ? AudioManager.Instance.iceSound
+                        : AudioManager.Instance.fireSound
+            );
     }
 
     public void SetIceForm()
     {
         if (iceSettings == null)
             return;
+
         IsIceForm = true;
         modifier = iceSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(true);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.iceSound);
     }
 
     public void SetFireForm()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.fireSound);
+
         if (fireSettings == null)
             return;
         IsIceForm = false;
         modifier = fireSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(false);
+
+        if (AudioManager.Instance != null)
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.iceSound);
     }
 
     private void UpdateFormSprite()
@@ -517,7 +529,6 @@ public class PlayerController : MonoBehaviour
             ? settings.airDashDuration * modifier.airDashDuration
             : settings.dashDuration * modifier.dashDuration;
         dashCooldownTimer = settings.dashCooldown * modifier.dashCooldown;
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.dashClip);
     }
 
     void HandleDash()

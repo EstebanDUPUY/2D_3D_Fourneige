@@ -100,13 +100,13 @@ public class MenuController : MonoBehaviour
         Screen.SetResolution(res.width, res.height, Screen.fullScreen);
     }
 
-public void SetFullScreen(bool isFullScreen)
-{
-    Screen.fullScreen = isFullScreen;
+    public void SetFullScreen(bool isFullScreen)
+    {
+        Screen.fullScreen = isFullScreen;
 
-    if (toggleImage != null)
-        toggleImage.sprite = isFullScreen ? spriteOn : spriteOff;
-}
+        if (toggleImage != null)
+            toggleImage.sprite = isFullScreen ? spriteOn : spriteOff;
+    }
 
     private void UpdateSprite(bool isFullScreen)
     {
@@ -125,5 +125,11 @@ public void SetFullScreen(bool isFullScreen)
 
         // Sauvegarde
         PlayerPrefs.SetFloat("MasterVolume", value);
+    }
+
+    public void PlayClick()
+    {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySound(AudioManager.Instance.click);
     }
 }

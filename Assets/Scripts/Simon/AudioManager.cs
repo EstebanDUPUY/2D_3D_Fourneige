@@ -42,23 +42,23 @@ public class AudioManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
-        else
-        {
-            instance = this;
-        }
-        DontDestroyOnLoad(this.gameObject);
 
-        // Source pour la musique
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // 🎵 MUSIC SOURCE
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
+        musicSource.playOnAwake = false;
         musicSource.outputAudioMixerGroup = masterMixerGroup;
 
-        // Source pour les bruitages
+        // 🔊 SFX SOURCE
         SFXSource = gameObject.AddComponent<AudioSource>();
         SFXSource.loop = false;
+        SFXSource.playOnAwake = false;
         SFXSource.outputAudioMixerGroup = masterMixerGroup;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
