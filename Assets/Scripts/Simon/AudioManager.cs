@@ -20,15 +20,15 @@ public class AudioManager : MonoBehaviour
 
 
     public AudioClip click;
-    public AudioClip dash;
+    public AudioClip dashClip;
     public AudioClip entranceLevel;
     public AudioClip footstepFire;
     public AudioClip footstepIce;
-    public AudioClip IceFX;
-    public AudioClip fireFX;
+    public AudioClip iceSound;
+    public AudioClip fireSound;
     public AudioClip toggleFX;   
     public AudioClip happy;
-    public AudioClip jump;
+    public AudioClip jumpClip;
     public AudioClip swoosh1;
     public AudioClip swoosh2;
     public AudioClip swoosh3;
@@ -42,23 +42,23 @@ public class AudioManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
-        else
-        {
-            instance = this;
-        }
-        DontDestroyOnLoad(this.gameObject);
 
-        // Source pour la musique
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // 🎵 MUSIC SOURCE
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
+        musicSource.playOnAwake = false;
         musicSource.outputAudioMixerGroup = masterMixerGroup;
 
-        // Source pour les bruitages
+        // 🔊 SFX SOURCE
         SFXSource = gameObject.AddComponent<AudioSource>();
         SFXSource.loop = false;
+        SFXSource.playOnAwake = false;
         SFXSource.outputAudioMixerGroup = masterMixerGroup;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -91,7 +91,7 @@ public class AudioManager : MonoBehaviour
             musicSource.clip = musicSelectLevel;
             musicSource.Play();
         }
-        else if (sceneName == "Test" && musicSource.clip != musicLevel1)
+        else if (sceneName == "Test 1" && musicSource.clip != musicLevel1)
         {
             musicSource.clip = musicLevel1;
             musicSource.Play();
