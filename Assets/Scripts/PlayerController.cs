@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour
     public bool IsDashing { get; private set; }
     public bool StopMoving { get; set; }
     public int FacingDirection { get; private set; } = 1;
+    private bool disableXFlip = false;
+
 
     public float bonusSlopeSpeed = 1;
 
@@ -183,8 +185,10 @@ public class PlayerController : MonoBehaviour
     public void OnDash(InputAction.CallbackContext ctx)
     {
         if (ctx.started)
+        {
             TryDash();
             AudioManager.Instance.PlaySound(AudioManager.Instance.dashClip);
+        }
     }
 
     public void OnSwitchForm(InputAction.CallbackContext ctx)

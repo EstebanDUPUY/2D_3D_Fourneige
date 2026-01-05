@@ -9,7 +9,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource SFXSource;
     public AudioMixerGroup masterMixerGroup;
 
-    [Header("-----------------Audio Source-----------------")]
+    [Header("-----------------Audio Clip-----------------")]
     public AudioClip musicMenu;
     public AudioClip musicSelectLevel;
     public AudioClip musicLevel1;
