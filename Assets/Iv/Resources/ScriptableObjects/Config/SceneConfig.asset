@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   homeScene: HomeScene
   levels:
-  - Level 1
-  - Level 2
+  - Test 1
+  - Test 2
   usefullLevels: []
   keyTopScoreLevels: TopScoreLevels_

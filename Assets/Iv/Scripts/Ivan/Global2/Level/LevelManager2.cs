@@ -37,6 +37,7 @@ public class LevelManager2 : MonoBehaviour
         Instance = this;
         playerInput = GetComponent<PlayerInput>();
         togglePlayAction = playerInput.actions["TogglePlay"];
+        player.StopMoving = false;
         // simuleLevelComplete = playerInput.actions["SimuleLevelComplete"];
     }
 
