@@ -80,11 +80,11 @@ public class GameUISystem2 : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI topScoresTMPro;
 
-    [SerializeField]
-    Button ScoreByLevelButton;
+    // [SerializeField]
+    // Button ScoreByLevelButton;
 
-    [SerializeField]
-    Button ScoreByLevelCloseButton;
+    // [SerializeField]
+    // Button ScoreByLevelCloseButton;
 
     [SerializeField]
     Button NextLevelScoreButton;
@@ -92,8 +92,8 @@ public class GameUISystem2 : MonoBehaviour
     [SerializeField]
     Button PreviousLevelScoreButton;
 
-    [SerializeField]
-    GameObject ScoreByLevelPanel;
+    // [SerializeField]
+    // GameObject ScoreByLevelPanel;
 
     [Header("LoadGamePanel")]
     [SerializeField]
@@ -189,8 +189,8 @@ public class GameUISystem2 : MonoBehaviour
         yesResetScoreButton.onClick.AddListener(() => ResetScore());
         noResetScoreButton.onClick.AddListener(() => confirmResetScorePanel.SetActive(false));
 
-        ScoreByLevelButton.onClick.AddListener(() => ScoreByLevelPanel.SetActive(true));
-        ScoreByLevelCloseButton.onClick.AddListener(() => ScoreByLevelPanel.SetActive(false));
+        // ScoreByLevelButton.onClick.AddListener(() => ScoreByLevelPanel.SetActive(true));
+        // ScoreByLevelCloseButton.onClick.AddListener(() => ScoreByLevelPanel.SetActive(false));
 
         NextLevelScoreButton.onClick.AddListener(() => NextLevelScoreShow());
         PreviousLevelScoreButton.onClick.AddListener(() => PreviousLevelScoreShow());

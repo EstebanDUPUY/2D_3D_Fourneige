@@ -10,6 +10,7 @@ public class InputFieldManager2 : MonoBehaviour
     public TMP_InputField nameInputField;
     public TextMeshProUGUI errorTextTMPro;
     public Button validateButton;
+    public TextMeshProUGUI NameForGameTMPro;
 
     [Header("Caractéristiques")]
     public int maxLength = 20;
@@ -105,13 +106,10 @@ public class InputFieldManager2 : MonoBehaviour
         }
 
         // 6) Sauvegarder
-        // PlayerPrefs.SetString(keyPlayerName, text);
-        // AddNameToList(text);
-        // PlayerPrefs.Save();
-
         ShowError(""); // retire l’erreur
         Debug.Log("Nom sauvegardé : " + text);
-
+        if (NameForGameTMPro != null)
+            NameForGameTMPro.text = text;
         GameManager2.instance.playerName = text;
         ValidateName?.Invoke();
         // GameManager2.instance.GoToFirstScene();
