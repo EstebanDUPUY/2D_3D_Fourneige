@@ -5678,7 +5678,7 @@ GameObject:
   - component: {fileID: 1263198988}
   - component: {fileID: 1263198987}
   m_Layer: 5
-  m_Name: NameForCreateGame
+  m_Name: NameForGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6469,7 +6469,7 @@ MonoBehaviour:
   nameInputField: {fileID: 460212305}
   errorTextTMPro: {fileID: 25110577}
   validateButton: {fileID: 701236974}
-  NameForCreateGame: {fileID: 0}
+  NameForGameTMPro: {fileID: 1263198987}
   maxLength: 15
   minLength: 3
   keyPlayerName: PlayerName
