@@ -26,6 +26,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip iceSound;
     public AudioClip fireSound;
     public AudioClip hurt;
+    public AudioClip revive;
     public AudioClip jumpClip;
     public AudioClip entranceLevel;
     public AudioClip selectLevel; 

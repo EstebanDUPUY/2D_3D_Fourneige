@@ -36,17 +36,19 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
-        // Associer toggle fullscreen
         if (fullscreenToggle != null)
+        {
+            fullscreenToggle.isOn = Screen.fullScreen;
             fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
+        }
+
+        // Afficher l'état actuel
+        UpdateSprite(Screen.fullScreen);
 
         // Charger la valeur sauvegardée
         float savedVolume = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
         slider.value = savedVolume;
         SetVolume(savedVolume);
-
-        // Afficher l'état actuel
-        UpdateSprite(Screen.fullScreen);
 
         // OPTIONS GRAPHIQUES (résolutions)
         InitResolutionMenu();
@@ -91,7 +93,6 @@ public class MenuController : MonoBehaviour
         resolutionDropdown.RefreshShownValue();
 
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
-        Screen.fullScreen = true;
     }
 
     private void SetResolution(int index)
