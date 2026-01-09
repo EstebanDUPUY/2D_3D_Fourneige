@@ -15,7 +15,6 @@ public class AudioManager : MonoBehaviour
     public AudioClip musicLevel2;
     public AudioClip musicLevel3;
     public AudioClip musicLevel4;
-    public AudioClip musicLevel5;
     public AudioClip levelComplete;
 
 
@@ -26,10 +25,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip footstepIce;
     public AudioClip iceSound;
     public AudioClip fireSound;
-    public AudioClip happy;
+    public AudioClip hurt;
     public AudioClip jumpClip;
-    public AudioClip swoosh1;
-    public AudioClip text;
     public AudioClip entranceLevel;
     public AudioClip selectLevel; 
 
@@ -102,11 +99,6 @@ public class AudioManager : MonoBehaviour
         else if (sceneName == "Level" && musicSource.clip != musicLevel4)
         {
             musicSource.clip = musicLevel4;
-            musicSource.Play();
-        }
-        else if (sceneName == "Level" && musicSource.clip != musicLevel5)
-        {
-            musicSource.clip = musicLevel5;
             musicSource.Play();
         }
     }

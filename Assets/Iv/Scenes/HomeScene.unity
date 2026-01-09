@@ -5256,7 +5256,6 @@ MonoBehaviour:
   musicLevel2: {fileID: 8300000, guid: 4ab7553ef1a40c6458df867d635b4a37, type: 3}
   musicLevel3: {fileID: 8300000, guid: 7c0cb90a4ca2257449b21d12d4de8820, type: 3}
   musicLevel4: {fileID: 8300000, guid: 7110a2e244074d64f9f67bdd0a178c16, type: 3}
-  musicLevel5: {fileID: 0}
   levelComplete: {fileID: 8300000, guid: cbe86ca0a43ec1940979c821a00c72f8, type: 3}
   click: {fileID: 8300000, guid: ca25234b9c57f07438fe7925685df30b, type: 3}
   dashClip: {fileID: 8300000, guid: a0bf30b21c29f884894cb34ff0f3fc29, type: 3}
@@ -5264,10 +5263,8 @@ MonoBehaviour:
   footstepIce: {fileID: 8300000, guid: 3097309cf8e2f7542981532e31309d52, type: 3}
   iceSound: {fileID: 8300000, guid: 8590ef4df8d956e41a03b3ef7acfa911, type: 3}
   fireSound: {fileID: 8300000, guid: 85fa176d75860e947a36aaa69cbe8a28, type: 3}
-  happy: {fileID: 8300000, guid: d097ee6d721d1194e90ee672ca74a9c3, type: 3}
+  hurt: {fileID: 8300000, guid: 36971f52e261b3843a052f82dd1bc47e, type: 3}
   jumpClip: {fileID: 8300000, guid: a7de869037a532f46b67ee4fcb2f01ad, type: 3}
-  swoosh1: {fileID: 8300000, guid: 572e1832e2e28c2479037508710eabff, type: 3}
-  text: {fileID: 0}
   entranceLevel: {fileID: 8300000, guid: 15e76fdec070b9743bd1b19ed86f169c, type: 3}
   selectLevel: {fileID: 8300000, guid: ac7793d954f82b34bbdc2c487c0b6ca8, type: 3}
 --- !u!4 &1122626075
