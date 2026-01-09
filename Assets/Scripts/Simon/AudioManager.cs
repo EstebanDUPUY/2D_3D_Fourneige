@@ -9,31 +9,29 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource SFXSource;
     public AudioMixerGroup masterMixerGroup;
 
-    [Header("-----------------Audio Clip-----------------")]
+    [Header("-----------------Music-----------------")]
     public AudioClip musicMenu;
-    public AudioClip musicSelectLevel;
     public AudioClip musicLevel1;
     public AudioClip musicLevel2;
     public AudioClip musicLevel3;
     public AudioClip musicLevel4;
     public AudioClip musicLevel5;
+    public AudioClip levelComplete;
 
 
+    [Header("-----------------SFX-----------------")]
     public AudioClip click;
     public AudioClip dashClip;
-    public AudioClip entranceLevel;
     public AudioClip footstepFire;
     public AudioClip footstepIce;
     public AudioClip iceSound;
     public AudioClip fireSound;
-    public AudioClip toggleFX;   
     public AudioClip happy;
     public AudioClip jumpClip;
     public AudioClip swoosh1;
-    public AudioClip swoosh2;
-    public AudioClip swoosh3;
-    public AudioClip text;   
-    public AudioClip levelComplete;   
+    public AudioClip text;
+    public AudioClip entranceLevel;
+    public AudioClip selectLevel; 
 
     private static AudioManager instance = null;
     public static AudioManager Instance => instance;
@@ -84,11 +82,6 @@ public class AudioManager : MonoBehaviour
         if (sceneName == "HomeScene" && musicSource.clip != musicMenu)
         {
             musicSource.clip = musicMenu;
-            musicSource.Play();
-        }
-        else if (sceneName == "SelectLevel" && musicSource.clip != musicSelectLevel)
-        {
-            musicSource.clip = musicSelectLevel;
             musicSource.Play();
         }
         else if (sceneName == "Test 1" && musicSource.clip != musicLevel1)

@@ -116,12 +116,12 @@ public class MenuController : MonoBehaviour
 
     public void SetVolume(float value)
     {
-    // Protection contre 0 : on met un tout petit nombre
-    if (value <= 0.0001f)
-        value = 0.0001f;
+        // Protection contre 0 : on met un tout petit nombre
+        if (value <= 0.0001f)
+            value = 0.0001f;
 
-    float dB = Mathf.Log10(value) * 20;
-    audioMixer.SetFloat("MasterVolume", dB);
+        float dB = Mathf.Log10(value) * 20;
+        audioMixer.SetFloat("MasterVolume", dB);
 
         // Sauvegarde
         PlayerPrefs.SetFloat("MasterVolume", value);
