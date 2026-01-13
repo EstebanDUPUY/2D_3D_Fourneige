@@ -37,45 +37,72 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
-        bool isFullscreen = Screen.fullScreen;
+        if (resolutionDropdown == null)
+        {
+            Debug.LogError("Resolution Dropdown non assigné !");
+            return;
+        }
 
+        // --- Configuration du Fullscreen ---
+        bool isFullscreen = Screen.fullScreen;
         fullscreenToggle.onValueChanged.RemoveAllListeners();
         fullscreenToggle.SetIsOnWithoutNotify(isFullscreen);
         UpdateSprite(isFullscreen);
         fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
 
+        // --- Initialisation des Résolutions ---
+        // On appelle ta fonction ici au lieu du code de test !
         InitResolutionMenu();
+        
+        // Optionnel : Charger le volume sauvegardé
+        if (slider != null) {
+            float savedVol = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
+            slider.value = savedVol;
+            SetVolume(savedVol);
+        }
     }
 
     private void InitResolutionMenu()
     {
-        // Liste "safe" de base
-        Resolution[] baseResolutions = new Resolution[]
+        // Liste des résolutions.
+        List<Resolution> baseResolutions = new List<Resolution>
         {
-            new Resolution { width = 3840, height = 2160 },
+            new Resolution { width = 2560, height = 1600 },
             new Resolution { width = 2560, height = 1440 },
+            new Resolution { width = 1920, height = 1200 },
             new Resolution { width = 1920, height = 1080 },
+            new Resolution { width = 1680, height = 1050 },
             new Resolution { width = 1600, height = 900 },
+            new Resolution { width = 1440, height = 900 },
+            new Resolution { width = 1366, height = 768 },
+            new Resolution { width = 1280, height = 800 },
             new Resolution { width = 1280, height = 720 }
         };
 
-        // On garde uniquement celles supportées par l’écran
+        // On ne garde que ce que l'écran actuel peut supporter physiquement
         resolutions = baseResolutions
-            .Where(r => r.width <= Screen.currentResolution.width &&
+            .Where(r => r.width <= Screen.currentResolution.width && 
                         r.height <= Screen.currentResolution.height)
+            .OrderByDescending(r => r.width) // Trie du plus grand au plus petit
             .ToArray();
 
-        resolutionDropdown.ClearOptions();
+        // Sécurité au cas où aucune résolution ne match
+        if (resolutions.Length == 0)
+        {
+            resolutions = new Resolution[] { Screen.currentResolution };
+        }
 
+        resolutionDropdown.ClearOptions();
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
 
         for (int i = 0; i < resolutions.Length; i++)
         {
-            options.Add($"{resolutions[i].width} x {resolutions[i].height}");
+            string option = resolutions[i].width + " x " + resolutions[i].height;
+            options.Add(option);
 
-            if (resolutions[i].width == Screen.width &&
-                resolutions[i].height == Screen.height)
+            // Détection de la résolution actuelle pour l'index par défaut
+            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
             {
                 currentResolutionIndex = i;
             }
@@ -84,9 +111,11 @@ public class MenuController : MonoBehaviour
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.SetValueWithoutNotify(currentResolutionIndex);
         resolutionDropdown.RefreshShownValue();
+        
+        // On nettoie les anciens listeners avant d'en ajouter un nouveau
+        resolutionDropdown.onValueChanged.RemoveAllListeners();
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
     }
-
     private void SetResolution(int index)
     {
         Resolution res = resolutions[index];
