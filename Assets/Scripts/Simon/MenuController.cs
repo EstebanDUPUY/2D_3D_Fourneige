@@ -26,72 +26,64 @@ public class MenuController : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
-        instance = this;
 
-        DontDestroyOnLoad(this.gameObject);
+        instance = this;
+        DontDestroyOnLoad(gameObject);
     }
+
 
     private void Start()
     {
-        if (fullscreenToggle != null)
-        {
-            fullscreenToggle.isOn = Screen.fullScreen;
-            fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
-        }
+        bool isFullscreen = Screen.fullScreen;
 
-        // Afficher l'état actuel
-        UpdateSprite(Screen.fullScreen);
+        fullscreenToggle.onValueChanged.RemoveAllListeners();
+        fullscreenToggle.SetIsOnWithoutNotify(isFullscreen);
+        UpdateSprite(isFullscreen);
+        fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
 
-        // Charger la valeur sauvegardée
-        float savedVolume = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
-        slider.value = savedVolume;
-        SetVolume(savedVolume);
-
-        // OPTIONS GRAPHIQUES (résolutions)
         InitResolutionMenu();
     }
 
     private void InitResolutionMenu()
     {
-        if (Screen.resolutions.Length == 0)
+        // Liste "safe" de base
+        Resolution[] baseResolutions = new Resolution[]
         {
-            resolutions = new Resolution[]
-            {
-                new Resolution { width = 1920, height = 1080 },
-                new Resolution { width = 1600, height = 900 },
-                new Resolution { width = 1280, height = 720 }
-            };
-        }
-        else
-        {
-            resolutions = Screen.resolutions
-                .Select(r => new Resolution { width = r.width, height = r.height })
-                .Distinct()
-                .ToArray();
-        }
+            new Resolution { width = 3840, height = 2160 },
+            new Resolution { width = 2560, height = 1440 },
+            new Resolution { width = 1920, height = 1080 },
+            new Resolution { width = 1600, height = 900 },
+            new Resolution { width = 1280, height = 720 }
+        };
+
+        // On garde uniquement celles supportées par l’écran
+        resolutions = baseResolutions
+            .Where(r => r.width <= Screen.currentResolution.width &&
+                        r.height <= Screen.currentResolution.height)
+            .ToArray();
 
         resolutionDropdown.ClearOptions();
+
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
 
         for (int i = 0; i < resolutions.Length; i++)
         {
-            string option = $"{resolutions[i].width} x {resolutions[i].height}";
-            options.Add(option);
+            options.Add($"{resolutions[i].width} x {resolutions[i].height}");
 
-            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+            if (resolutions[i].width == Screen.width &&
+                resolutions[i].height == Screen.height)
             {
                 currentResolutionIndex = i;
             }
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
+        resolutionDropdown.SetValueWithoutNotify(currentResolutionIndex);
         resolutionDropdown.RefreshShownValue();
-
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
     }
 
