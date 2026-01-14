@@ -2437,7 +2437,7 @@ MonoBehaviour:
   scorePanel: {fileID: 2131422802}
   scoreTMPro: {fileID: 253746834}
   messageScoreTMPro: {fileID: 1808379122}
-  isTopScorerTMPro: {fileID: 0}
+  isTopScorerTMPro: {fileID: 8856825157523568041}
   topScoresTMPro: {fileID: 1124494439}
   homeButton: {fileID: 42367909}
   playAgainButton: {fileID: 1678021587}
@@ -9263,6 +9263,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 515ead5d7480c3b4faf367f05417dcb6, type: 3}
+--- !u!114 &8856825157523568041 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9046224697978595009, guid: 515ead5d7480c3b4faf367f05417dcb6, type: 3}
+  m_PrefabInstance: {fileID: 8856825157523568040}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
