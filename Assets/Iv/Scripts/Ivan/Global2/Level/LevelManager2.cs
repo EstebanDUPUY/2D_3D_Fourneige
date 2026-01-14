@@ -37,6 +37,7 @@ public class LevelManager2 : MonoBehaviour
         Instance = this;
         playerInput = GetComponent<PlayerInput>();
         togglePlayAction = playerInput.actions["TogglePlay"];
+        player.StopMoving = false;
         // simuleLevelComplete = playerInput.actions["SimuleLevelComplete"];
     }
 
@@ -67,6 +68,7 @@ public class LevelManager2 : MonoBehaviour
 
     public static void GameOver()
     {
+        Instance.player.StopMoving = true;
         Instance.StartCoroutine(Instance.GameOverRoutine());
         // To do
         // Supprime ligne en dessous en prod

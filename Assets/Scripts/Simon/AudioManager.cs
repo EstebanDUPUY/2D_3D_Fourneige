@@ -9,31 +9,26 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource SFXSource;
     public AudioMixerGroup masterMixerGroup;
 
-    [Header("-----------------Audio Source-----------------")]
+    [Header("-----------------Music-----------------")]
     public AudioClip musicMenu;
-    public AudioClip musicSelectLevel;
     public AudioClip musicLevel1;
     public AudioClip musicLevel2;
     public AudioClip musicLevel3;
     public AudioClip musicLevel4;
-    public AudioClip musicLevel5;
+    public AudioClip levelComplete;
 
 
+    [Header("-----------------SFX-----------------")]
     public AudioClip click;
-    public AudioClip dash;
-    public AudioClip entranceLevel;
+    public AudioClip dashClip;
     public AudioClip footstepFire;
     public AudioClip footstepIce;
-    public AudioClip IceFX;
-    public AudioClip fireFX;
-    public AudioClip toggleFX;   
-    public AudioClip happy;
-    public AudioClip jump;
-    public AudioClip swoosh1;
-    public AudioClip swoosh2;
-    public AudioClip swoosh3;
-    public AudioClip text;   
-    public AudioClip levelComplete;   
+    public AudioClip iceSound;
+    public AudioClip fireSound;
+    public AudioClip hurt;
+    public AudioClip jumpClip;
+    public AudioClip entranceLevel;
+    public AudioClip selectLevel; 
 
     private static AudioManager instance = null;
     public static AudioManager Instance => instance;
@@ -42,23 +37,23 @@ public class AudioManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
-        else
-        {
-            instance = this;
-        }
-        DontDestroyOnLoad(this.gameObject);
 
-        // Source pour la musique
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // 🎵 MUSIC SOURCE
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
+        musicSource.playOnAwake = false;
         musicSource.outputAudioMixerGroup = masterMixerGroup;
 
-        // Source pour les bruitages
+        // 🔊 SFX SOURCE
         SFXSource = gameObject.AddComponent<AudioSource>();
         SFXSource.loop = false;
+        SFXSource.playOnAwake = false;
         SFXSource.outputAudioMixerGroup = masterMixerGroup;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -86,12 +81,7 @@ public class AudioManager : MonoBehaviour
             musicSource.clip = musicMenu;
             musicSource.Play();
         }
-        else if (sceneName == "SelectLevel" && musicSource.clip != musicSelectLevel)
-        {
-            musicSource.clip = musicSelectLevel;
-            musicSource.Play();
-        }
-        else if (sceneName == "Test" && musicSource.clip != musicLevel1)
+        else if (sceneName == "Test 1" && musicSource.clip != musicLevel1)
         {
             musicSource.clip = musicLevel1;
             musicSource.Play();
@@ -109,11 +99,6 @@ public class AudioManager : MonoBehaviour
         else if (sceneName == "Level" && musicSource.clip != musicLevel4)
         {
             musicSource.clip = musicLevel4;
-            musicSource.Play();
-        }
-        else if (sceneName == "Level" && musicSource.clip != musicLevel5)
-        {
-            musicSource.clip = musicLevel5;
             musicSource.Play();
         }
     }

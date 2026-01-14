@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using static Unity.Cinemachine.CinemachineFreeLookModifier;
 
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("Auto-detects child named 'Visuals' if not assigned")]
     public SpriteRenderer spriteRenderer;
+
     [Tooltip("Auto-detects from spriteRenderer's GameObject if not assigned")]
     public Animator animator;
 
@@ -33,7 +35,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Speed Modifier")]
     //[SerializeField] private float baseSpeedMultiplier = 1.0f;
-    [SerializeField] private float speedMultiplier = 1f;
+    [SerializeField]
+    private float speedMultiplier = 1f;
 
     // Form state
     public bool IsIceForm { get; private set; }
@@ -45,7 +48,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool jumpHeld;
 
-    [HideInInspector] public PlayerDamageSystem damageSystem;
+    [HideInInspector]
+    public PlayerDamageSystem damageSystem;
 
     // State (public for external access)
     public bool IsGrounded { get; private set; }
@@ -54,6 +58,8 @@ public class PlayerController : MonoBehaviour
     public bool IsDashing { get; private set; }
     public bool StopMoving { get; set; }
     public int FacingDirection { get; private set; } = 1;
+    private bool disableXFlip = false;
+
 
     public float bonusSlopeSpeed = 1;
 
@@ -77,11 +83,16 @@ public class PlayerController : MonoBehaviour
     public float wallJumpAnimTime = 0.15f;
     private float wallJumpAnimTimer;
 
+    [Header("Audio")]
+    [SerializeField] private float footstepInterval = 0.4f;
+    private float footstepTimer;
+
+
 
     void Awake()
     {
         damageSystem = GetComponent<PlayerDamageSystem>();
-        
+
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
@@ -123,7 +134,7 @@ public class PlayerController : MonoBehaviour
         {
             wallJumpAnimTimer -= Time.deltaTime;
             if (wallJumpAnimTimer <= 0)
-            IsWallJumping = false;
+                IsWallJumping = false;
         }
 
         // Falling
@@ -161,6 +172,8 @@ public class PlayerController : MonoBehaviour
         {
             jumpHeld = true;
             TryJump();
+            AudioManager.Instance.PlaySound(AudioManager.Instance.jumpClip);
+
         }
         else if (ctx.canceled)
         {
@@ -172,7 +185,10 @@ public class PlayerController : MonoBehaviour
     public void OnDash(InputAction.CallbackContext ctx)
     {
         if (ctx.started)
+        {
             TryDash();
+            AudioManager.Instance.PlaySound(AudioManager.Instance.dashClip);
+        }
     }
 
     public void OnSwitchForm(InputAction.CallbackContext ctx)
@@ -187,34 +203,54 @@ public class PlayerController : MonoBehaviour
 
     public void SwitchForm()
     {
-        if (!enableFormSwitch || iceSettings == null || fireSettings == null) return;
+        if (!enableFormSwitch || iceSettings == null || fireSettings == null)
+            return;
+
         IsIceForm = !IsIceForm;
         modifier = IsIceForm ? iceSettings : fireSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(IsIceForm);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(
+                IsIceForm ? AudioManager.Instance.iceSound
+                        : AudioManager.Instance.fireSound
+            );
     }
 
     public void SetIceForm()
     {
-        if (iceSettings == null) return;
+        if (iceSettings == null)
+            return;
+
         IsIceForm = true;
         modifier = iceSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(true);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.iceSound);
     }
 
     public void SetFireForm()
     {
-        if (fireSettings == null) return;
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.fireSound);
+
+        if (fireSettings == null)
+            return;
         IsIceForm = false;
         modifier = fireSettings;
         UpdateFormSprite();
         OnFormSwitch?.Invoke(false);
+
+        if (AudioManager.Instance != null)
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.iceSound);
     }
 
     private void UpdateFormSprite()
     {
-        if (spriteRenderer == null) return;
+        if (spriteRenderer == null)
+            return;
 
         Material targetSprite = IsIceForm ? iceSprite : fireSprite;
         if (targetSprite != null)
@@ -241,7 +277,7 @@ public class PlayerController : MonoBehaviour
             lastGroundedTime = Time.time;
             if (!wasGrounded)
             {
-            wallSlideTimer = 0;
+                wallSlideTimer = 0;
                 IsWallSliding = false;
                 hasDoubleJump = true;
                 hasAirDash = true;
@@ -303,18 +339,44 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
-        if (!settings.enableMovement) return;
+        if (!settings.enableMovement || StopMoving)
+            return;
 
         if (Mathf.Abs(moveInput.x) < 0.1f)
         {
+            footstepTimer = 0f;
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
             return;
         }
 
-        // Has input = accelerate toward target
         float target = moveInput.x * settings.moveSpeed * modifier.moveSpeed * speedMultiplier;
-        float newVelX = Mathf.MoveTowards(rb.linearVelocity.x, target, settings.acceleration * modifier.acceleration * speedMultiplier * Time.fixedDeltaTime);
+        float newVelX = Mathf.MoveTowards(
+            rb.linearVelocity.x,
+            target,
+            settings.acceleration * modifier.acceleration * speedMultiplier * Time.fixedDeltaTime
+        );
         rb.linearVelocity = new Vector3(newVelX, rb.linearVelocity.y, 0);
+
+        // 🔊 FOOTSTEPS
+        if (IsGrounded)
+        {
+            footstepTimer += Time.fixedDeltaTime;
+            if (footstepTimer >= footstepInterval)
+            {
+                PlayFootstep();
+                footstepTimer = 0f;
+            }
+        }
+    }
+    void PlayFootstep()
+    {
+        if (AudioManager.Instance == null)
+            return;
+
+        if (IsIceForm)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.footstepIce);
+        else
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.footstepFire);
     }
 
     // Use this function to set the speed multiplier
@@ -347,7 +409,11 @@ public class PlayerController : MonoBehaviour
         );
 
         if (rb.linearVelocity.y < -settings.maxFallSpeed * modifier.maxFallSpeed)
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, -settings.maxFallSpeed * modifier.maxFallSpeed, 0);
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x,
+                -settings.maxFallSpeed * modifier.maxFallSpeed,
+                0
+            );
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -362,11 +428,8 @@ public class PlayerController : MonoBehaviour
         {
             wallSlideTimer = 0f;
             int wallDir = IsTouchingWall ? wallDirection : lastWallDirection;
-            rb.linearVelocity = new Vector3(
-                -wallDir * settings.wallJumpPushForce * modifier.wallJumpPushForce,
-                settings.wallJumpForce * modifier.wallJumpForce,
-                0
-            );
+            rb.linearVelocity = new Vector3(-wallDir * settings.wallJumpPushForce * modifier.wallJumpPushForce, settings.wallJumpForce * modifier.wallJumpForce, 0);
+            AudioManager.Instance.PlaySound(AudioManager.Instance.jumpClip);
             FacingDirection = -wallDir;
             hasDoubleJump = true;
             hasAirDash = true;
@@ -398,7 +461,10 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x,
-                settings.jumpForce * modifier.jumpForce * settings.doubleJumpMultiplier * modifier.doubleJumpMultiplier,
+                settings.jumpForce
+                    * modifier.jumpForce
+                    * settings.doubleJumpMultiplier
+                    * modifier.doubleJumpMultiplier,
                 0
             );
             hasDoubleJump = false;
@@ -431,7 +497,10 @@ public class PlayerController : MonoBehaviour
 
         if (IsWallSliding)
         {
-            float speed = -settings.wallSlideSpeed * modifier.wallSlideSpeed * (1f - settings.wallSlideFriction * modifier.wallSlideFriction);
+            float speed =
+                -settings.wallSlideSpeed
+                * modifier.wallSlideSpeed
+                * (1f - settings.wallSlideFriction * modifier.wallSlideFriction);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, speed, 0);
         }
     }
@@ -460,13 +529,17 @@ public class PlayerController : MonoBehaviour
     {
         IsDashing = true;
         isAirDash = air;
-        dashTimer = air ? settings.airDashDuration * modifier.airDashDuration : settings.dashDuration * modifier.dashDuration;
+        dashTimer = air
+            ? settings.airDashDuration * modifier.airDashDuration
+            : settings.dashDuration * modifier.dashDuration;
         dashCooldownTimer = settings.dashCooldown * modifier.dashCooldown;
     }
 
     void HandleDash()
     {
-        float speed = isAirDash ? settings.airDashSpeed * modifier.airDashSpeed : settings.dashSpeed * modifier.dashSpeed;
+        float speed = isAirDash
+            ? settings.airDashSpeed * modifier.airDashSpeed
+            : settings.dashSpeed * modifier.dashSpeed;
         Vector2 dir;
         if (moveInput.magnitude > 0.1f)
             dir = moveInput.normalized;

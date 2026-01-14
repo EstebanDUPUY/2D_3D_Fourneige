@@ -475,6 +475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae5c767e48b61841a28fbb057427752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnTime: 1
   rb: {fileID: 1397923380503018712}
   isUp: 1
 --- !u!54 &1397923380503018712
@@ -502,7 +503,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 106
   m_CollisionDetection: 0
 --- !u!1 &8055666699382481762
 GameObject:
