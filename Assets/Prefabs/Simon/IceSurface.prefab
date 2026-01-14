@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7578830728595485271}
   - component: {fileID: 6932338926579448940}
   - component: {fileID: 3511629038784440205}
+  - component: {fileID: -6616853117703494544}
   m_Layer: 6
   m_Name: IceSurface
   m_TagString: Untagged
@@ -358,8 +359,23 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6819396865822450267}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca9ed8620f55e4b4a9a6e17070e6a49c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bonus: 3
+  malus: 0.75
+--- !u!114 &-6616853117703494544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6819396865822450267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fa55d7ecc42884390062fcd07466c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bonusSpeed: 8

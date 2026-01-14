@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AccelerationPlayerFire : MonoBehaviour
+public class AccelerationPlayerIce : MonoBehaviour
 {
     [SerializeField]
     private float bonusSpeed = 8f;
@@ -11,17 +11,14 @@ public class AccelerationPlayerFire : MonoBehaviour
         {
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
 
-            if (!player.IsIceForm)
+            if (player.IsIceForm)
                 player.bonusSlopeSpeed = bonusSpeed;
             else
             {
-                if (null != player)
+                PlayerDamageSystem playerDamage = player.GetComponent<PlayerDamageSystem>();
+                if (null != playerDamage)
                 {
-                    PlayerDamageSystem playerDamage = player.GetComponent<PlayerDamageSystem>();
-                    if (null != playerDamage)
-                    {
-                        playerDamage.DieNow();
-                    }
+                    playerDamage.DieNow();
                 }
             }
         }
@@ -33,7 +30,7 @@ public class AccelerationPlayerFire : MonoBehaviour
         {
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
 
-            if (player.IsIceForm)
+            if (!player.IsIceForm)
             {
                 PlayerDamageSystem playerDamage = player.GetComponent<PlayerDamageSystem>();
                 if (null != playerDamage)
