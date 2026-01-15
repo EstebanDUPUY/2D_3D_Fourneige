@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: Assets/Iv/Scenes/HomeScene.unity
     guid: f9434a5718ee4fb438c828c47cbdc681
   - enabled: 1
+    path: Assets/Scenes/Luciano LD/True Level 1.unity
+    guid: f5545f8f4ed3ccb4e98c7143efcbeda5
+  - enabled: 1
+    path: Assets/Scenes/Luciano LD/True Level 2.unity
+    guid: c9f18ca6bda1888429097e7152a1b0ff
+  - enabled: 0
     path: Assets/Iv/Scenes/Test 1.unity
     guid: 6c85bfe5556922c42976b8754d8ee253
-  - enabled: 1
+  - enabled: 0
     path: Assets/Iv/Scenes/Test 2.unity
     guid: 77cff81e5880edf4d99ba7f795f33b22
   - enabled: 0
