@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -70.4, y: 0, z: 0}
-  m_LocalScale: {x: 2.76, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4033641774053620570}
@@ -71,8 +71,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 24.75399, y: 4.5803986, z: 5.771223}
-  m_Center: {x: 5.6952076, y: 0.13046086, z: -0.55252075}
+  m_Size: {x: 24.10498, y: 5.0811086, z: 5.771223}
+  m_Center: {x: 5.842711, y: 0.38081574, z: -0.55252075}
 --- !u!1001 &2948313689870429846
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -155,12 +155,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: -1340270957083844871, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      objectReference: {fileID: 2100000, guid: 3a3e92d056476e947be8fc0acff2f1b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (2)
@@ -285,12 +285,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -1340270957083844871, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: -1340270957083844871, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      objectReference: {fileID: 2100000, guid: 3a3e92d056476e947be8fc0acff2f1b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (5)
@@ -415,12 +419,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: -1340270957083844871, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      objectReference: {fileID: 2100000, guid: 3a3e92d056476e947be8fc0acff2f1b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (3)
@@ -545,12 +549,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: -1340270957083844871, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      objectReference: {fileID: 2100000, guid: 3a3e92d056476e947be8fc0acff2f1b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (4)
@@ -675,12 +679,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: -1340270957083844871, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      objectReference: {fileID: 2100000, guid: 3a3e92d056476e947be8fc0acff2f1b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava (1)
@@ -805,12 +809,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: -1340270957083844871, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
+      objectReference: {fileID: 2100000, guid: 3a3e92d056476e947be8fc0acff2f1b1, type: 2}
     - target: {fileID: 919132149155446097, guid: 3653808a0581ecd46973058a132d71d9, type: 3}
       propertyPath: m_Name
       value: lava

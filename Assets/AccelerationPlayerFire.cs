@@ -20,6 +20,8 @@ public class AccelerationPlayerFire : MonoBehaviour
                     PlayerDamageSystem playerDamage = player.GetComponent<PlayerDamageSystem>();
                     if (null != playerDamage)
                     {
+                        
+                Debug.Log(" test");
                         playerDamage.DieNow();
                     }
                 }
