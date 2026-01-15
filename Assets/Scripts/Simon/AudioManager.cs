@@ -82,12 +82,12 @@ public class AudioManager : MonoBehaviour
             musicSource.clip = musicMenu;
             musicSource.Play();
         }
-        else if (sceneName == "Test 1" && musicSource.clip != musicLevel1)
+        else if (sceneName == "True Level 1" && musicSource.clip != musicLevel1)
         {
             musicSource.clip = musicLevel1;
             musicSource.Play();
         }
-        else if (sceneName == "Test 2" && musicSource.clip != musicLevel2)
+        else if (sceneName == "True Level 2" && musicSource.clip != musicLevel2)
         {
             musicSource.clip = musicLevel2;
             musicSource.Play();
